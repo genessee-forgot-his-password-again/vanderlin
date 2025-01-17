@@ -29,15 +29,6 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	set_species(/datum/species/human/northern)
 	addtimer(CALLBACK(src, PROC_REF(after_creation)), 1 SECONDS)
 
-/mob/living/carbon/human/species/human/northern/npc/bandit/pre_equip(mob/living/carbon/human/H)
-	..()
-
-	H.TOTALSTR = 8
-	H.TOTALSPD = 8
-	H.TOTALCON = 8
-	H.TOTALEND = 8
-	H.TOTALINT = 8
-
 /mob/living/carbon/human/species/human/northern/npc/bandit/after_creation()
 	..()
 	job = "Generic Bandit"
