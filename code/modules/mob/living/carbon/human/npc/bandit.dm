@@ -19,22 +19,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 			say(pick(GLOB.bandit_aggro))
 			linepoint(target)
 
-/mob/living/carbon/human/species/human/northern/npc/bandit/should_target(mob/living/L)
-	if(L.stat != CONSCIOUS)
-		return FALSE
-	. = ..()
-
 /mob/living/carbon/human/species/human/northern/npc/bandit/Initialize()
 	. = ..()
 	set_species(/datum/species/human/northern)
 	addtimer(CALLBACK(src, PROC_REF(after_creation)), 1 SECONDS)
-
-/mob/living/carbon/human/species/human/northern/npc/bandit/after_creation()
-	..()
-	job = "Generic Bandit"
-	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
-	ADD_TRAIT(src, TRAIT_NOHUNGER, TRAIT_GENERIC)
-	equipOutfit(new /datum/outfit/job/roguetown/adventurer/peasant)
 
 /mob/living/carbon/human/species/human/northern/npc/bandit/npc_idle()
 	if(m_intent == MOVE_INTENT_SNEAK)
