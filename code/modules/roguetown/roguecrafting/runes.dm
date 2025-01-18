@@ -117,3 +117,86 @@
 	name = "rune essence"
 	desc = "The source of magic in our world."
 	remarks = list("My head hurts...", "I'll never understand this!", "I don't want to look away...")
+
+// epic custom runebooks
+
+/obj/item/rune/spell/spitfire
+	spell = /obj/effect/proc_holder/spell/invoked/projectile/spitfire
+	spellname = "spitfire"
+	icon_state = "book5_0"
+	name = "tome of spitfire"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Spitfire', which allows a caster to throw a mote of fire which blinds nearby targets. On a direct hit, it will also burn a single target."
+	remarks = list("Think of hot things...", "Grasp the mote between your fingers...", "Wear heat-resistant gloves...", "Don't look directly at the mote...")
+	
+/obj/item/rune/spell/fireball
+	spell = /obj/effect/proc_holder/spell/invoked/projectile/fireball
+	spellname = "fireball"
+	icon_state = "spellbookpower1_0"
+	name = "tome of fireball"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Fireball', which allows a caster to hurl an explosive ball of flame, searing the flesh of and knocking down nearby targets."
+	remarks = list("To understand these archaic things...", "Just catching them on fire won't do...", "Accounting for crosswinds... really?", "I think I just burned my hand...")
+	
+/obj/item/rune/spell/greaterfireball
+	spell = /obj/effect/proc_holder/spell/invoked/projectile/fireball/greater
+	spellname = "greater fireball"
+	icon_state = "bibble_0"
+	name = "tome of greater fireball"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Greater Fireball', which allows a caster to hurl an immensley powerful explosive ball of flame, melting and knocking down nearby targets."
+	remarks = list("Let it burn inside you...", "Rage fuels the flame of power...", "Do not fumble at all costs...", "Teach them why a mage is to be feared...")
+
+/obj/item/rune/spell/lightning
+	spell = /obj/effect/proc_holder/spell/invoked/projectile/lightningbolt
+	spellname = "lightning bolt"
+	icon_state = "knowledge_0"
+	name = "tome of lightning bolt"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Lightning Bolt', which allows a caster to shoot a single bolt of lighting from their fingertips, shocking and stunning their target."
+	remarks = list("Lightning bolt... lightning bolt...", "Unlimited power...", "I think I just shocked my hand...")
+	
+/obj/item/rune/spell/magicmissile
+	spell = /obj/effect/proc_holder/spell/invoked/projectile/arcanebolt
+	spellname = "arcane bolt"
+	icon_state = "book7_0"
+	name = "tome of arcane bolt"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Arcane Bolt', also known as 'Magic Missile'. It allows the caster to hurl a missile of arcane magic that harms a target on a direct hit. This spell recharges very quickly."
+	remarks = list("Despite common belief, missiles will not always find their target...", "What's 'force damage'?..", "I think I just bruised my hand...")
+	
+/obj/item/rune/spell/repulse
+	spell = /obj/effect/proc_holder/spell/invoked/push_spell
+	spellname = "repulse"
+	icon_state = "book4_0"
+	name = "tome of repulse"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Repulse', which allows a caster to send anyone near them flying in random directions, giving the caster an opportunity to escape or reposition."
+	remarks = list("This might save my life...", "None shall lay their hands upon me...", "This might be useful near steep falls...")
+	
+/obj/item/rune/spell/darkvision
+	spell = /obj/effect/proc_holder/spell/targeted/touch/darkvision
+	spellname = "darkvision"
+	icon_state = "book_0"
+	name = "tome of darkvision"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Darkvision', which allows a caster to grant themselves or another person the ability to see in the dark for 10 minutes."
+	remarks = list("I can see the universe...", "Dark-dwellers shall fear me...", "Torches are for the unwise...")
+	
+/obj/item/rune/spell/haste
+	spell = /obj/effect/proc_holder/spell/invoked/haste
+	spellname = "haste"
+	icon_state = "book2_0"
+	name = "tome of haste"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Haste', which allows a caster to grant themselves or another person magically increased speed for 60 seconds."
+	remarks = list("Speed... more speed...", "None shall catch me...", "No side effects, you say...?")
+	
+	
+/obj/item/rune/spell/message
+	spell = /obj/effect/proc_holder/spell/self/message
+	spellname = "message"
+	icon_state = "basic_book_0"
+	name = "tome of message"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Message', which allows a caster to magically speak directly - and optionally, anonymously - into another person's mind. The caster must know the target's name."
+	remarks = list("Couriers be damned...", "How useful...", "Perhaps I can change my voice...?")
+	
+/obj/item/rune/spell/snare
+	spell = /obj/effect/proc_holder/spell/invoked/slowdown_spell_aoe
+	spellname = "ensnare"
+	icon_state = "book6_0"
+	name = "tome of ensnare"
+	desc = "This tome contains detailed instructions on how to cast the spell 'Ensnare', which allows a caster to magically halt anyone in a small radius in which they can see."
+	remarks = list("Halt...!", "Cease your movement...", "Careful not to backfire...")
