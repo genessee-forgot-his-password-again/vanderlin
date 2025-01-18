@@ -7,16 +7,59 @@
 	name = "Copper Coins"
 	cost = 0
 	contains = /obj/item/roguecoin/copper/pile
+	
+/datum/supply_pack/rogue/cheat/manycopper
+	name = "Bulk Copper Coins"
+	cost = 0
+	contains = list(/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile,
+	/obj/item/roguecoin/copper/pile)
 
 /datum/supply_pack/rogue/cheat/silver
 	name = "Silver Coins"
 	cost = 0
 	contains = /obj/item/roguecoin/silver/pile
+	
+/datum/supply_pack/rogue/cheat/manysilver
+	name = "Bulk Silver Coins"
+	cost = 0
+	contains = list(/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile,
+	/obj/item/roguecoin/silver/pile)
 
 /datum/supply_pack/rogue/cheat/gold
 	name = "Gold Coins"
 	cost = 0
 	contains = /obj/item/roguecoin/gold/pile
+	
+/datum/supply_pack/rogue/cheat/manygold
+	name = "Bulk Gold Coins"
+	cost = 0
+	contains = list(
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile,
+	/obj/item/roguecoin/gold/pile)
 
 /datum/supply_pack/rogue/cheat/emerald
 	name = "Emerald"
@@ -52,3 +95,18 @@
 	name = "Onyx"
 	cost = 0
 	contains = /obj/item/roguegem/black
+	
+/datum/supply_pack/rogue/cheat/manygem
+	name = "Bulk Gemstones"
+	cost = 0
+	contains = list(
+	/obj/item/roguegem,
+	/obj/item/roguegem,
+	/obj/item/roguegem,
+	/obj/item/roguegem,
+	/obj/item/roguegem,
+	/obj/item/roguegem,
+	/obj/item/roguegem,
+	/obj/item/roguegem,
+	/obj/item/roguegem,
+	/obj/item/roguegem)
