@@ -43,8 +43,8 @@
 	contains = /obj/item/reagent_containers/glass/bottle/rogue/water
 
 /datum/supply_pack/rogue/food/beer
-	name = "Beer-In-A-Bottle"
-	cost = 8
+	name = "Homebrewed Beer"
+	cost = 6
 	contains = /obj/item/reagent_containers/glass/bottle/rogue/beer
 
 /datum/supply_pack/rogue/food/spottedhen
@@ -122,15 +122,15 @@
 	cost = 320
 	contains = /obj/item/reagent_containers/glass/bottle/rogue/elfblue
 
-/datum/supply_pack/rogue/food/meat
-	name = "Dry Meat"
-	cost = 10
-	contains = /obj/item/reagent_containers/food/snacks/rogue/meat/coppiette
-
 /datum/supply_pack/rogue/food/hardtack
 	name = "Hardtack"
 	cost = 6
 	contains = /obj/item/reagent_containers/food/snacks/rogue/crackerscooked
+	
+/datum/supply_pack/rogue/food/bread
+	name = "Loaf of Bread"
+	cost = 10
+	contains = /obj/item/reagent_containers/food/snacks/rogue/bread
 
 /datum/supply_pack/rogue/food/cheese
 	name = "Cheese Wheel"
@@ -138,9 +138,14 @@
 	contains = /obj/item/reagent_containers/food/snacks/rogue/cheddar
 
 /datum/supply_pack/rogue/food/salami
-	name = "Salami Stick"
-	cost = 15
+	name = "Log of Salami"
+	cost = 12
 	contains = /obj/item/reagent_containers/food/snacks/rogue/meat/salami
+	
+/datum/supply_pack/rogue/food/jerky
+	name = "Beef Jerky"
+	cost = 10
+	contains = /obj/item/reagent_containers/food/snacks/rogue/meat/coppiette
 
 /datum/supply_pack/rogue/food/potato
 	name = "Dwarven Potato"
