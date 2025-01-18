@@ -63,7 +63,7 @@
 	cost = 100
 	contains = /obj/item/clothing/ring/silver/calm
 
-/datum/supply_pack/rogue/jewelry/protection
+/datum/supply_pack/rogue/jewelry/knowledge
 	name = "Ring of Knowledge"
 	cost = 120
 	contains = /obj/item/clothing/ring/silver/noc
