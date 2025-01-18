@@ -15,6 +15,12 @@
 	var/wgain = 0
 	var/keycontrol = "merchant"
 	var/funynthing = FALSE
+	var/max_stored = 15
+
+/obj/structure/roguemachine/vendor/bigstorage
+	name = "GRAND PEDDLER"
+	desc = "The stomach of this thing can been stuffed with fun things for you to buy. This one in particular possesses a supremely large gullet."
+	max_stored = 100
 
 /obj/structure/roguemachine/vendor/attackby(obj/item/P, mob/user, params)
 
@@ -46,7 +52,7 @@
 	if(!locked)
 		if(P.w_class <= WEIGHT_CLASS_BULKY)
 			testing("startadd")
-			if(held_items.len < 15)
+			if(held_items.len < max_stored)
 				held_items[P] = list()
 				held_items[P]["NAME"] = P.name
 				held_items[P]["PRICE"] = 0
