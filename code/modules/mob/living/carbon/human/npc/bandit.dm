@@ -113,6 +113,42 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.put_in_hands(P, forced = TRUE)
 	H.put_in_hands(POH, forced = TRUE)
 
+// Bandit Marauder - Blunt lvl3
+
+/mob/living/carbon/human/species/human/northern/npc/bandit/blunt_three/after_creation()
+	..()
+	job = "Brigand Marauder"
+	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_NOHUNGER, TRAIT_GENERIC)
+	equipOutfit(new /datum/outfit/job/roguetown/npc/bandit/blunt_three)
+
+/datum/outfit/job/roguetown/npc/bandit/blunt_three/pre_equip(mob/living/carbon/human/H)
+	..()
+
+	H.TOTALSTR = 11
+	H.TOTALSPD = 8
+	H.TOTALCON = 11
+	H.TOTALEND = 10
+	H.TOTALINT = 4
+
+	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 3, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+
+	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	pants = /obj/item/clothing/under/roguetown/trou/leather
+	armor = /obj/item/clothing/suit/roguetown/armor/leather
+	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
+	belt = /obj/item/storage/belt/rogue/leather
+	head = /obj/item/clothing/head/roguetown/helmet/skullcap
+	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
+	var/obj/item/rogueweapon/mace/steel/P = new()
+	var/obj/item/rogueweapon/shield/heater/POH = new()
+	H.put_in_hands(P, forced = TRUE)
+	H.put_in_hands(POH, forced = TRUE)
+
 // Bandit Rebel - Polearm lvl1
 
 /mob/living/carbon/human/species/human/northern/npc/bandit/polearm_one/after_creation()
@@ -177,6 +213,40 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	head = /obj/item/clothing/head/roguetown/armingcap
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
 	var/obj/item/rogueweapon/polearm/spear/P = new()
+	H.put_in_hands(P, forced = TRUE)
+
+// Bandit Renegade - Polearm lvl3
+
+/mob/living/carbon/human/species/human/northern/npc/bandit/polearm_three/after_creation()
+	..()
+	job = "Brigand Marauder"
+	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_NOHUNGER, TRAIT_GENERIC)
+	equipOutfit(new /datum/outfit/job/roguetown/npc/bandit/polearm_three)
+
+/datum/outfit/job/roguetown/npc/bandit/polearm_three/pre_equip(mob/living/carbon/human/H)
+	..()
+
+	H.TOTALSTR = 11
+	H.TOTALSPD = 8
+	H.TOTALCON = 11
+	H.TOTALEND = 10
+	H.TOTALINT = 4
+
+	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+
+	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	pants = /obj/item/clothing/under/roguetown/trou/leather
+	armor = /obj/item/clothing/suit/roguetown/armor/leather
+	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
+	belt = /obj/item/storage/belt/rogue/leather
+	head = /obj/item/clothing/head/roguetown/helmet/skullcap
+	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
+	var/obj/item/rogueweapon/polearm/spear/bronze/P = new()
 	H.put_in_hands(P, forced = TRUE)
 
 // Bandit Goon - Blade lvl1
@@ -244,5 +314,41 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
 	var/obj/item/rogueweapon/sword/iron/P = new()
 	var/obj/item/rogueweapon/shield/wood/POH = new()
+	H.put_in_hands(P, forced = TRUE)
+	H.put_in_hands(POH, forced = TRUE)
+
+// Bandit Cutthroat - Blade lvl3
+
+/mob/living/carbon/human/species/human/northern/npc/bandit/blade_three/after_creation()
+	..()
+	job = "Brigand Cutthroat"
+	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_NOHUNGER, TRAIT_GENERIC)
+	equipOutfit(new /datum/outfit/job/roguetown/npc/bandit/blade_three)
+
+/datum/outfit/job/roguetown/npc/bandit/blade_three/pre_equip(mob/living/carbon/human/H)
+	..()
+
+	H.TOTALSTR = 11
+	H.TOTALSPD = 8
+	H.TOTALCON = 11
+	H.TOTALEND = 10
+	H.TOTALINT = 4
+
+	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+
+	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	pants = /obj/item/clothing/under/roguetown/trou/leather
+	armor = /obj/item/clothing/suit/roguetown/armor/leather
+	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
+	belt = /obj/item/storage/belt/rogue/leather
+	head = /obj/item/clothing/head/roguetown/helmet/skullcap
+	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
+	var/obj/item/rogueweapon/sword/sabre/P = new()
+	var/obj/item/rogueweapon/shield/heater/POH = new()
 	H.put_in_hands(P, forced = TRUE)
 	H.put_in_hands(POH, forced = TRUE)
