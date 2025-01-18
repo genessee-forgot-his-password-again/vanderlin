@@ -48,3 +48,28 @@
 	cost = 240
 	contains = /obj/item/clothing/ring/active/nomag
 
+/datum/supply_pack/rogue/jewelry/protection
+	name = "Ring of Protection"
+	cost = 300
+	contains = /obj/item/clothing/ring/gold/protection
+
+/datum/supply_pack/rogue/jewelry/strength
+	name = "Ring of Strength"
+	cost = 250
+	contains = /obj/item/clothing/ring/gold/ravox
+
+/datum/supply_pack/rogue/jewelry/calm
+	name = "Ring of Soothing"
+	cost = 100
+	contains = /obj/item/clothing/ring/silver/calm
+
+/datum/supply_pack/rogue/jewelry/protection
+	name = "Ring of Knowledge"
+	cost = 120
+	contains = /obj/item/clothing/ring/silver/noc
+
+
+
+
+
+

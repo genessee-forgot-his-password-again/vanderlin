@@ -4,128 +4,204 @@
 	crate_type = /obj/structure/closet/crate/chest/merchant
 
 /datum/supply_pack/rogue/rawmats/glass
-	name = "Glass Panes"
-	cost = 50
+	name = "Glass Pane"
+	cost = 8
 	contains = list(
-		/obj/item/natural/glass,
-		/obj/item/natural/glass,
-		/obj/item/natural/glass,
-		/obj/item/natural/glass,
-		/obj/item/natural/glass,
 		/obj/item/natural/glass
 	)
 
 /datum/supply_pack/rogue/rawmats/copper
 	name = "Copper Ore"
-	cost = 50
+	cost = 10
 	contains = list(
-		/obj/item/rogueore/copper,
-		/obj/item/rogueore/copper,
-		/obj/item/rogueore/copper,
-		/obj/item/rogueore/copper,
 		/obj/item/rogueore/copper
+	)
+
+/datum/supply_pack/rogue/rawmats/copper_bar
+	name = "Copper Bar"
+	cost = 15
+	contains = list(
+		/obj/item/ingot/copper
 	)
 
 /datum/supply_pack/rogue/rawmats/tin
 	name = "Tin Ore"
-	cost = 80
-	contains = list(/obj/item/rogueore/tin,
+	cost = 15
+	contains = list(
 		/obj/item/rogueore/tin,
-		/obj/item/rogueore/tin,
-		/obj/item/rogueore/tin,
-		/obj/item/rogueore/tin
+	)
+
+/datum/supply_pack/rogue/rawmats/tin_bar
+	name = "Tin Bar"
+	cost = 25
+	contains = list(
+		/obj/item/ingot/tin
+	)
+
+/datum/supply_pack/rogue/rawmats/bronze_bar
+	name = "Bronze Bar"
+	cost = 40
+	contains = list(
+		/obj/item/ingot/bronze
 	)
 
 /datum/supply_pack/rogue/rawmats/iron
 	name = "Iron Ore"
+	cost = 20
+	contains = list(
+		/obj/item/rogueore/iron
+	)
+
+/datum/supply_pack/rogue/rawmats/iron_bar
+	name = "Iron Bar"
+	cost = 35
+	contains = list(
+		/obj/item/ingot/iron
+	)
+
+/datum/supply_pack/rogue/rawmats/steel_bar
+	name = "Steel Bar"
+	cost = 60
+	contains = list(
+		/obj/item/ingot/steel
+	)
+
+/datum/supply_pack/rogue/rawmats/silver
+	name = "Silver Ore"
+	cost = 50
+	contains = list(
+		/obj/item/rogueore/silver
+	)
+
+/datum/supply_pack/rogue/rawmats/silver_bar
+	name = "Silver Bar"
+	cost = 75
+	contains = list(
+		/obj/item/ingot/silver
+	)
+
+/datum/supply_pack/rogue/rawmats/gold
+	name = "Gold Ore"
 	cost = 80
 	contains = list(
-		/obj/item/rogueore/iron,
-		/obj/item/rogueore/iron,
-		/obj/item/rogueore/iron,
-		/obj/item/rogueore/iron
+		/obj/item/rogueore/gold
+	)
+
+/datum/supply_pack/rogue/rawmats/gold_bar
+	name = "Gold Bar"
+	cost = 120
+	contains = list(
+		/obj/item/ingot/gold
 	)
 
 /datum/supply_pack/rogue/rawmats/coal
 	name = "Coal"
-	cost = 40
+	cost = 8
 	contains = list(
-		/obj/item/rogueore/coal,
-		/obj/item/rogueore/coal,
-		/obj/item/rogueore/coal,
-		/obj/item/rogueore/coal,
 		/obj/item/rogueore/coal
 	)
 
 /datum/supply_pack/rogue/rawmats/cloth
 	name = "Fiber Strands"
-	cost = 4
+	cost = 1
 	contains = list(
-		/obj/item/natural/fibers,
-		/obj/item/natural/fibers,
-		/obj/item/natural/fibers,
-		/obj/item/natural/fibers,
 		/obj/item/natural/fibers
 	)
 
 /datum/supply_pack/rogue/rawmats/cloth
 	name = "Cloth"
-	cost = 10
+	cost = 2
 	contains = list(
-		/obj/item/natural/cloth,
-		/obj/item/natural/cloth,
-		/obj/item/natural/cloth,
-		/obj/item/natural/cloth,
 		/obj/item/natural/cloth
 	)
 
-/datum/supply_pack/rogue/rawmats/feather
-	name = "Feathers"
-	cost = 15
+/datum/supply_pack/rogue/rawmats/leather
+	name = "Leather"
+	cost = 8
 	contains = list(
-		/obj/item/natural/feather,
-		/obj/item/natural/feather,
-		/obj/item/natural/feather,
-		/obj/item/natural/feather,
+		/obj/item/natural/hide/cured
+	)
+
+/datum/supply_pack/rogue/rawmats/feather
+	name = "Feather"
+	cost = 3
+	contains = list(
 		/obj/item/natural/feather
 	)
 
 /datum/supply_pack/rogue/rawmats/silk
 	name = "Silk"
-	cost = 25
+	cost = 5
 	contains = list(
-		/obj/item/natural/silk,
-		/obj/item/natural/silk,
-		/obj/item/natural/silk,
-		/obj/item/natural/silk,
 		/obj/item/natural/silk
 	)
 
 /datum/supply_pack/rogue/rawmats/ash
 	name = "Fertillizing Ash"
-	cost = 15
+	cost = 3
 	contains = list(
-		/obj/item/ash,
-		/obj/item/ash,
-		/obj/item/ash,
-		/obj/item/ash,
 		/obj/item/ash
 	)
 
 /datum/supply_pack/rogue/rawmats/sinew
 	name = "Animal Bone and Sinew"
-	cost = 15
+	cost = 3
 	contains = list(
-		/obj/item/alch/bone,
-		/obj/item/alch/bone,
-		/obj/item/alch/bone,
-		/obj/item/alch/sinew,
-		/obj/item/alch/sinew,
 		/obj/item/alch/sinew
 	)
-/datum/supply_pack/rogue/rawmats/riddle_of_steel
-	name = "Riddle of Steel"
-	cost = 1500
+
+/datum/supply_pack/rogue/rawmats/bone
+	name = "Animal Bone"
+	cost = 3
 	contains = list(
-		/obj/item/riddleofsteel
+		/obj/item/alch/bone
+	)
+
+/datum/supply_pack/rogue/rawmats/log
+	name = "Log"
+	cost = 7
+	contains = list(
+		/obj/item/grown/log/tree/small
+	)
+
+/datum/supply_pack/rogue/rawmats/plank
+	name = "Plank"
+	cost = 4
+	contains = list(
+		/obj/item/natural/wood/plank
+	)
+
+/datum/supply_pack/rogue/rawmats/stick
+	name = "Stick"
+	cost = 1
+	contains = list(
+		/obj/item/grown/log/tree/stick
+	)
+
+/datum/supply_pack/rogue/rawmats/stone
+	name = "Stone"
+	cost = 1
+	contains = list(
+		/obj/item/natural/stone
+	)
+
+/datum/supply_pack/rogue/rawmats/thorn
+	name = "Thorn"
+	cost = 1
+	contains = list(
+		/obj/item/natural/thorn
+	)
+
+/datum/supply_pack/rogue/rawmats/paper
+	name = "Parchment"
+	cost = 1
+	contains = list(
+		/obj/item/paper
+	)
+
+/datum/supply_pack/rogue/rawmats/scroll
+	name = "Scroll"
+	cost = 2
+	contains = list(
+		/obj/item/paper/scroll
 	)
