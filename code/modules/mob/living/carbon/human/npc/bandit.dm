@@ -5,10 +5,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	aggressive=1
 	mode = AI_IDLE
 	ambushable = FALSE
+	faction = list("bandits", "station")
 	flee_in_pain = TRUE
 	possible_rmb_intents = list()
 	wander = TRUE
-	faction = "bums"
 
 /mob/living/carbon/human/species/human/northern/npc/bandit/retaliate(mob/living/L)
 	var/newtarg = target
