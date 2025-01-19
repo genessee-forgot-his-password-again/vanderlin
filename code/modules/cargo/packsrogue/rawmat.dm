@@ -191,17 +191,3 @@
 	contains = list(
 		/obj/item/natural/thorn
 	)
-
-/datum/supply_pack/rogue/rawmats/paper
-	name = "Parchment"
-	cost = 1
-	contains = list(
-		/obj/item/paper
-	)
-
-/datum/supply_pack/rogue/rawmats/scroll
-	name = "Scroll"
-	cost = 2
-	contains = list(
-		/obj/item/paper/scroll
-	)
