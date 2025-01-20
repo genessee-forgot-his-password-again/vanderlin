@@ -77,7 +77,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
 	if(prob(25))
 		head = /obj/item/clothing/head/roguetown/armingcap
-	var/obj/item/rogueweapon/mace/cudgel/P = new()
+	if(prob(50))
+		var/obj/item/rogueweapon/mace/cudgel/P = new()
+	else
+		var/obj/item/rogueweapon/mace/copperbludgeon/P = new()
 	H.put_in_hands(P, forced = TRUE)
 
 // Bandit Henchman - Blunt lvl2
@@ -249,7 +252,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
 	if(prob(25))
 		head = /obj/item/clothing/head/roguetown/armingcap
-	var/obj/item/rogueweapon/polearm/spear/stone/copper/P = new()
+	if(prob(50))
+		var/obj/item/rogueweapon/polearm/spear/stone/copper/P = new()
+	else
+		var/obj/item/rogueweapon/pitchfork/copper/P = new()
 	H.put_in_hands(P, forced = TRUE)
 
 // Bandit Turncoat - Polearm lvl2
