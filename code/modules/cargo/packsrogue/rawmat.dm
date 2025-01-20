@@ -144,14 +144,14 @@
 	)
 
 /datum/supply_pack/rogue/rawmats/sinew
-	name = "Animal Bone and Sinew"
+	name = "Sinew"
 	cost = 3
 	contains = list(
 		/obj/item/alch/sinew
 	)
 
 /datum/supply_pack/rogue/rawmats/bone
-	name = "Animal Bone"
+	name = "Bone"
 	cost = 3
 	contains = list(
 		/obj/item/alch/bone
