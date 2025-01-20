@@ -103,6 +103,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 2, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
 
+	gloves = /obj/item/clothing/gloves/roguetown/leather
 	pants = /obj/item/clothing/under/roguetown/tights/random
 	shirt = /obj/item/clothing/suit/roguetown/shirt/shortshirt/random
 	if(prob(50))
@@ -114,7 +115,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	if(prob(75))
 		head = /obj/item/clothing/head/roguetown/helmet/leather
 	else
-		head = /obj/item/clothing/head/roguetown/helmet/coppercap
+		head = /obj/item/clothing/head/roguetown/helmet/leather/conical
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
 	var/obj/item/rogueweapon/mace/P = new()
 	var/obj/item/rogueweapon/shield/wood/POH = new()
@@ -145,12 +146,12 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
-	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	gloves = /obj/item/clothing/gloves/roguetown/chain/iron
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	if(prob(75))
 		armor = /obj/item/clothing/suit/roguetown/armor/chainmail/iron
 	else
-		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/copperchest
+		armor = /obj/item/clothing/suit/roguetown/armor/chainmail
 	if(prob(50))
 		shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	else
@@ -161,10 +162,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	else
 		head = /obj/item/clothing/head/roguetown/helmet/kettle
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
-	if(prob(50))
-		neck = /obj/item/clothing/neck/roguetown/coif/cloth
-	else
-		neck = /obj/item/clothing/neck/roguetown/gorget/copper
+	neck = /obj/item/clothing/neck/roguetown/coif/cloth
 	var/obj/item/rogueweapon/mace/steel/P = new()
 	var/obj/item/rogueweapon/shield/heater/POH = new()
 	H.put_in_hands(P, forced = TRUE)
@@ -197,16 +195,16 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 	else
 		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
-	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	gloves = /obj/item/clothing/gloves/roguetown/chain
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	if(prob(75))
-		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/iron
+		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/iron/rust
 	else
 		armor = /obj/item/clothing/suit/roguetown/armor/cuirass
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor/light
-	belt = /obj/item/storage/belt/rogue/leather
+	belt = /obj/item/storage/belt/rogue/leather/steel
 	if(prob(75))
-		head = /obj/item/clothing/head/roguetown/helmet/heavy/ironplate
+		head = /obj/item/clothing/head/roguetown/helmet/heavy/rust
 	else
 		head = /obj/item/clothing/head/roguetown/helmet/sallet
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
@@ -277,6 +275,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.mind?.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
 
+	gloves = /obj/item/clothing/gloves/roguetown/leather
 	pants = /obj/item/clothing/under/roguetown/tights/random
 	shirt = /obj/item/clothing/suit/roguetown/shirt/shortshirt/random
 	if(prob(50))
@@ -288,7 +287,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	if(prob(75))
 		head = /obj/item/clothing/head/roguetown/helmet/leather
 	else
-		head = /obj/item/clothing/head/roguetown/helmet/coppercap
+		head = /obj/item/clothing/head/roguetown/helmet/leather/conical
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
 	var/obj/item/rogueweapon/polearm/spear/P = new()
 	H.put_in_hands(P, forced = TRUE)
@@ -317,12 +316,12 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
-	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	gloves = /obj/item/clothing/gloves/roguetown/chain/iron
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	if(prob(75))
 		armor = /obj/item/clothing/suit/roguetown/armor/chainmail/iron
 	else
-		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/copperchest
+		armor = /obj/item/clothing/suit/roguetown/armor/chainmail
 	if(prob(50))
 		shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	else
@@ -333,10 +332,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	else
 		head = /obj/item/clothing/head/roguetown/helmet/kettle
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
-	if(prob(50))
-		neck = /obj/item/clothing/neck/roguetown/coif/cloth
-	else
-		neck = /obj/item/clothing/neck/roguetown/gorget/copper
+	neck = /obj/item/clothing/neck/roguetown/coif/cloth
 	var/obj/item/rogueweapon/polearm/spear/billhook/P = new()
 	H.put_in_hands(P, forced = TRUE)
 
@@ -367,16 +363,16 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 	else
 		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
-	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	gloves = /obj/item/clothing/gloves/roguetown/chain
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	if(prob(75))
-		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/iron
+		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/iron/rust
 	else
 		armor = /obj/item/clothing/suit/roguetown/armor/cuirass
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor/light
-	belt = /obj/item/storage/belt/rogue/leather
+	belt = /obj/item/storage/belt/rogue/leather/steel
 	if(prob(75))
-		head = /obj/item/clothing/head/roguetown/helmet/heavy/ironplate
+		head = /obj/item/clothing/head/roguetown/helmet/heavy/rust
 	else
 		head = /obj/item/clothing/head/roguetown/helmet/sallet
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
@@ -445,6 +441,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.mind?.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
 
+	gloves = /obj/item/clothing/gloves/roguetown/leather
 	pants = /obj/item/clothing/under/roguetown/tights/random
 	shirt = /obj/item/clothing/suit/roguetown/shirt/shortshirt/random
 	if(prob(50))
@@ -456,7 +453,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	if(prob(75))
 		head = /obj/item/clothing/head/roguetown/helmet/leather
 	else
-		head = /obj/item/clothing/head/roguetown/helmet/coppercap
+		head = /obj/item/clothing/head/roguetown/helmet/leather/conical
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
 	var/obj/item/rogueweapon/sword/iron/P = new()
 	var/obj/item/rogueweapon/shield/wood/POH = new()
@@ -487,12 +484,12 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
-	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	gloves = /obj/item/clothing/gloves/roguetown/chain/iron
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	if(prob(75))
 		armor = /obj/item/clothing/suit/roguetown/armor/chainmail/iron
 	else
-		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/copperchest
+		armor = /obj/item/clothing/suit/roguetown/armor/chainmail
 	if(prob(50))
 		shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	else
@@ -503,10 +500,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	else
 		head = /obj/item/clothing/head/roguetown/helmet/kettle
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
-	if(prob(50))
-		neck = /obj/item/clothing/neck/roguetown/coif/cloth
-	else
-		neck = /obj/item/clothing/neck/roguetown/gorget/copper
+	neck = /obj/item/clothing/neck/roguetown/coif/cloth
 	var/obj/item/rogueweapon/sword/sabre/P = new()
 	var/obj/item/rogueweapon/shield/heater/POH = new()
 	H.put_in_hands(P, forced = TRUE)
@@ -539,16 +533,16 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 	else
 		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
-	gloves = /obj/item/clothing/gloves/roguetown/fingerless
+	gloves = /obj/item/clothing/gloves/roguetown/chain
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	if(prob(75))
-		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/iron
+		armor = /obj/item/clothing/suit/roguetown/armor/cuirass/iron/rust
 	else
 		armor = /obj/item/clothing/suit/roguetown/armor/cuirass
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor/light
-	belt = /obj/item/storage/belt/rogue/leather
+	belt = /obj/item/storage/belt/rogue/leather/steel
 	if(prob(75))
-		head = /obj/item/clothing/head/roguetown/helmet/heavy/ironplate
+		head = /obj/item/clothing/head/roguetown/helmet/heavy/rust
 	else
 		head = /obj/item/clothing/head/roguetown/helmet/sallet
 	mask = /obj/item/clothing/mask/rogue/shepherd/clothmask
