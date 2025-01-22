@@ -48,6 +48,9 @@
 		return PROCESS_KILL
 	blood_storage = max(blood_storage - drainage, 0)
 
+/obj/item/natural/worms/update_icon()
+	icon_state = "leech"
+
 /obj/item/natural/worms/leech/examine(mob/user)
 	. = ..()
 	switch(blood_storage/blood_maximum)
@@ -194,11 +197,6 @@
 	if(length(descs))
 		desc = "[desc] [jointext(descs, " ")]"
 	return TRUE
-
-/obj/item/natural/worms/leeches/update_icon()
-	..()
-	if(amt > 1)
-		name = "[initial(name)]es"
 
 /obj/item/natural/worms/leech/parasite
 	name = "the parasite"
