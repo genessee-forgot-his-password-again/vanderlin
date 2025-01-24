@@ -1098,7 +1098,6 @@
 #include "code\modules\cargo\packsrogue\apparel.dm"
 #include "code\modules\cargo\packsrogue\armor.dm"
 #include "code\modules\cargo\packsrogue\cheat.dm"
-
 #include "code\modules\cargo\packsrogue\food.dm"
 #include "code\modules\cargo\packsrogue\instruments.dm"
 #include "code\modules\cargo\packsrogue\jewelry.dm"
@@ -1514,7 +1513,6 @@
 #include "code\modules\mob\living\carbon\human\voicepack.dm"
 #include "code\modules\mob\living\carbon\human\npc\_npc.dm"
 #include "code\modules\mob\living\carbon\human\npc\bandit.dm"
-
 #include "code\modules\mob\living\carbon\human\npc\bum.dm"
 #include "code\modules\mob\living\carbon\human\npc\goblin.dm"
 #include "code\modules\mob\living\carbon\human\npc\orc.dm"
