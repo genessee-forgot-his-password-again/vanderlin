@@ -394,10 +394,10 @@ GLOBAL_PROTECT(tracy_init_reason)
 
 /world/proc/update_status()
 	var/s = ""
-	s += "<center><a href=\"https://discord.gg/zNAGFDcQ\">"
+	s += "<center><a href=\"https://discord.gg/w84J6eFzcp\">"
 #ifdef MATURESERVER
-	s += "<big><b>Vanderlin - Now 24/7 (Hosted by Monkestation)</b></big></a><br>"
-	s += "<b>Dark Medieval Fantasy Roleplay<b><br>"
+	s += "<big><b>genessee's cruel and illegal vanderlin fork</b></big></a><br>"
+	s += "<b>poopdark medieval fantasy<b><br>"
 
 #else
 	s += "<big><b>ROGUEWORLD</b></big></a><br>"
