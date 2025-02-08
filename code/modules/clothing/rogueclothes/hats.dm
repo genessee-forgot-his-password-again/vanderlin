@@ -265,6 +265,9 @@
 /obj/item/clothing/head/roguetown/roguehood/black
 	color = CLOTHING_SOOT_BLACK
 
+/obj/item/clothing/head/roguetown/roguehood/green
+	color = CLOTHING_FOREST_GREEN
+
 /obj/item/clothing/head/roguetown/roguehood/random/Initialize()
 	color = pick( CLOTHING_PEASANT_BROWN, CLOTHING_SPRING_GREEN, CLOTHING_CHESTNUT, CLOTHING_YELLOW_OCHRE)
 	..()
@@ -509,7 +512,7 @@
 
 /obj/item/clothing/head/roguetown/crown/serpcrown/Initialize()
 	. = ..()
-	if(type == /obj/item/clothing/head/roguetown/crown/serpcrown)
+	if(type == /obj/item/clothing/head/roguetown/crown/serpcrown && !istype(loc, /mob/living/carbon/human/dummy)) //dummies spawn this in character setup
 		SSroguemachine.crown = src
 
 /obj/item/clothing/head/roguetown/crown/serpcrown/proc/anti_stall()
@@ -1448,9 +1451,9 @@
 	item_state = "human_spearplate"
 	allowed_sex = list(MALE)
 	allowed_race = list("human")
-	flags_inv = HIDEEARS
+	flags_inv = HIDEEARS|HIDEFACE
 	clothing_flags = CANT_SLEEP_IN
-	body_parts_covered = HEAD|EARS|HAIR
+	body_parts_covered = HEAD|EARS|HAIR|NOSE|MOUTH
 
 //............... Hoplite Helmet ............... //
 /obj/item/clothing/head/roguetown/rare/hoplite // Unique Hoplite kit

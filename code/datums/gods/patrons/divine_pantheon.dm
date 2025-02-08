@@ -26,9 +26,9 @@
 	name = "Noc"
 	domain = "God of Knowledge, the Moon Prince"
 	desc = "Crafted from the helmet of Psydon, twin of Astrata. He gifted mankind divine wisdom."
-	flaws = "Close-minded, Vindictive, Haughty"
+	flaws = "Cynical, Isolationist, Unfiltered Honesty"
 	worshippers = "Magic Practitioners, Scholars, Scribes"
-	sins = "Ignorance, Burning Books, Rashness"
+	sins = "Suppressing Truth, Burning Books, Censorship"
 	boons = "You learn and teach apprentices slightly better."
 	added_traits = list(TRAIT_TUTELAGE)
 	t0 = /obj/effect/proc_holder/spell/invoked/lesser_heal
@@ -37,7 +37,7 @@
 	t3 = /obj/effect/proc_holder/spell/invoked/projectile/moondagger
 	confess_lines = list(
 		"NOC IS NIGHT!",
-		"NOC SEES ALL!",
+		"NOC SEES THE TRUTH!",
 		"I SEEK THE MYSTERIES OF THE MOON!",
 	)
 
@@ -109,6 +109,8 @@
 	added_traits = list(TRAIT_SHARPER_BLADES)
 	t0 = /obj/effect/proc_holder/spell/invoked/lesser_heal
 	t1 = /obj/effect/proc_holder/spell/self/call_to_arms
+	t2 = /obj/effect/proc_holder/spell/self/divine_strike
+	t3 = /obj/effect/proc_holder/spell/invoked/persistence
 	confess_lines = list(
 		"RAVOX IS JUSTICE!",
 		"THROUGH STRIFE, GRACE!",
@@ -126,6 +128,7 @@
 	added_traits = list(TRAIT_BLACKLEG)
 	t0 = /obj/effect/proc_holder/spell/invoked/lesser_heal
 	t1 = /obj/effect/proc_holder/spell/invoked/vicious_mimicry
+	t2 = /obj/effect/proc_holder/spell/invoked/wheel
 	confess_lines = list(
 		"ASTRATA IS MY LIGHT!",
 		"NOC IS NIGHT!",

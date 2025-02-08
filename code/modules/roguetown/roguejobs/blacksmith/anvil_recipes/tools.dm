@@ -62,6 +62,14 @@
 	created_item = /obj/item/rogueweapon/knife/scissors/steel
 	i_type = "Tools"
 
+/datum/anvil_recipe/tools/pick/steel
+	name = "Steel Pick (+Stick)"
+	recipe_name = "a digging Pick"
+	req_bar = /obj/item/ingot/steel
+	additional_items = list(/obj/item/grown/log/tree/stick)
+	created_item = /obj/item/rogueweapon/pick/steel
+	i_type = "Tools"
+
 /datum/anvil_recipe/tools/frypan
 	name = "Pan"
 	recipe_name = "a Frypan"
@@ -95,6 +103,20 @@
 	createmultiple = TRUE
 	createditem_num = 2
 	craftdiff = 2
+
+/datum/anvil_recipe/tools/carafegold
+	name = "Golden Carafe"
+	recipe_name = "Golden Carafe"
+	req_bar = /obj/item/ingot/gold
+	created_item = /obj/item/reagent_containers/glass/carafe/gold
+	craftdiff = 0
+
+/datum/anvil_recipe/tools/carafesilver
+	name = "Silver Carafe"
+	recipe_name = "Silver Carafe"
+	req_bar = /obj/item/ingot/silver
+	created_item = /obj/item/reagent_containers/glass/carafe/silver
+	craftdiff = 0
 
 /datum/anvil_recipe/tools/hammer
 	name = "Hammer (+Stick)"

@@ -508,13 +508,15 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.json")
 					cat_name = "Peasantry"
 				if (APPRENTICES)
 					cat_name = "Apprentices"
+				if (YOUNGFOLK)
+					cat_name = "Young Folk"
 
 			dat += "<fieldset style='width: 185px; border: 2px solid [cat_color]; display: inline'>"
 			dat += "<legend align='center' style='font-weight: bold; color: [cat_color]'>[cat_name]</legend>"
 			var/datum/game_mode/chaosmode/C = SSticker.mode
 			if(istype(C))
 				if(C.skeletons)
-					dat += "<a class='job command' href='byond://?src=[REF(src)];SelectedJob=skeleton'>BECOME AN EVIL SKELETON</a>"
+					dat += "<a class='job command' href='byond://?src=[REF(src)];SelectedJob=Skeleton'>BECOME AN EVIL SKELETON</a>"
 					dat += "</fieldset><br>"
 					column_counter++
 					if(column_counter > 0 && (column_counter % 3 == 0))
