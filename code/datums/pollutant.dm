@@ -26,7 +26,7 @@
 	return
 
 ///When a carbon mob breathes in the pollutant
-/datum/pollutant/proc/breathe_act(mob/living/carbon/victim, amount)
+/datum/pollutant/proc/breathe_act(mob/living/carbon/victim, amount, total_amount)
 	return
 
 ///When a carbon mob smells scents this is called
@@ -34,17 +34,32 @@
 	return
 
 
-/datum/pollutant/fragrance/on_life(parent)
+/datum/pollutant/fragrance/on_smell(parent)
 	. = ..()
 	for(var/mob/living/carbon/human/H in view(1, parent))
 		if(!H)
 			continue
 		if(!considered_alive(H.mind))
 			continue
-		if(H.has_stress(/datum/stressevent/perfume))
+		if(!H.can_smell())
 			continue
 
-		H.add_stress(/datum/stressevent/perfume)
+		switch(descriptor)
+			if(SCENT_DESC_FRAGRANCE)
+				if(H.has_stress_type(/datum/stress_event/perfume) || H.has_stress_type(/datum/stress_event/perfume_hater))
+					continue
+				if(HAS_TRAIT(H, TRAIT_STINKY))
+					H.add_stress(/datum/stress_event/perfume_hater)
+				else
+					H.add_stress(/datum/stress_event/perfume)
+			if(SCENT_DESC_ODOR)
+				if(H.has_stress_type(/datum/stress_event/odor_lover) || H.has_stress_type(/datum/stress_event/odor))
+					continue
+				if(HAS_TRAIT(H, TRAIT_STINKY))
+					H.add_stress(/datum/stress_event/odor_lover)
+				else
+					H.add_stress(/datum/stress_event/odor)
+
 		if(prob(2))
 			H.visible_message(span_green("The [descriptor] of [scent] bombards my nostrils."))
 
@@ -64,7 +79,7 @@
 	scent = "debug scent"
 	color = "#000000"
 
-	descriptor = "fragrance"
+	descriptor = SCENT_DESC_FRAGRANCE
 
 /datum/pollutant/fragrance/lavender
 	name = "lavender"
@@ -105,3 +120,34 @@
 	name = "strawberry"
 	scent = "strawberries"
 	color = "#fc5a8d"
+
+//Body odor
+/datum/pollutant/fragrance/musk
+	name = "Musk"
+	pollutant_flags = POLLUTANT_SMELL|POLLUTANT_BREATHE_ACT
+	smell_intensity = 1
+
+	scent = "body odor"
+	color = "#c13636"
+	var/musk_reagent = /datum/reagent/miasmagas
+
+/datum/pollutant/fragrance/musk/breathe_act(mob/living/carbon/victim, amount, total_amount)
+	. = ..()
+	if(victim.wear_mask)
+		var/obj/item/mask = victim.wear_mask
+		if(!mask.gas_transfer_coefficient)
+			return
+		if((3 / victim.wear_mask.gas_transfer_coefficient) >= amount)
+			return
+	if(amount > 3 && (amount / total_amount >= 0.25))
+		victim.reagents.add_reagent(musk_reagent, 1)
+
+/datum/pollutant/fragrance/musk/brimstone
+	name = "brimstone"
+	scent = "brimstone"
+	color = "#7b3939"
+
+/datum/pollutant/fragrance/musk/bilgewater
+	name = "bilge water"
+	scent = "rotted fish"
+	color = "#40526d"

@@ -1,4 +1,4 @@
-/obj/item/rogueweapon/surgery/saw/improv
+/obj/item/weapon/surgery/saw/improv
 	name = "improvised saw"
 	desc = "A tool used to carve through bone crudely, but better than nothing."
 	icon_state = "bonesaw_wood"
@@ -15,8 +15,10 @@
 	thrown_bclass = BCLASS_CHOP
 	tool_behaviour = TOOL_IMPROVISED_SAW
 	sharpness = IS_BLUNT
+	smeltresult = /obj/item/fertilizer/ash
+	melting_material = null
 
-/obj/item/rogueweapon/surgery/hemostat/improv
+/obj/item/weapon/surgery/hemostat/improv
 	name = "improvised clamp"
 	desc = "A tool used to clamp down on soft tissue. A poor alternative to metal but better than nothing."
 	icon_state = "forceps_wood"
@@ -27,8 +29,10 @@
 	pickup_sound = 'sound/foley/equip/swordsmall2.ogg'
 	tool_behaviour = TOOL_IMPROVISED_HEMOSTAT
 	sharpness = IS_BLUNT
+	smeltresult = /obj/item/fertilizer/ash
+	melting_material = null
 
-/obj/item/rogueweapon/surgery/retractor/improv
+/obj/item/weapon/surgery/retractor/improv
 	name = "improvised retractor"
 	desc = "A tool used to spread tissue open for surgical access in a tentative manner."
 	icon_state = "speculum_wood"
@@ -43,3 +47,5 @@
 	thrown_bclass = BCLASS_BLUNT
 	tool_behaviour = TOOL_IMPROVISED_RETRACTOR
 	sharpness = IS_BLUNT
+	smeltresult = /obj/item/fertilizer/ash
+	melting_material = null

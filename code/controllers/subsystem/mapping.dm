@@ -9,6 +9,7 @@ SUBSYSTEM_DEF(mapping)
 
 	var/datum/map_config/config
 	var/datum/map_config/next_map_config
+	var/datum/map_adjustment/map_adjustment
 
 	var/map_voted = FALSE
 
@@ -43,48 +44,72 @@ SUBSYSTEM_DEF(mapping)
 	var/datum/space_level/transit
 	var/datum/space_level/empty_space
 	var/num_of_res_levels = 1
+	/// True when in the process of adding a new Z-level, global locking
+	var/adding_new_zlevel = FALSE
 
-//dlete dis once #39770 is resolved
-/datum/controller/subsystem/mapping/proc/HACK_LoadMapConfig()
-	if(!config)
+	///this is a list of all the world_traits we have from things like god interventions
+	var/list/active_world_traits = list()
+	///antag retainer
+	var/datum/antag_retainer/retainer
+
+/datum/controller/subsystem/mapping/PreInit()
 #ifdef FORCE_MAP
-		config = load_map_config(FORCE_MAP)
+	config = load_map_config(FORCE_MAP)
 #else
-		config = load_map_config(error_if_missing = FALSE)
+	config = load_map_config(error_if_missing = FALSE)
 #endif
 
+#ifdef FORCE_RANDOM_WORLD_GEN
+	config = load_map_config("_maps/kalypso.json")
+	log_world("FORCE_RANDOM_WORLD_GEN enabled - loading Kalypso only for random world generation")
+#endif
+
+#ifndef FORCE_RANDOM_WORLD_GEN
+	// After assigning a config datum to var/config, we check which map adjustment fits the current config
+	for(var/datum/map_adjustment/adjust as anything in subtypesof(/datum/map_adjustment))
+		if(!adjust.map_file_name)
+			continue
+		var/map = config.map_file
+		if(!map)
+			break
+		if(map_adjustment)
+			stack_trace("[map] is trying to set map adjustments after they have been set!")
+			break
+		if(adjust.map_file_name != map)
+			continue
+		map_adjustment = new adjust()
+		log_world("Loaded '[map]' map adjustment.")
+		break
+#endif
+	return ..()
+
 /datum/controller/subsystem/mapping/Initialize(timeofday)
-	HACK_LoadMapConfig()
+	retainer = new
 	if(initialized)
 		return
+#ifdef FORCE_RANDOM_WORLD_GEN
+	// Skip normal initialization and go straight to random world gen
+	log_world("Initializing random world generation...")
+	initialize_random_world_generation()
+	return ..()
+#endif
+
 	if(config.defaulted)
 		var/old_config = config
 		config = global.config.defaultmap
 		if(!config || config.defaulted)
-			to_chat(world, "<span class='boldannounce'>Unable to load next or default map config, defaulting to Box Station</span>")
+			to_chat(world, "<span class='boldannounce'>Unable to load next or default map config, defaulting to Vanderlin</span>")
 			config = old_config
+	if(map_adjustment)
+		map_adjustment.on_mapping_init()
+		log_world("Applied '[map_adjustment.map_file_name]' map adjustment: on_mapping_init()")
 	loadWorld()
-	repopulate_sorted_areas()
+	require_area_resort()
 	process_teleport_locs()			//Sets up the wizard teleport locations
 	preloadTemplates()
-#ifndef LOWMEMORYMODE
-	// Create space ruin levels
-	while (space_levels_so_far < config.space_ruin_levels)
-		++space_levels_so_far
-		add_new_zlevel("Empty Area [space_levels_so_far]", ZTRAITS_SPACE)
-	// and one level with no ruins
-	for (var/i in 1 to config.space_empty_levels)
-		++space_levels_so_far
-		empty_space = add_new_zlevel("Empty Area [space_levels_so_far]", list(ZTRAIT_LINKAGE = CROSSLINKED))
-
-	// Pick a random away mission.
-	if(CONFIG_GET(flag/roundstart_away))
-		createRandomZlevel()
-
-#endif
 	// Add the transit level
 	transit = add_new_zlevel("Transit/Reserved", list(ZTRAIT_RESERVED = TRUE))
-	repopulate_sorted_areas()
+	require_area_resort()
 	initialize_reserved_level(transit.z_value)
 	generate_z_level_linkages()
 	calculate_default_z_level_gravities()
@@ -142,8 +167,8 @@ SUBSYSTEM_DEF(mapping)
 	z_list = SSmapping.z_list
 	multiz_levels = SSmapping.multiz_levels
 
-#define INIT_ANNOUNCE(X) to_chat(world, "<span class='boldannounce'>[X]</span>"); log_world(X)
-/datum/controller/subsystem/mapping/proc/LoadGroup(list/errorList, name, path, files, list/traits, list/default_traits, silent = FALSE)
+#define INIT_ANNOUNCE(X) to_chat(world, span_boldannounce("[X]")); log_world(X)
+/datum/controller/subsystem/mapping/proc/LoadGroup(list/errorList, name, path, files, list/traits, list/default_traits, silent = FALSE, delve = 0)
 	. = list()
 	var/start_time = REALTIMEOFDAY
 
@@ -177,13 +202,13 @@ SUBSYSTEM_DEF(mapping)
 	var/start_z = world.maxz + 1
 	var/i = 0
 	for (var/level in traits)
-		add_new_zlevel("[name][i ? " [i + 1]" : ""]", level)
+		add_new_zlevel("[name][i ? " [i + 1]" : ""]", level, delve = delve)
 		++i
 
 	// load the maps
 	for (var/P in parsed_maps)
 		var/datum/parsed_map/pm = P
-		if (!pm.load(1, 1, start_z + parsed_maps[P], no_changeturf = TRUE))
+		if (!pm.load(1, 1, start_z + parsed_maps[P], no_changeturf = TRUE, new_z = TRUE))
 			errorList |= pm.original_path
 
 	log_game("Loaded [name] in [(REALTIMEOFDAY - start_time)/10]s!")
@@ -191,45 +216,37 @@ SUBSYSTEM_DEF(mapping)
 	return parsed_maps
 
 /datum/controller/subsystem/mapping/proc/loadWorld()
-	//if any of these fail, something has gone horribly, HORRIBLY, wrong
 	var/list/FailedZs = list()
-
-	// ensure we have space_level datums for compiled-in maps
 	InitializeDefaultZLevels()
-
-	// load the station
 	station_start = world.maxz + 1
+
 	#ifdef TESTING
 	INIT_ANNOUNCE("Loading [config.map_name]...")
 	#endif
-
-	LoadGroup(FailedZs, "Station", config.map_path, config.map_file, config.traits, ZTRAITS_TOWN)
-
+	LoadGroup(FailedZs, "Station", config.map_path, config.map_file, config.traits, ZTRAITS_TOWN, delve = config.delve)
 	var/list/otherZ = list()
+	for(var/map_json in config.other_z)
+		otherZ += load_map_config(map_json)
 
-	//For Dakka map
-/*	otherZ += load_map_config("_maps/map_files/dakkatown/otherz/dakkacoast.json")
-	otherZ += load_map_config("_maps/map_files/dakkatown/otherz/dakkaforest.json")
-	otherZ += load_map_config("_maps/map_files/dakkatown/otherz/dakkamountain.json")
-	otherZ += load_map_config("_maps/map_files/dakkatown/otherz/dakkaswamp.json")*/
-	#ifndef LOWMEMORYMODE
-	if(config.map_name == "Vanderlin") // Vanderlin
-		otherZ += load_map_config("_maps/map_files/vanderlin/otherz/vanderlin_forest.json")
-		//otherZ += load_map_config("_maps/map_files/vanderlin/otherz/vanderlin_mountain.json")
-		otherZ += load_map_config("_maps/map_files/roguetown/otherz/smalldecap.json")
-		otherZ += load_map_config("_maps/map_files/vanderlin/otherz/vanderlin_bog.json")
-		// Add dungeon map files here later, maybe we can pick from a list of them?
-	else //For Rogue map
-		otherZ += load_map_config("_maps/map_files/roguetown/otherz/smallforest.json")
-		otherZ += load_map_config("_maps/map_files/roguetown/otherz/smalldecap.json")
-		otherZ += load_map_config("_maps/map_files/roguetown/otherz/smallswamp.json")
+	#ifndef NO_DUNGEON
+	// Load base dungeon level
+	otherZ += load_map_config("_maps/map_files/shared/dungeon.json")
+
+	// Load additional delve levels if multi-level dungeons are enabled
+	if(SSdungeon_generator.multilevel_dungeons)
+		for(var/level = 2; level <= SSdungeon_generator.max_delve_levels; level++)
+			otherZ += load_map_config("_maps/map_files/shared/dungeon_delve[level].json")
 	#endif
+
 	//For all maps
-	otherZ += load_map_config("_maps/map_files/roguetown/otherz/underworld.json")
-//	otherZ += load_map_config("_maps/map_files/roguetown/otherz/special.json")
-	if(otherZ.len)
+
+	#ifndef LOWMEMORYMODE
+	otherZ += load_map_config("_maps/map_files/shared/underworld.json") // don't load underworld on lowmem
+	#endif
+
+	if(length(otherZ))
 		for(var/datum/map_config/OtherZ in otherZ)
-			LoadGroup(FailedZs, OtherZ.map_name, OtherZ.map_path, OtherZ.map_file, OtherZ.traits, ZTRAITS_STATION)
+			LoadGroup(FailedZs, OtherZ.map_name, OtherZ.map_path, OtherZ.map_file, OtherZ.traits, ZTRAITS_STATION, delve = OtherZ.delve)
 
 	if(SSdbcore.Connect())
 		var/datum/DBQuery/query_round_map_name = SSdbcore.NewQuery({"
@@ -258,7 +275,7 @@ SUBSYSTEM_DEF(mapping)
 	if(config.map_path == "custom")
 		fdel("_maps/custom/[config.map_file]")
 		// And as the file is now removed set the next map to default.
-		next_map_config = load_map_config(default_to_box = TRUE)
+		next_map_config = load_map_config(default_to_van = TRUE)
 
 
 /datum/controller/subsystem/mapping/proc/maprotate()
@@ -317,20 +334,12 @@ SUBSYSTEM_DEF(mapping)
 
 /datum/controller/subsystem/mapping/proc/changemap(datum/map_config/VM)
 	if(!VM.MakeNextMap())
-		next_map_config = load_map_config(default_to_box = TRUE)
+		next_map_config = load_map_config(default_to_van = TRUE)
 		message_admins("Failed to set new map with next_map.json for [VM.map_name]! Using default as backup!")
 		return
 
 	next_map_config = VM
 	return TRUE
-/*
-/datum/controller/subsystem/mapping/proc/preloadTemplates(path = "_maps/templates/") //see master controller setup
-
-	var/list/filelist = flist(path)
-	for(var/map in filelist)
-		var/datum/map_template/T = new(path = "[path][map]", rename = "[map]")
-		map_templates[T.name] = T
-*/
 
 //Precache the templates via map template datums, not directly from files
 //This lets us preload as many files as we want without explicitely loading ALL of them into cache (ie WIP maps or what have you)
@@ -378,24 +387,22 @@ SUBSYSTEM_DEF(mapping)
 		// No need to empty() these, because it's world init and they're
 		// already /turf/open/space/basic.
 		var/turf/T = t
-		T.flags_1 |= UNUSED_RESERVATION_TURF_1
+		T.turf_flags |= UNUSED_RESERVATION_TURF
 	unused_turfs["[z]"] = block
 	reservation_ready["[z]"] = TRUE
 	clearing_reserved_turfs = FALSE
 
 /datum/controller/subsystem/mapping/proc/reserve_turfs(list/turfs)
-	for(var/i in turfs)
-		var/turf/T = i
+	for(var/turf/T as anything in turfs)
 		T.empty(RESERVED_TURF_TYPE, RESERVED_TURF_TYPE, null, TRUE)
 		LAZYINITLIST(unused_turfs["[T.z]"])
 		unused_turfs["[T.z]"] |= T
-		T.flags_1 |= UNUSED_RESERVATION_TURF_1
+		T.turf_flags |= UNUSED_RESERVATION_TURF
 		GLOB.areas_by_type[world.area].contents += T
 		CHECK_TICK
 
 /datum/controller/subsystem/mapping/proc/reg_in_areas_in_z(list/areas)
-	for(var/B in areas)
-		var/area/A = B
+	for(var/area/A as anything in areas)
 		A.reg_in_areas_in_z()
 
 /datum/controller/subsystem/mapping/proc/get_isolated_ruin_z()
@@ -427,3 +434,103 @@ SUBSYSTEM_DEF(mapping)
 			else
 				//Loading the template failed somehow (template.load returned a FALSE), did you spell the paths right?
 				log_world("SSMapping: Failed to load template: [template.name] ([template.mappath])")
+
+/datum/controller/subsystem/mapping/proc/add_world_trait(datum/world_trait/trait_type, duration = 30 MINUTES)
+	var/datum/world_trait/new_trait = new trait_type
+	active_world_traits |= new_trait
+
+	if(duration > 0)
+		addtimer(CALLBACK(src, PROC_REF(remove_world_trait), new_trait), duration)
+
+/datum/controller/subsystem/mapping/proc/remove_world_trait(datum/world_trait/trait_to_remove)
+	active_world_traits -= trait_to_remove
+	qdel(trait_to_remove)
+
+/datum/controller/subsystem/mapping/proc/find_and_remove_world_trait(datum/world_trait/trait_to_remove)
+	for(var/datum/world_trait/trait in active_world_traits)
+		if(!istype(trait, trait_to_remove))
+			continue
+		active_world_traits -= trait
+		qdel(trait)
+		return TRUE
+	return FALSE
+
+/datum/controller/subsystem/mapping/proc/build_area_turfs(z_level, space_guaranteed)
+	// If we know this is filled with default tiles, we can use the default area
+	// Faster
+	if(space_guaranteed)
+		var/area/global_area = GLOB.areas_by_type[world.area]
+		LISTASSERTLEN(global_area.turfs_by_zlevel, z_level, list())
+		global_area.turfs_by_zlevel[z_level] = Z_TURFS(z_level)
+		return
+
+	for(var/turf/to_contain as anything in Z_TURFS(z_level))
+		var/area/our_area = to_contain.loc
+		LISTASSERTLEN(our_area.turfs_by_zlevel, z_level, list())
+		our_area.turfs_by_zlevel[z_level] += to_contain
+
+/proc/has_world_trait(datum/world_trait/trait_type)
+	if(!length(SSmapping.active_world_traits))
+		return FALSE
+	for(var/datum/world_trait/trait in SSmapping.active_world_traits)
+		if(!istype(trait, trait_type))
+			continue
+		return TRUE
+	return FALSE
+
+/proc/add_tracked_world_trait_atom(atom/incoming, datum/world_trait/trait_type)
+	if(!length(SSmapping.active_world_traits))
+		return FALSE
+	for(var/datum/world_trait/trait in SSmapping.active_world_traits)
+		if(!istype(trait, trait_type))
+			continue
+		trait.add_tracked(incoming)
+
+/proc/remove_tracked_world_trait_atom(atom/removing, datum/world_trait/trait_type)
+	if(!length(SSmapping.active_world_traits))
+		return FALSE
+	for(var/datum/world_trait/trait in SSmapping.active_world_traits)
+		if(!istype(trait, trait_type))
+			continue
+		trait.remove_tracked(removing)
+
+/datum/controller/subsystem/mapping/proc/initialize_random_world_generation()
+	// Ensure we have space_level datums for compiled-in maps
+	InitializeDefaultZLevels()
+
+	// Load only Kalypso as the base
+	station_start = world.maxz + 1
+
+	#ifdef TESTING
+	message_admins("Loading Kalypso for random world generation...")
+	#endif
+
+	var/list/FailedZs = list()
+	LoadGroup(FailedZs, "Kalypso", config.map_path, config.map_file, config.traits, ZTRAITS_TOWN)
+
+	if(LAZYLEN(FailedZs))
+		var/msg = "RED ALERT! Failed to load Kalypso for random world generation: [FailedZs[1]]"
+		message_admins(msg)
+		return
+
+	// Skip loading other z-levels - we only want Kalypso
+	log_world("Kalypso loaded successfully for random world generation")
+
+	// Generate the random world content
+	generate_random_world()
+
+	// Basic post-load setup
+	require_area_resort()
+	process_teleport_locs()
+	preloadTemplates()
+
+	// Add minimal transit level
+	transit = add_new_zlevel("Transit/Reserved", list(ZTRAIT_RESERVED = TRUE))
+	require_area_resort()
+	initialize_reserved_level(transit.z_value)
+	generate_z_level_linkages()
+	calculate_default_z_level_gravities()
+
+
+/datum/controller/subsystem/mapping/proc/generate_random_world()
+	generate_complete_world()

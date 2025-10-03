@@ -1,5 +1,4 @@
 ////// Roguetown version of the kitchen spike
-#define VIABLE_MOB_CHECK(X) (isliving(X))
 /obj/structure/meathook
 	name = "meathook"
 	icon = 'icons/roguetown/misc/tallstructure.dmi'
@@ -9,7 +8,8 @@
 	anchored = TRUE
 	max_integrity = 250
 	buckle_lying = 0
-	can_buckle = 1
+	can_buckle = TRUE
+	buckle_prevents_pull = TRUE
 
 	var/draining_blood = FALSE
 
@@ -41,57 +41,58 @@
 /obj/structure/meathook/attack_paw(mob/user)
 	return attack_hand(user)
 
-/obj/structure/meathook/attack_hand(mob/user)
-	if(VIABLE_MOB_CHECK(user.pulling) && !has_buckled_mobs())
-		var/mob/living/L = user.pulling
-		L.visible_message(span_danger("[user] starts hanging [L] on [src]!"), span_danger("[user] starts hanging you on [src]]!"), span_hear("I hear the sound of clanging chains..."))
-		if(do_mob(user, src, 120))
-			if(has_buckled_mobs())
-				return
-			if(L.buckled)
-				return
-			if(user.pulling != L)
-				return
-			playsound(src.loc, 'sound/foley/butcher.ogg', 25, TRUE)
-			L.visible_message(span_danger("[user] hangs [L] on [src]!"), span_danger("[user] hangs you on [src]]!"))
-			L.forceMove(drop_location())
-			L.emote("scream")
-			L.add_splatter_floor()
-			L.adjustBruteLoss(30)
-			L.setDir(2)
-			buckle_mob(L, force=1)
-			var/matrix/m90 = matrix(L.transform)
-			m90.Turn(90)
-			m90.Translate(12,12)
-			animate(L, transform = m90, time = 3)
-			L.pixel_y = L.get_standard_pixel_x_offset(180)
-	else if (has_buckled_mobs())
-		for(var/mob/living/L in buckled_mobs)
-			user_unbuckle_mob(L, user)
-	else
-		..()
-
 /obj/structure/meathook/user_buckle_mob(mob/living/M, mob/user, check_loc)
-	return
+	if(!isliving(user.pulling))
+		return FALSE
+	if(has_buckled_mobs())
+		return FALSE
+
+	var/mob/living/L = user.pulling
+	L.visible_message(span_danger("[user] starts hanging [L] on [src]!"), span_danger("[user] starts hanging you on [src]]!"), span_hear("I hear the sound of clanging chains..."))
+	if(!do_after(user, 12 SECONDS, src))
+		return FALSE
+
+	if(has_buckled_mobs())
+		return FALSE
+	if(L.buckled)
+		return FALSE
+	if(user.pulling != L)
+		return FALSE
+
+	playsound(get_turf(src), 'sound/foley/butcher.ogg', 25, TRUE)
+	L.visible_message(span_danger("[user] hangs [L] on [src]!"), span_danger("[user] hangs you on [src]]!"))
+	L.forceMove(drop_location())
+	L.emote("scream")
+	L.add_splatter_floor()
+	L.adjustBruteLoss(30)
+	L.setDir(2)
+	buckle_mob(L, force=1)
+	var/matrix/m90 = matrix(L.transform)
+	m90.Turn(90)
+	m90.Translate(12,12)
+	animate(L, transform = m90, time = 3)
+	L.pixel_y = L.get_standard_pixel_x_offset()
+	draining_blood = FALSE
+	return TRUE
 
 /obj/structure/meathook/user_unbuckle_mob(mob/living/buckled_mob, mob/user)
 	if(buckled_mob)
 		var/mob/living/M = buckled_mob
 		if (M != user)
 			M.visible_message(span_notice("[user] is trying to pull [M] free of [src]!"),\
-				span_notice("[user] is trying to pull you off [src]! It hurts!"),\
+				span_notice("[user] is trying to pull me off [src]! It hurts!"),\
 				span_hear("I hear the sound of torn flesh and whimpering..."))
-			if(!do_after(user, 300, target = src))
+			if(!do_after(user, 12 SECONDS, src))
 				if(M && M.buckled)
 					M.visible_message(span_notice("[user] fails to free [M]!"),\
-					span_notice("[user] fails to pull you off of [src]!"))
+					span_notice("[user] fails to pull me off of [src]!"))
 				return
 		else
 			M.visible_message(span_warning("[M] struggles to break free from [src]!"),\
 				span_notice("I struggle to break free from [src], tearing my legs! (Stay still for two minutes.)"),\
 				span_hear("I hear the sound of torn flesh and whimpering..."))
 			M.adjustBruteLoss(30)
-			if(!do_after(M, 1200, target = src))
+			if(!do_after(M, 30 SECONDS, src))
 				if(M && M.buckled)
 					to_chat(M, span_warning("I fail to free myself!"))
 				return
@@ -101,10 +102,11 @@
 
 /obj/structure/meathook/process()
 	if(!length(buckled_mobs) || !draining_blood)
+		draining_blood = FALSE
 		STOP_PROCESSING(SSmachines, src)
 		return
 	var/mob/living/L = buckled_mobs[1]
-	if(L.blood_drained > 60)
+	if(L.blood_drained >= 60)
 		L.blood_drained = 60
 		draining_blood = FALSE
 		STOP_PROCESSING(SSmachines, src)
@@ -114,27 +116,28 @@
 	var/obj/item/reagent_containers/container = locate(/obj/item/reagent_containers) in get_turf(src)
 	playsound(get_turf(src), 'sound/misc/bleed (3).ogg', 100, FALSE)
 	if(container && container.is_open_container() && container.reagents.total_volume < container.reagents.maximum_volume)
-		container.reagents.add_reagent(/datum/reagent/blood, 5)
+		var/datum/blood_type/type = L.get_blood_type()
+		container.reagents.add_reagent(initial(type.reagent_type), 5)
 	else
 		var/obj/effect/decal/cleanable/blood/puddle/P = locate() in get_turf(src)
 		if(P)
 			P.blood_vol += 5
-			P.update_icon()
+			P.update_appearance()
 		else
 			var/obj/effect/decal/cleanable/blood/drip/D = locate() in get_turf(src)
 			if(D)
 				D.blood_vol += 5
 				D.drips++
-				D.update_icon()
+				D.update_appearance()
 			else
 				new /obj/effect/decal/cleanable/blood/drip(get_turf(src))
 
 /obj/structure/meathook/proc/release_mob(mob/living/M)
 	var/matrix/m270 = matrix(M.transform)
-	m270.Turn(270)
 	m270.Translate(-12,-12)
+	m270.Turn(-90)
 	animate(M, transform = m270, time = 3)
-	M.pixel_y = M.get_standard_pixel_y_offset(180)
+	M.pixel_y = M.get_standard_pixel_y_offset()
 	M.adjustBruteLoss(30)
 	src.visible_message(span_danger("[M] falls free of [src]!"))
 	unbuckle_mob(M,force=1)
@@ -156,59 +159,80 @@
 /obj/structure/meathook/proc/butchery(mob/living/user, mob/living/simple_animal/butchery_target)
 	var/list/butcher = list()
 	if(butchery_target.butcher_results)
-		if(user.mind.get_skill_level(/datum/skill/labor/butchering) <= 1)
-			if(prob(50))
-				butcher = butchery_target.botched_butcher_results // chance to get shit result
-			else
-				butcher =butchery_target.butcher_results
-		if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 3)
-			if(prob(10))
-				butcher = butchery_target.perfect_butcher_results // small chance to get great result
-			else
-				butcher = butchery_target.butcher_results
-		if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 4)
-			if(prob(50))
-				butcher = butchery_target.perfect_butcher_results // decent chance to get great result
-			else
-				butcher = butchery_target.butcher_results
-		else
-			if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 5)
+		if(prob(50 + (user.get_skill_level(/datum/skill/labor/butchering) * 25))) // need level 2 to get consistent result
+			if(prob((user.get_skill_level(/datum/skill/labor/butchering) * 25) - 50)) // level 3 to 6 get better result
 				butcher = butchery_target.perfect_butcher_results
 			else
 				butcher = butchery_target.butcher_results
+		else
+			butcher = butchery_target.botched_butcher_results
+
+	// Get happiness bonus for yield calculations
+	var/happiness_bonus = butchery_target.get_happiness_yield_bonus(1)
 
 	if(!draining_blood && butchery_target.blood_drained < 60)
 		if(!(user.used_intent.type == /datum/intent/dagger/cut || user.used_intent.type == /datum/intent/sword/cut || user.used_intent.type == /datum/intent/axe/cut))
 			return
-		to_chat(user, span_notice("You start to cut [butchery_target] to start draining their blood."))
-		var/cut_time = 4 SECONDS - (0.5 SECONDS * user.mind?.get_skill_level(/datum/skill/labor/butchering))
-		if(do_after(user, cut_time, FALSE, src))
+		var/cut_time = 4 SECONDS - (0.5 SECONDS * user.get_skill_level(/datum/skill/labor/butchering))
+		to_chat(user, span_notice("I prepare to drain [butchery_target]'s blood by cutting the skin..."))
+		if(do_after(user, cut_time, src, (IGNORE_HELD_ITEM)))
 			butchery_target.blood_drained++
-			START_PROCESSING(SSmachines, src)
 			draining_blood = TRUE
+			START_PROCESSING(SSmachines, src)
 		return
 
 	if(!butchery_target.skinned && (user.used_intent.type == /datum/intent/dagger/cut || user.used_intent.type == /datum/intent/sword/cut || user.used_intent.type == /datum/intent/axe/cut))
-		var/cut_time = 6 SECONDS - (0.5 SECONDS * user.mind?.get_skill_level(/datum/skill/labor/butchering))
-		to_chat(user, span_notice("You start to skin [butchery_target]."))
-		if(do_after(user, cut_time, FALSE, src))
+		var/cut_time = 6 SECONDS - (0.5 SECONDS * user.get_skill_level(/datum/skill/labor/butchering))
+		to_chat(user, span_notice("I start to skin [butchery_target]."))
+		if(do_after(user, cut_time, src, (IGNORE_HELD_ITEM)))
 			var/first_fail = TRUE
+			var/total_bonus_items = 0
 			for(var/listed_item in butcher)
 				if(ispath(listed_item, /obj/item/natural/hide) || ispath(listed_item, /obj/item/natural/fur))
-					if(prob(40 + (user.mind?.get_skill_level(/datum/skill/labor/butchering) * 10) - (60 - butchery_target.blood_drained)))
-						butcher[listed_item] += round(butcher[listed_item] * 0.5)
-					if(prob(10 + (user.mind?.get_skill_level(/datum/skill/labor/butchering) * 5)) - (60 - butchery_target.blood_drained))
-						butcher[listed_item] += round(butcher[listed_item] * 0.5)
+					var/base_amount = butcher[listed_item]
+					var/final_amount = base_amount
+
+					// Apply skill-based bonuses
+					if(prob(40 + (user.get_skill_level(/datum/skill/labor/butchering) * 10) - (60 - butchery_target.blood_drained)))
+						final_amount += round(base_amount * 0.5)
+					if(prob(10 + (user.get_skill_level(/datum/skill/labor/butchering) * 5)) - (60 - butchery_target.blood_drained))
+						final_amount += round(base_amount * 0.5)
 					if(prob((60 - butchery_target.blood_drained)))
 						if(first_fail)
 							to_chat(user, span_notice("The flowing blood got in the way and messed up some of the skin."))
 							first_fail = FALSE
-						butcher[listed_item] -= round(butcher[listed_item] * 0.5)
-					for(var/i in 1 to butcher[listed_item])
+						final_amount -= round(base_amount * 0.5)
+
+					// Apply happiness bonus (only if we have items to bonus)
+					var/bonus_amount = 0
+					if(final_amount > 0 && happiness_bonus > 0)
+						var/total_bonus = final_amount * happiness_bonus
+						bonus_amount = round(total_bonus)
+						// Handle fractional bonuses with probability
+						var/fractional_part = total_bonus - bonus_amount
+						if(fractional_part > 0 && prob(fractional_part * 100))
+							bonus_amount++
+						total_bonus_items += bonus_amount
+
+					final_amount += bonus_amount
+
+					var/current_happiness = SEND_SIGNAL(butchery_target, COMSIG_HAPPINESS_RETURN_VALUE)
+					var/recipe_quality = clamp(FLOOR(current_happiness / 30, 1) + 1, 1, 4)
+					for(var/i in 1 to final_amount)
 						var/obj/item/I = new listed_item(get_turf(user))
 						I.add_mob_blood(butchery_target)
+						if(istype(I, /obj/item/reagent_containers/food))
+							var/obj/item/reagent_containers/food/F = I
+							F.set_quality(recipe_quality)
 					butcher -= listed_item
-			var/boon = user.mind.get_learning_boon(/datum/skill/labor/butchering)
+
+			// Show happiness message for skinning if we got bonus items
+			if(total_bonus_items > 0)
+				var/happiness_message = butchery_target.get_happiness_butcher_message(happiness_bonus)
+				if(happiness_message)
+					to_chat(user, span_notice("[happiness_message] (+[total_bonus_items] bonus hide/fur)"))
+
+			var/boon = user.get_learning_boon(/datum/skill/labor/butchering)
 			var/amt2raise = user.STAINT
 			user.mind.add_sleep_experience(/datum/skill/labor/butchering, amt2raise * boon, FALSE)
 			butchery_target.skinned = TRUE
@@ -218,22 +242,45 @@
 		return
 
 	if(user.used_intent.type == /datum/intent/dagger/chop/cleaver)
-		var/cut_time = 6 SECONDS - (0.5 SECONDS * user.mind?.get_skill_level(/datum/skill/labor/butchering))
-		to_chat(user, span_notice("You start to butcher [butchery_target]."))
-		if(do_after(user, cut_time, FALSE, src))
+		var/cut_time = 6 SECONDS - (0.5 SECONDS * user.get_skill_level(/datum/skill/labor/butchering))
+		to_chat(user, span_notice("I start to butcher [butchery_target]."))
+		if(do_after(user, cut_time, src, (IGNORE_HELD_ITEM)))
 			var/first_fail = TRUE
+			var/total_bonus_items = 0
+
+			// Handle meat and fat with skill bonuses and happiness
 			for(var/listed_item in butcher)
-				if(ispath(listed_item, /obj/item/reagent_containers/food/snacks/rogue/meat) || ispath(listed_item, /obj/item/reagent_containers/food/snacks/fat))
-					if(prob(40 + (user.mind?.get_skill_level(/datum/skill/labor/butchering) * 10) - (60 - butchery_target.blood_drained)))
-						butcher[listed_item] += round(butcher[listed_item] * 0.5)
-					if(prob(10 + (user.mind?.get_skill_level(/datum/skill/labor/butchering) * 5)) - (60 - butchery_target.blood_drained))
-						butcher[listed_item] += round(butcher[listed_item] * 0.5)
+				if(ispath(listed_item, /obj/item/reagent_containers/food/snacks/meat) || ispath(listed_item, /obj/item/reagent_containers/food/snacks/fat))
+					var/base_amount = butcher[listed_item]
+					var/final_amount = base_amount
+
+					// Apply skill-based bonuses
+					if(prob(40 + (user.get_skill_level(/datum/skill/labor/butchering) * 10) - (60 - butchery_target.blood_drained)))
+						final_amount += round(base_amount * 0.5)
+					if(prob(10 + (user.get_skill_level(/datum/skill/labor/butchering) * 5)) - (60 - butchery_target.blood_drained))
+						final_amount += round(base_amount * 0.5)
 					if(prob((60 - butchery_target.blood_drained)))
 						if(first_fail)
 							to_chat(user, span_notice("The flowing blood got in the way and messed up some of the meat."))
 							first_fail = FALSE
-						butcher[listed_item] -= round(butcher[listed_item] * 0.5)
-					for(var/i in 1 to butcher[listed_item])
+						final_amount -= round(base_amount * 0.5)
+
+					// Apply happiness bonus (only if we have items to bonus)
+					var/bonus_amount = 0
+					if(final_amount > 0 && happiness_bonus > 0)
+						var/total_bonus = final_amount * happiness_bonus
+						bonus_amount = round(total_bonus)
+						// Handle fractional bonuses with probability
+						var/fractional_part = total_bonus - bonus_amount
+						if(fractional_part > 0 && prob(fractional_part * 100))
+							bonus_amount++
+						total_bonus_items += bonus_amount
+
+					final_amount += bonus_amount
+
+					var/current_happiness = SEND_SIGNAL(butchery_target, COMSIG_HAPPINESS_RETURN_VALUE)
+					var/recipe_quality = clamp(FLOOR(current_happiness / 30, 1) + 1, 1, 4)
+					for(var/i in 1 to final_amount)
 						var/obj/item/I = new listed_item(get_turf(user))
 						I.add_mob_blood(butchery_target)
 						var/rotstuff = FALSE
@@ -241,18 +288,49 @@
 						if(CR)
 							if(CR.amount >= 10 MINUTES)
 								rotstuff = TRUE
-						if(rotstuff)
+						if(istype(I, /obj/item/reagent_containers/food/snacks))
+							var/obj/item/reagent_containers/food/snacks/F = I
+							F.set_quality(recipe_quality)
+							if(rotstuff)
+								F.become_rotten()
+						else if(rotstuff && istype(I,/obj/item/reagent_containers/food/snacks))
 							var/obj/item/reagent_containers/food/snacks/F = I
 							F.become_rotten()
 					butcher -= listed_item
+
+			// Handle remaining items (bones, organs, etc.) with happiness bonus
 			for(var/listed_item in butcher)
-				for(var/i in 1 to butcher[listed_item])
+				var/base_amount = butcher[listed_item]
+				var/bonus_amount = 0
+
+				// Apply happiness bonus to remaining items too
+				if(base_amount > 0 && happiness_bonus > 0)
+					var/total_bonus = base_amount * happiness_bonus
+					bonus_amount = round(total_bonus)
+					// Handle fractional bonuses with probability
+					var/fractional_part = total_bonus - bonus_amount
+					if(fractional_part > 0 && prob(fractional_part * 100))
+						bonus_amount++
+					total_bonus_items += bonus_amount
+
+				var/final_amount = base_amount + bonus_amount
+
+				var/current_happiness = SEND_SIGNAL(butchery_target, COMSIG_HAPPINESS_RETURN_VALUE)
+				var/recipe_quality = clamp(FLOOR(current_happiness / 30, 1) + 1, 1, 4)
+				for(var/i in 1 to final_amount)
 					var/obj/item/I = new listed_item(get_turf(user))
 					I.add_mob_blood(butchery_target)
+					if(istype(I, /obj/item/reagent_containers/food))
+						var/obj/item/reagent_containers/food/F = I
+						F.set_quality(recipe_quality)
+
+			// Show happiness message for butchering if we got bonus items
+			if(total_bonus_items > 0)
+				var/happiness_message = butchery_target.get_happiness_butcher_message(happiness_bonus)
+				if(happiness_message)
+					to_chat(user, span_notice("[happiness_message] (+[total_bonus_items] bonus items)"))
+
 			butchery_target.gib()
-			draining_blood = FALSE
-			var/boon = user.mind.get_learning_boon(/datum/skill/labor/butchering)
+			var/boon = user.get_learning_boon(/datum/skill/labor/butchering)
 			var/amt2raise = user.STAINT
 			user.mind.add_sleep_experience(/datum/skill/labor/butchering, amt2raise * boon, FALSE)
-
-#undef VIABLE_MOB_CHECK

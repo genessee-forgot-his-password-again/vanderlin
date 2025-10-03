@@ -3,8 +3,6 @@
 	switch(modifiers)
 		if("old")
 			used = getfold(soundin)
-		if("young")
-			used = getfyoung(soundin)
 		if("silenced")
 			used = getfsilenced(soundin)
 	if(!used)
@@ -47,6 +45,8 @@
 				used = 'sound/vo/female/gen/grumble.ogg'
 			if("haltyell")
 				used = list('sound/vo/female/gen/haltyell (1).ogg','sound/vo/female/gen/haltyell (2).ogg')
+			if("haltyellorphan")
+				used = list('sound/vo/female/gen/haltyellorphan (1).ogg','sound/vo/female/gen/haltyellorphan (2).ogg')
 			if("hmm")
 				used = 'sound/vo/female/gen/hmm.ogg'
 			if("huh")

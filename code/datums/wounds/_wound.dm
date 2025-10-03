@@ -64,6 +64,8 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 	var/disabling = FALSE
 	/// If TRUE, this is a crit wound
 	var/critical = FALSE
+	/// Some wounds cause instant death for CRITICAL_WEAKNESS
+	var/mortal = FALSE
 
 	/// Amount we heal passively while sleeping
 	var/sleep_healing = 1
@@ -76,11 +78,14 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 	var/qdel_on_droplimb = FALSE
 
 	/// Werewolf infection probability for bites on this wound
-	var/werewolf_infection_probability = 8
+	var/werewolf_infection_probability = 0
 	/// Time taken until werewolf infection comes in
 	var/werewolf_infection_time = 2 MINUTES
 	/// Actual infection timer
 	var/werewolf_infection_timer
+
+	/// Ingores "bloody wound" checks for wound applications
+	var/ignore_bloody
 
 /datum/wound/Destroy(force)
 	. = ..()
@@ -138,7 +143,7 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 /datum/wound/proc/can_apply_to_bodypart(obj/item/bodypart/affected)
 	if(bodypart_owner || owner || QDELETED(affected) || QDELETED(affected.owner))
 		return FALSE
-	if(!isnull(bleed_rate) && !affected.can_bloody_wound())
+	if(!ignore_bloody && !isnull(bleed_rate) && !affected.can_bloody_wound())
 		return FALSE
 	for(var/datum/wound/other_wound as anything in affected.wounds)
 		if(!can_stack_with(other_wound))
@@ -151,7 +156,7 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 
 /// Adds this wound to a given bodypart
 /datum/wound/proc/apply_to_bodypart(obj/item/bodypart/affected, silent = FALSE, crit_message = FALSE)
-	if(QDELETED(affected) || QDELETED(affected.owner))
+	if(QDELETED(src) || QDELETED(affected) || QDELETED(affected.owner))
 		return FALSE
 	if(bodypart_owner)
 		remove_from_bodypart()
@@ -178,7 +183,7 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 /datum/wound/proc/on_bodypart_gain(obj/item/bodypart/affected)
 	if(bleed_rate && affected.bandage)
 		affected.bandage_expire() //new bleeding wounds always expire bandages, fuck you
-	if(disabling)
+	if(disabling && affected.can_be_disabled)
 		affected.update_disabled()
 
 /// Removes this wound from a given bodypart
@@ -196,7 +201,7 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 
 /// Effects when a wound is lost on a bodypart
 /datum/wound/proc/on_bodypart_loss(obj/item/bodypart/affected, mob/living/affected_mob)
-	if(disabling)
+	if(disabling && affected.can_be_disabled)
 		affected.update_disabled()
 
 /// Returns whether or not this wound can be applied to a given mob
@@ -217,7 +222,7 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 	else if(owner)
 		remove_from_mob()
 	LAZYADD(affected.simple_wounds, src)
-	sortList(affected.simple_wounds, GLOBAL_PROC_REF(cmp_wound_severity_dsc))
+	sortTim(affected.simple_wounds, GLOBAL_PROC_REF(cmp_wound_severity_dsc))
 	owner = affected
 	on_mob_gain(affected)
 	if(crit_message)
@@ -238,7 +243,8 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 		deltimer(werewolf_infection_timer)
 		werewolf_infection_timer = null
 		werewolf_infect_attempt()
-
+	if(mortal && HAS_TRAIT(affected, TRAIT_CRITICAL_WEAKNESS))
+		affected.death()
 
 /// Removes this wound from a given, simpler than adding to a bodypart - No extra effects
 /datum/wound/proc/remove_from_mob()
@@ -300,6 +306,7 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 	passive_healing = max(passive_healing, 1)
 	if(mob_overlay != old_overlay)
 		owner?.update_damage_overlays()
+	record_round_statistic(STATS_WOUNDS_SEWED)
 	return TRUE
 
 /// Checks if this wound has a special infection (zombie or werewolf)
@@ -339,8 +346,15 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 		return
 	if(human_owner.stat >= DEAD) //forget it
 		return
+	var/static/list/silver_items = list(
+		/obj/item/clothing/neck/psycross/silver,
+		/obj/item/clothing/neck/silveramulet
+	)
+	if(is_type_in_list(human_owner.wear_wrists, silver_items) || is_type_in_list(human_owner.wear_neck, silver_items))
+		if(prob(50))
+			return
 	to_chat(human_owner, span_danger("I feel horrible... REALLY horrible..."))
-	human_owner.mob_timers["puke"] = world.time
+	MOBTIMER_SET(human_owner, MT_PUKE)
 	human_owner.vomit(1, blood = TRUE, stun = FALSE)
 	werewolf_infection_timer = addtimer(CALLBACK(src, PROC_REF(wake_werewolf)), werewolf_infection_time, TIMER_STOPPABLE)
 	severity = WOUND_SEVERITY_BIOHAZARD

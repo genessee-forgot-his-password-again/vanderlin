@@ -1,20 +1,13 @@
 /obj/effect/abstract/pollution
 	icon = 'icons/effects/96x96.dmi'
 	icon_state = "smoke-static"
-	pixel_x = -32
-	pixel_y = -32
+	SET_BASE_PIXEL(-32, -32)
 	anchored = TRUE
 	plane = GAME_PLANE_UPPER
 	layer = AREA_LAYER-1
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	appearance_flags = KEEP_APART|RESET_TRANSFORM|RESET_COLOR
 	vis_flags = NONE
-
-/turf/open
-	appearance_flags = LONG_GLIDE | TILE_BOUND
-	/// Pollution of this turf
-	var/datum/pollution/pollution
-
 
 /datum/pollution
 	/// Reference to the turf we're on
@@ -48,8 +41,9 @@
 	REMOVE_POLLUTION_CURRENTRUN(src)
 	SET_UNACTIVE_POLLUTION(src)
 	UNREGISTER_POLLUTION(src)
-	if(my_turf?.pollution == src)
-		my_turf.pollution = null
+	if(isopenturf(my_turf))
+		if(my_turf?.pollution == src)
+			my_turf.pollution = null
 	return ..()
 
 /datum/pollution/proc/touch_act(mob/living/carbon/victim)
@@ -70,10 +64,12 @@
 		if(!(pollutant.pollutant_flags & POLLUTANT_BREATHE_ACT))
 			continue
 		var/amount = pollutants[type]
-		pollutant.breathe_act(victim, amount)
+		pollutant.breathe_act(victim, amount, total_amount)
 
 /// When a user smells this pollution
 /datum/pollution/proc/smell_act(mob/living/sniffer)
+	if(!sniffer.can_smell())
+		return
 	var/list/singleton_cache = SSpollution.singletons
 	var/datum/pollutant/dominant_pollutant
 	var/dominiant_smell_power
@@ -113,12 +109,14 @@
 	else
 		to_chat(sniffer, span_info(smell_string))
 
+	dominant_pollutant.on_smell(sniffer)
+
 /datum/pollution/proc/scrub_amount(amount_to_scrub, update_active = TRUE)
 	if(amount_to_scrub >= total_amount || !isopenturf(my_turf) || QDELING(my_turf))
 		qdel(src)
 		return
 	for(var/type in pollutants)
-		pollutants[type] -= amount_to_scrub * pollutants[type] / total_amount
+		pollutants[type] -= max(floor(amount_to_scrub * (pollutants[type] / total_amount)), 1)
 	total_amount -= amount_to_scrub
 	update_height()
 	handle_overlay()
@@ -176,7 +174,9 @@
 		if(!isopenturf(open_turf) || QDELING(open_turf) || QDELETED(open_turf.pollution))
 			continue
 		var/datum/pollution/cached_pollution = open_turf.pollution
-		for(var/type in cached_pollution.pollutants)
+		for(var/datum/pollutant/type as anything in cached_pollution.pollutants)
+			if(initial(type.pollutant_flags) & POLLUTION_DO_NOT_SPREAD)
+				continue
 			if(!total_share_pollutants[type])
 				total_share_pollutants[type] = 0
 			total_share_pollutants[type] += cached_pollution.pollutants[type]

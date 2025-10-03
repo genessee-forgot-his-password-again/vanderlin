@@ -18,6 +18,8 @@
 
 	///Used to cache this client's bans to save on DB queries
 	var/ban_cache = null
+	///If we are currently building this client's ban cache, this var stores the timeofday we started at
+	var/ban_cache_start = 0
 	///Contains the last message sent by this client - used to protect against copy-paste spamming.
 	var/last_message = ""
 	///contins a number of how many times a message identical to last_message was sent.
@@ -52,8 +54,6 @@
 	var/list/played = list()
 	var/list/nextspooky = 0
 
-	var/patreonlevel = -1
-
 		////////////
 		//SECURITY//
 		////////////
@@ -84,9 +84,8 @@
 	var/mouse_up_icon = null
 	///used to make a special mouse cursor, this one for mouse up icon
 	var/mouse_down_icon = null
-
-	///Used for ip intel checking to identify evaders, disabled because of issues with traffic
-	var/ip_intel = "Disabled"
+	///used to override the mouse cursor so it doesnt get reset
+	var/mouse_override_icon = null
 
 	///datum that controls the displaying and hiding of tooltips
 	var/datum/tooltip/tooltips
@@ -130,20 +129,22 @@
 	///When set to true, user will be autokicked if they trip the keysends in a second limit again
 	var/keysend_tripped = FALSE
 
-	var/atom/movable/screen/movable/mouseover/mouseovertext
-	var/atom/movable/screen/movable/mouseover/mouseoverbox
 	///custom movement keys for this client
 	var/list/movement_keys = list()
 
 	/// Messages currently seen by this client
 	var/list/seen_messages
+	var/datum/viewData/view_size
 
 	var/list/current_weathers = list()
 	var/last_lighting_update = 0
 
-	var/list/open_popups = list()
-
 	var/loop_sound = FALSE
 	var/rain_sound = FALSE
-	var/last_droning_sound
-	var/sound/droning_sound
+
+	///Which ambient sound this client is currently being provided
+	var/current_ambient_sound
+	/// Cooldowns for Real like - For Mentor
+	var/list/real_like_cooldowns  = list()
+	/// Total Real likes recieved in a round - For Mentor
+	var/real_likes_received  = 0

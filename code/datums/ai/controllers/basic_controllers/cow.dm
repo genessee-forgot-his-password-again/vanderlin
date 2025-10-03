@@ -5,12 +5,10 @@
 		BB_TARGETTING_DATUM = new /datum/targetting_datum/basic/allow_items(),
 		BB_BASIC_MOB_TIP_REACTING = FALSE,
 		BB_BASIC_MOB_TIPPER = null,
-		BB_BABIES_PARTNER_TYPES = list(/mob/living/simple_animal/hostile/retaliate/rogue/bull, /mob/living/simple_animal/hostile/retaliate/rogue/cow),
-		BB_BABIES_CHILD_TYPES = list(/mob/living/simple_animal/hostile/retaliate/rogue/cow/cowlet = 95, /mob/living/simple_animal/hostile/retaliate/rogue/cow/cowlet/bullet = 5),
 	)
 
 	ai_traits = STOP_MOVING_WHEN_PULLED
-	ai_movement = /datum/ai_movement/basic_avoidance
+	ai_movement = /datum/ai_movement/hybrid_pathing
 	idle_behavior = /datum/idle_behavior/idle_random_walk
 	planning_subtrees = list(
 		/datum/ai_planning_subtree/tip_reaction,
@@ -25,12 +23,12 @@
 		BB_TARGETTING_DATUM = new /datum/targetting_datum/basic/allow_items(),
 		BB_BASIC_MOB_TIP_REACTING = FALSE,
 		BB_BASIC_MOB_TIPPER = null,
-		BB_FIND_MOM_TYPES = list(/mob/living/simple_animal/hostile/retaliate/rogue/cow),
-		BB_IGNORE_MOM_TYPES = list(/mob/living/simple_animal/hostile/retaliate/rogue/cow/cowlet),
+		BB_FIND_MOM_TYPES = list(/mob/living/simple_animal/hostile/retaliate/cow),
+		BB_IGNORE_MOM_TYPES = list(/mob/living/simple_animal/hostile/retaliate/cow/cowlet),
 	)
 
 	ai_traits = STOP_MOVING_WHEN_PULLED
-	ai_movement = /datum/ai_movement/basic_avoidance
+	ai_movement = /datum/ai_movement/hybrid_pathing
 	idle_behavior = /datum/idle_behavior/idle_random_walk
 	planning_subtrees = list(
 		/datum/ai_planning_subtree/tip_reaction,

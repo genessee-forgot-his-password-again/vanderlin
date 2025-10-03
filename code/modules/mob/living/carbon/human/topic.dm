@@ -2,7 +2,42 @@ GLOBAL_VAR_INIT(year, time2text(world.realtime,"YYYY"))
 GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 
 /mob/living/carbon/human/Topic(href, href_list)
-	if(href_list["inspect_limb"] && (isobserver(usr) || usr.canUseTopic(src, BE_CLOSE, NO_DEXTERITY)))
+
+	if(href_list["task"] == "view_flavor_text" && (isobserver(usr) || usr.can_perform_action(src, NEED_LIGHT)))
+		if(!ismob(usr))
+			return
+		var/mob/user = usr
+		var/list/dat = list()
+		if(headshot_link)
+			dat += "<br>"
+			dat += ("<div align='center'><img src='[headshot_link]' width='325px' height='325px'></div>")
+		if(flavortext)
+			dat += "<div align='left' style='line-height: 1.2;'>[flavortext_display]</div>"
+		if(ooc_notes)
+			dat += "<br>"
+			dat += "<div align='center'><b>OOC notes</b></div>"
+			dat += "<div align='left' style='line-height: 1.2;'>[ooc_notes_display]</div>"
+		if(ooc_extra)
+			dat += "[ooc_extra]"
+		var/datum/browser/popup = new(user, "[src]", "<center>[src]</center>", 480, 700)
+
+		popup.set_content(dat.Join())
+		popup.open(FALSE)
+		return
+
+	if(href_list["view_descriptors"] && (isobserver(usr) || usr.can_perform_action(src, NEED_LIGHT)))
+		if(!ismob(usr))
+			return
+		var/obscure_name
+		if(name == "Unknown" || name == "Unknown Man" || name == "Unknown Woman")
+			obscure_name = TRUE
+		if(isobserver(usr))
+			obscure_name = FALSE
+		var/list/lines = build_cool_description(get_mob_descriptors(obscure_name, usr), src)
+		to_chat(usr, span_info("[lines.Join("\n")]"))
+		return
+
+	if(href_list["inspect_limb"] && (isobserver(usr) || usr.can_perform_action(src, FORBID_TELEKINESIS_REACH)))
 		var/list/msg = list()
 		var/mob/user = usr
 		var/checked_zone = check_zone(href_list["inspect_limb"])
@@ -19,15 +54,15 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 			msg += span_dead("Limb is missing!")
 		to_chat(usr, span_info("[msg.Join("\n")]"))
 
-	if(href_list["check_hb"] && (isobserver(usr) || usr.canUseTopic(src, BE_CLOSE, NO_DEXTERITY)))
+	if(href_list["check_hb"] && (isobserver(usr) || usr.can_perform_action(src, FORBID_TELEKINESIS_REACH)))
 		if(!isobserver(usr))
 			usr.visible_message(span_info("[usr] tries to hear [src]'s heartbeat."))
-			if(!do_after(usr, 30, needhand = TRUE, target = src))
+			if(!do_after(usr, 3 SECONDS, src))
 				return
 		var/list/following_my_heart = check_heartbeat(usr)
 		to_chat(usr, span_info("[following_my_heart.Join("\n")]"))
 
-	if(href_list["embedded_object"] && usr.canUseTopic(src, BE_CLOSE, NO_DEXTERITY))
+	if(href_list["embedded_object"] && usr.can_perform_action(src, FORBID_TELEKINESIS_REACH))
 		var/obj/item/bodypart/L = locate(href_list["embedded_limb"]) in bodyparts
 		if(!L)
 			return
@@ -39,7 +74,7 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 			usr.visible_message(span_warning("[usr] attempts to remove [I] from [usr.p_their()] [L.name]."),span_warning("I attempt to remove [I] from my [L.name]..."))
 		else
 			usr.visible_message(span_warning("[usr] attempts to remove [I] from [src]'s [L.name]."),span_warning("I attempt to remove [I] from [src]'s [L.name]..."))
-		if(do_after(usr, time_taken, needhand = TRUE, target = src))
+		if(do_after(usr, time_taken, src))
 			if(QDELETED(I) || QDELETED(L) || !L.remove_embedded_object(I))
 				return
 			L.receive_damage(I.embedding.embedded_unsafe_removal_pain_multiplier*I.w_class)//It hurts to rip it out, get surgery you dingus.
@@ -51,7 +86,7 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 			else
 				usr.visible_message(span_notice("[usr] rips [I] out of [src]'s [L.name]!"), span_notice("I successfully remove [I] from [src]'s [L.name]."))
 
-	if(href_list["bandage"] && usr.canUseTopic(src, BE_CLOSE, NO_DEXTERITY))
+	if(href_list["bandage"] && usr.can_perform_action(src, FORBID_TELEKINESIS_REACH))
 		var/obj/item/bodypart/L = locate(href_list["bandaged_limb"]) in bodyparts
 		if(!L)
 			return
@@ -62,7 +97,7 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 			usr.visible_message(span_warning("[usr] starts unbandaging [usr.p_their()] [L.name]."),span_warning("I start unbandaging [L.name]..."))
 		else
 			usr.visible_message(span_warning("[usr] starts unbandaging [src]'s [L.name]."),span_warning("I start unbandaging [src]'s [L.name]..."))
-		if(do_after(usr, 50, needhand = TRUE, target = src))
+		if(do_after(usr, 5 SECONDS, src))
 			if(QDELETED(I) || QDELETED(L) || (L.bandage != I))
 				return
 			L.remove_bandage()
@@ -70,7 +105,7 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 
 	if(href_list["item"]) //canUseTopic check for this is handled by mob/Topic()
 		var/slot = text2num(href_list["item"])
-		if(slot in check_obscured_slots(TRUE))
+		if(slot & check_obscured_slots(TRUE))
 			to_chat(usr, span_warning("I can't reach that! Something is covering it."))
 			return
 
@@ -80,7 +115,7 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 			return
 		if(underwear == "Nude")
 			return
-		if(do_after(usr, 50, needhand = 1, target = src))
+		if(do_after(usr, 5 SECONDS, src))
 			cached_underwear = underwear
 			underwear = "Nude"
 			update_body()
@@ -93,38 +128,6 @@ GLOBAL_VAR_INIT(year_integer, text2num(year)) // = 2013???
 			if(iscarbon(usr))
 				var/mob/living/carbon/C = usr
 				C.put_in_hands(U)
-
-	if(href_list["pockets"] && usr.canUseTopic(src, BE_CLOSE, NO_DEXTERITY)) //TODO: Make it match (or intergrate it into) strippanel so you get 'item cannot fit here' warnings if mob_can_equip fails
-		var/pocket_side = href_list["pockets"]
-		var/pocket_id = (pocket_side == "right" ? SLOT_R_STORE : SLOT_L_STORE)
-		var/obj/item/pocket_item = (pocket_id == SLOT_R_STORE ? r_store : l_store)
-		var/obj/item/place_item = usr.get_active_held_item() // Item to place in the pocket, if it's empty
-
-		var/delay_denominator = 1
-		if(pocket_item && !(pocket_item.item_flags & ABSTRACT))
-			if(HAS_TRAIT(pocket_item, TRAIT_NODROP))
-				to_chat(usr, span_warning("I try to empty [src]'s [pocket_side] pocket, it seems to be stuck!"))
-			to_chat(usr, span_notice("I try to empty [src]'s [pocket_side] pocket."))
-		else if(place_item && place_item.mob_can_equip(src, usr, pocket_id, 1) && !(place_item.item_flags & ABSTRACT))
-			to_chat(usr, span_notice("I try to place [place_item] into [src]'s [pocket_side] pocket."))
-			delay_denominator = 4
-		else
-			return
-
-		if(do_mob(usr, src, POCKET_STRIP_DELAY/delay_denominator)) //placing an item into the pocket is 4 times faster
-			if(pocket_item)
-				if(pocket_item == (pocket_id == SLOT_R_STORE ? r_store : l_store)) //item still in the pocket we search
-					dropItemToGround(pocket_item)
-			else
-				if(place_item)
-					if(place_item.mob_can_equip(src, usr, pocket_id, FALSE, TRUE))
-						usr.temporarilyRemoveItemFromInventory(place_item, TRUE)
-						equip_to_slot(place_item, pocket_id, TRUE)
-					//do nothing otherwise
-				//updating inv screen after handled by living/Topic()
-		else
-			// Display a warning if the user mocks up
-			to_chat(src, span_warning("I feel your [pocket_side] pocket being fumbled with!"))
 	return ..() //end of this massive fucking chain. TODO: make the hud chain not spooky. - Yeah, great job doing that.
 
 /mob/living/proc/check_heartbeat(mob/user)

@@ -1,49 +1,48 @@
-/obj/structure/flora/roguegrass/tangler
+/obj/structure/flora/grass/tangler
 	name = "twisting shrub"
 	desc = "Green, spiky and....I think I saw it move!"
 	icon = 'icons/roguetown/mob/monster/tangler.dmi'
 	icon_state = "tangler_hidden"
-	max_integrity = 5
-	var/faction = list("plants")
+	num_random_icons = 0
+	var/faction = list(FACTION_PLANTS)
 
-/obj/structure/flora/roguegrass/tangler/update_icon()
-	return
-
-/obj/structure/flora/roguegrass/tangler/real
-	var/aggroed = 1
+/obj/structure/flora/grass/tangler/real
 	max_integrity = 40
 	integrity_failure = 0.15
 	attacked_sound = 'sound/misc/woodhit.ogg'
-	var/list/eatablez = list(/obj/item/organ, /obj/item/reagent_containers/food/snacks/rogue/meat,/obj/item/compost,
-/obj/item/natural/poo)
+	buckle_lying = FALSE
+	buckle_prevents_pull = TRUE
+	var/list/eatablez = list(/obj/item/organ, /obj/item/reagent_containers/food/snacks/meat, /obj/item/fertilizer/compost, /obj/item/natural/poo)
 	var/last_eat
-	buckle_lying = 0
-	buckle_prevents_pull = 1
+	var/aggroed = TRUE
+	///Proximity monitor associated with this atom, needed for proximity checks.
+	var/datum/proximity_monitor/proximity_monitor
 
-/obj/structure/flora/roguegrass/tangler/real/Initialize()
+/obj/structure/flora/grass/tangler/real/Initialize()
 	. = ..()
 	proximity_monitor = new(src, 1)
 
-/obj/structure/flora/roguegrass/tangler/real/Destroy()
+/obj/structure/flora/grass/tangler/real/Destroy()
 	QDEL_NULL(proximity_monitor)
 	unbuckle_all_mobs()
 	STOP_PROCESSING(SSobj, src)
 	. = ..()
 
-/obj/structure/flora/roguegrass/tangler/real/obj_break(damage_flag)
-	..()
+/obj/structure/flora/grass/tangler/real/atom_break(damage_flag)
+	. = ..()
 	QDEL_NULL(proximity_monitor)
 	unbuckle_all_mobs()
 	STOP_PROCESSING(SSobj, src)
-	update_icon()
+	update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
 
-/obj/structure/flora/roguegrass/tangler/real/process()
+/obj/structure/flora/grass/tangler/real/atom_fix()
+	. = ..()
+	proximity_monitor = new(src, 1)
+
+/obj/structure/flora/grass/tangler/real/process()
 	if(!has_buckled_mobs())
 		if(world.time > last_eat + 5)
 			var/list/around = view(1, src)
-			for(var/mob/living/M in around)
-				HasProximity(M)
-				return
 			for(var/obj/item/F in around)
 				if(is_type_in_list(F, eatablez))
 					aggroed = world.time
@@ -53,25 +52,34 @@
 					return
 		if(world.time > aggroed + 10 SECONDS)
 			aggroed = 0
-			update_icon()
+			update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
 			STOP_PROCESSING(SSobj, src)
 			return TRUE
 
-/obj/structure/flora/roguegrass/tangler/real/update_icon()
+/obj/structure/flora/grass/tangler/real/update_icon_state()
+	. = ..()
 	if(obj_broken)
-		name = "dry vine"
-		desc = ""
 		icon_state = "tangler-dead"
-		return
-	if(aggroed)
-		name = "twisting vine"
-		var/list/icon_states = list("tangler_1", "tangler_2", "tangler_3")
-		icon_state = pick(icon_states)
+	else if(aggroed)
+		icon_state = pick("tangler_1", "tangler_2", "tangler_3")
 	else
-		name = "twisting shrub"
 		icon_state = "tangler-hidden"
 
-/obj/structure/flora/roguegrass/tangler/real/user_unbuckle_mob(mob/living/M, mob/user)
+/obj/structure/flora/grass/tangler/real/update_name()
+	. = ..()
+	if(obj_broken)
+		name = "dry vine"
+	else if(aggroed)
+		name = "twisting vine"
+	else
+		name = "twisting shrub"
+
+/obj/structure/flora/grass/tangler/real/update_desc()
+	. = ..()
+	if(obj_broken)
+		desc = ""
+
+/obj/structure/flora/grass/tangler/real/user_unbuckle_mob(mob/living/M, mob/user)
 	if(obj_broken)
 		..()
 		return
@@ -90,39 +98,48 @@
 		else
 			user.visible_message("<span class='warning'>[user] tries to break free of [src]!</span>")
 
-/obj/structure/flora/roguegrass/tangler/real/user_buckle_mob(mob/living/M, mob/living/user)
+/obj/structure/flora/grass/tangler/real/user_buckle_mob(mob/living/M, mob/living/user)
 	return
 
-/obj/structure/flora/roguegrass/tangler/real/HasProximity(atom/movable/AM)
+/obj/structure/flora/grass/tangler/real/HasProximity(atom/movable/AM)
 	if(has_buckled_mobs())
 		return
-	if(world.time > last_eat + 5)
-		var/list/around = view(src, 1)
-		if(!(AM in around))
+	if(!(world.time > last_eat + 5 SECONDS))
+		return
+	if(istype(AM, /mob/living))
+		var/mob/living/L = AM
+		if(HAS_TRAIT(L, TRAIT_ENTANGLER_IMMUNE))
 			return
-		if(istype(AM, /mob/living))
-			var/mob/living/L = AM
-			if("plants" in L.faction)
+		if(FACTION_PLANTS in L.faction)
+			return
+		if(!aggroed)
+			if(L.m_intent != MOVE_INTENT_RUN)
 				return
-			if(!aggroed)
-				if(L.m_intent != MOVE_INTENT_RUN)
-					return
+		aggroed = world.time
+		last_eat = world.time
+		update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
+		buckle_mob(L, TRUE, check_loc = FALSE)
+		START_PROCESSING(SSobj, src)
+		if(!HAS_TRAIT(L, TRAIT_NOPAIN))
+			L.emote("painscream", forced = FALSE)
+		src.visible_message("<span class='danger'>[src] snatches [L]!</span>")
+		playsound(src.loc, "plantcross", 100, FALSE, -1)
+	else if(istype(AM, /obj/item))
+		if(is_type_in_list(AM, eatablez))
 			aggroed = world.time
 			last_eat = world.time
-			update_icon()
-			buckle_mob(L, TRUE, check_loc = FALSE)
 			START_PROCESSING(SSobj, src)
-			if(!HAS_TRAIT(L, TRAIT_NOPAIN))
-				L.emote("painscream", forced = FALSE)
-			src.visible_message("<span class='danger'>[src] snatches [L]!</span>")
-			playsound(src.loc, "plantcross", 100, FALSE, -1)
-		if(istype(AM, /obj/item))
-			if(is_type_in_list(AM, eatablez))
-				aggroed = world.time
-				last_eat = world.time
-				START_PROCESSING(SSobj, src)
-				update_icon()
-				playsound(src,'sound/misc/eat.ogg', rand(30,60), TRUE)
-				qdel(AM)
-				return
-			aggroed = world.time
+			update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
+			playsound(src,'sound/misc/eat.ogg', rand(30,60), TRUE)
+			qdel(AM)
+			return
+		aggroed = world.time
+
+/obj/structure/flora/grass/tangler/real/CanPass(atom/movable/mover, turf/target)
+	if(isliving(mover))
+		if(prob(50) && !HAS_TRAIT(mover, TRAIT_WEBWALK))
+			to_chat(mover, "<span class='danger'>I get stuck in \the [src] for a moment.</span>")
+			return FALSE
+	else if(istype(mover, /obj/projectile) && prob(30))
+		return ..()
+	return ..()

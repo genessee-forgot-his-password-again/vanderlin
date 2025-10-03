@@ -6,8 +6,7 @@
 	name = "smoke"
 	icon = 'icons/effects/96x96.dmi'
 	icon_state = "smoke"
-	pixel_x = -32
-	pixel_y = -32
+	SET_BASE_PIXEL(-32, -32)
 	opacity = 1
 	layer = FLY_LAYER
 	plane = GAME_PLANE_UPPER
@@ -34,8 +33,9 @@
 /obj/effect/particle_effect/smoke/Initialize()
 	. = ..()
 	create_reagents(500)
+	var/turf/T = get_turf(src)
+	T.ImmediateCalculateAdjacentTurfs()
 	START_PROCESSING(SSobj, src)
-
 
 /obj/effect/particle_effect/smoke/Destroy()
 	STOP_PROCESSING(SSobj, src)
@@ -135,6 +135,31 @@
 /datum/effect_system/smoke_spread/bad
 	effect_type = /obj/effect/particle_effect/smoke/bad
 
+
+/////////////////////////////////////////////
+// Poison smoke
+/////////////////////////////////////////////
+
+/obj/effect/particle_effect/smoke/poison
+	color = "#23462d"
+	lifetime = 10
+
+/obj/effect/particle_effect/smoke/poison/smoke_mob(mob/living/carbon/M)
+	if(..())
+		if(!istype(M.wear_mask, /obj/item/clothing/face/phys/plaguebearer))
+			M.adjustToxLoss(5)
+			M.add_nausea(5)
+			M.reagents.add_reagent(/datum/reagent/miasmagas, 1)
+			M.emote("cough")
+			if(prob(5))
+				to_chat(M, span_warning("You feel numbness spreading through your body..."))
+			return 1
+
+
+/datum/effect_system/smoke_spread/poison
+	effect_type = /obj/effect/particle_effect/smoke/poison
+
+
 /////////////////////////////////////////////
 // Sleep smoke
 /////////////////////////////////////////////
@@ -219,14 +244,8 @@
 
 		var/where = "[AREACOORD(location)]"
 		if(carry.my_atom.fingerprintslast)
-			var/mob/M = get_mob_by_key(carry.my_atom.fingerprintslast)
-			var/more = ""
-			if(M)
-				more = "[ADMIN_LOOKUPFLW(M)] "
-			message_admins("Smoke: ([ADMIN_VERBOSEJMP(location)])[contained]. Key: [more ? more : carry.my_atom.fingerprintslast].")
 			log_game("A chemical smoke reaction has taken place in ([where])[contained]. Last touched by [carry.my_atom.fingerprintslast].")
 		else
-			message_admins("Smoke: ([ADMIN_VERBOSEJMP(location)])[contained]. No associated key.")
 			log_game("A chemical smoke reaction has taken place in ([where])[contained]. No associated key.")
 
 
@@ -255,6 +274,16 @@
 	effect_type = /obj/effect/particle_effect/smoke/transparent
 
 /obj/effect/particle_effect/smoke/transparent
+	opaque = FALSE
+	alpha = 50
+	opacity = FALSE
+	lifetime = 3
+
+//Same as the base type, but the smoke produced is not opaque
+/datum/effect_system/smoke_spread/chem/transparent
+	effect_type = /obj/effect/particle_effect/smoke/chem/transparent
+
+/obj/effect/particle_effect/smoke/chem/transparent
 	opaque = FALSE
 	alpha = 50
 	opacity = FALSE

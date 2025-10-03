@@ -34,14 +34,14 @@
  * Arguments:
  * * datum/P the parent datum this component reacts to signals from
  */
-/datum/component/New(datum/P, ...)
-	parent = P
-	var/list/arguments = args.Copy(2)
+/datum/component/New(list/raw_args)
+	parent = raw_args[1]
+	var/list/arguments = raw_args.Copy(2)
 	if(Initialize(arglist(arguments)) == COMPONENT_INCOMPATIBLE)
 		qdel(src, TRUE, TRUE)
-		CRASH("Incompatible [type] assigned to a [P.type]! args: [json_encode(arguments)]")
+		CRASH("Incompatible [type] assigned to a [parent.type]! args: [json_encode(arguments)]")
 
-	_JoinParent(P)
+	_JoinParent(parent)
 
 /**
  * Called during component creation with the same arguments as in new excluding parent.
@@ -186,10 +186,17 @@
 
 	signal_enabled = TRUE
 
+
+/// Registers multiple signals to the same proc.
+/datum/proc/RegisterSignals(datum/target, list/signal_types, proctype, override = FALSE)
+	for(var/signal_type in signal_types)
+		RegisterSignal(target, signal_type, proctype, override)
+
 /**
  * Stop listening to a given signal from target
  *
  * Breaks the relationship between target and source datum, removing the callback when the signal fires
+ *
  * Doesn't care if a registration exists or not
  *
  * Arguments:
@@ -197,14 +204,16 @@
  * * sig_typeor_types Signal string key or list of signal keys to stop listening to specifically
  */
 /datum/proc/UnregisterSignal(datum/target, sig_type_or_types)
-	if(!target)
-		return
-	var/list/lookup = target.comp_lookup
+	var/list/lookup = target?.comp_lookup
 	if(!signal_procs || !signal_procs[target] || !lookup)
 		return
 	if(!islist(sig_type_or_types))
 		sig_type_or_types = list(sig_type_or_types)
 	for(var/sig in sig_type_or_types)
+		if(!signal_procs[target][sig])
+			if(!istext(sig))
+				stack_trace("We're unregistering with something that isn't a valid signal \[[sig]\], you fucked up")
+			continue
 		switch(length(lookup[sig]))
 			if(2)
 				lookup[sig] = (lookup[sig]-src)[1]
@@ -216,6 +225,8 @@
 						target.comp_lookup = null
 						break
 			if(0)
+				if(lookup[sig] != src)
+					continue
 				lookup -= sig
 				if(!length(lookup))
 					target.comp_lookup = null
@@ -280,11 +291,11 @@
 		var/proctype = C.signal_procs[src][sigtype]
 		return NONE | CallAsync(C, proctype, arguments)
 	. = NONE
-	for(var/I in target)
-		var/datum/C = I
+	for(var/datum/C as anything in target)
 		if(!C.signal_enabled)
 			continue
 		var/proctype = C.signal_procs[src][sigtype]
+		arguments |= sigtype
 		. |= CallAsync(C, proctype, arguments)
 
 // The type arg is casted so initial works, you shouldn't be passing a real instance into this
@@ -351,7 +362,8 @@
  * If this tries to add an component to an incompatible type, the component will be deleted and the result will be `null`. This is very unperformant, try not to do it
  * Properly handles duplicate situations based on the `dupe_mode` var
  */
-/datum/proc/AddComponent(new_type, ...)
+/datum/proc/_AddComponent(list/raw_args)
+	var/new_type = raw_args[1]
 	var/datum/component/nt = new_type
 	var/dm = initial(nt.dupe_mode)
 	var/dt = initial(nt.dupe_type)
@@ -366,7 +378,7 @@
 		new_comp = nt
 		nt = new_comp.type
 
-	args[1] = src
+	raw_args[1] = src
 
 	if(dm != COMPONENT_DUPE_ALLOWED)
 		if(!dt)
@@ -377,26 +389,27 @@
 			switch(dm)
 				if(COMPONENT_DUPE_UNIQUE)
 					if(!new_comp)
-						new_comp = new nt(arglist(args))
+						new_comp = new nt(raw_args)
 					if(!QDELETED(new_comp))
 						old_comp.InheritComponent(new_comp, TRUE)
 						QDEL_NULL(new_comp)
 				if(COMPONENT_DUPE_HIGHLANDER)
 					if(!new_comp)
-						new_comp = new nt(arglist(args))
+						new_comp = new nt(raw_args)
 					if(!QDELETED(new_comp))
 						new_comp.InheritComponent(old_comp, FALSE)
 						QDEL_NULL(old_comp)
 				if(COMPONENT_DUPE_UNIQUE_PASSARGS)
 					if(!new_comp)
-						var/list/arguments = args.Copy(2)
-						old_comp.InheritComponent(null, TRUE, arguments)
+						var/list/arguments = raw_args.Copy(2)
+						arguments.Insert(1, null, TRUE)
+						old_comp.InheritComponent(arglist(arguments))
 					else
 						old_comp.InheritComponent(new_comp, TRUE)
 		else if(!new_comp)
-			new_comp = new nt(arglist(args)) // There's a valid dupe mode but there's no old component, act like normal
+			new_comp = new nt(raw_args) // There's a valid dupe mode but there's no old component, act like normal
 	else if(!new_comp)
-		new_comp = new nt(arglist(args)) // Dupes are allowed, act like normal
+		new_comp = new nt(raw_args) // Dupes are allowed, act like normal
 
 	if(!old_comp && !QDELETED(new_comp)) // Nothing related to duplicate components happened and the new component is healthy
 		SEND_SIGNAL(src, COMSIG_COMPONENT_ADDED, new_comp)
@@ -415,7 +428,7 @@
 /datum/proc/LoadComponent(component_type, ...)
 	. = GetComponent(component_type)
 	if(!.)
-		return AddComponent(arglist(args))
+		return _AddComponent(args)
 
 /**
  * Removes the component from parent, ends up with a null parent

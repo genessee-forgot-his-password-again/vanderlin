@@ -573,3 +573,15 @@ MONKEYCAP 64
 
 ## Enable the capitalist agenda on your server.
 ECONOMY
+
+## Enable death by starvation
+#STARVATION_DEATH
+
+## Damage per tick for starving to death
+STARVATION_DAMAGE_PER_TICK 0.1
+
+## Enable death by dehydration
+#DEHYDRATION_DEATH
+
+## Damage per tick for dying of dehydration
+DEHYDRATION_DAMAGE_PER_TICK 0.1

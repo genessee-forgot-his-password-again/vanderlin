@@ -19,7 +19,9 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 	dat += "</ul>"
 	dat += "<a href='?_src_=holder;[HrefToken()];create_outfit_menu=1'>Create</a><br>"
 	dat += "<a href='?_src_=holder;[HrefToken()];load_outfit=1'>Load from file</a>"
-	admin << browse(dat.Join(),"window=outfitmanager")
+	var/datum/browser/popup = new(admin, "outfitmanager", "Outfit Manager", 670, 650)
+	popup.set_content(dat.Join())
+	popup.open()
 
 /datum/admins/proc/save_outfit(mob/admin,datum/outfit/O)
 	O.save_to_file(admin)
@@ -49,51 +51,42 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 		to_chat(admin,"<span class='warning'>Malformed/Outdated file.</span>")
 		return
 	GLOB.custom_outfits += O
+	message_admins("[key_name(usr)] loaded an outfit! Name: \"[O.name]\"")
 	outfit_manager(admin)
 
 /datum/admins/proc/create_outfit(mob/admin)
-	var/list/uniforms = typesof(/obj/item/clothing/under)
-	var/list/suits = typesof(/obj/item/clothing/suit)
-	var/list/gloves = typesof(/obj/item/clothing/gloves)
-	var/list/shoes = typesof(/obj/item/clothing/shoes)
-	var/list/headwear = typesof(/obj/item/clothing/head)
-	var/list/glasses = typesof(/obj/item/clothing/glasses)
-	var/list/masks = typesof(/obj/item/clothing/mask)
 
-	var/uniform_select = "<select name=\"outfit_uniform\"><option value=\"\">None</option>"
-	for(var/path in uniforms)
-		uniform_select += "<option value=\"[path]\">[path]</option>"
-	uniform_select += "</select>"
+	var/heads_select = "<input type=\"text\" name=\"outfit_head\""
 
-	var/suit_select = "<select name=\"outfit_suit\"><option value=\"\">None</option>"
-	for(var/path in suits)
-		suit_select += "<option value=\"[path]\">[path]</option>"
-	suit_select += "</select>"
+	var/masks_select = "<input type=\"text\" name=\"outfit_mask\""
 
-	var/gloves_select = "<select name=\"outfit_gloves\"><option value=\"\">None</option>"
-	for(var/path in gloves)
-		gloves_select += "<option value=\"[path]\">[path]</option>"
-	gloves_select += "</select>"
+	var/necks_select = "<input type=\"text\" name=\"outfit_neck\""
 
-	var/shoes_select = "<select name=\"outfit_shoes\"><option value=\"\">None</option>"
-	for(var/path in shoes)
-		shoes_select += "<option value=\"[path]\">[path]</option>"
-	shoes_select += "</select>"
+	var/cloaks_select = "<input type=\"text\" name=\"outfit_cloak\""
 
-	var/head_select = "<select name=\"outfit_head\"><option value=\"\">None</option>"
-	for(var/path in headwear)
-		head_select += "<option value=\"[path]\">[path]</option>"
-	head_select += "</select>"
+	var/backsr_select = "<input type=\"text\" name=\"outfit_backr\""
 
-	var/glasses_select = "<select name=\"outfit_glasses\"><option value=\"\">None</option>"
-	for(var/path in glasses)
-		glasses_select += "<option value=\"[path]\">[path]</option>"
-	glasses_select += "</select>"
+	var/backsl_select = "<input type=\"text\" name=\"outfit_backl\""
 
-	var/mask_select = "<select name=\"outfit_mask\"><option value=\"\">None</option>"
-	for(var/path in masks)
-		mask_select += "<option value=\"[path]\">[path]</option>"
-	mask_select += "</select>"
+	var/rings_select = "<input type=\"text\" name=\"outfit_ring\""
+
+	var/wrists_select = "<input type=\"text\" name=\"outfit_wrists\""
+
+	var/gloves_select = "<input type=\"text\" name=\"outfit_gloves\""
+
+	var/shirts_select = "<input type=\"text\" name=\"outfit_shirt\""
+
+	var/armors_select = "<input type=\"text\" name=\"outfit_armor\""
+
+	var/pants_select = "<input type=\"text\" name=\"outfit_pants\""
+
+	var/belts_select = "<input type=\"text\" name=\"outfit_belt\""
+
+	var/shoes_select = "<input type=\"text\" name=\"outfit_shoes\""
+
+	var/scabbard1 = "<input type=\"text\" name=\"outfit_scabbard1\""
+
+	var/scabbard2 = "<input type=\"text\" name=\"outfit_scabbard2\""
 
 	var/dat = {"
 	<html><head><title>Create Outfit</title></head><body>
@@ -109,27 +102,51 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 			</td>
 		</tr>
 		<tr>
-			<th>Uniform:</th>
+			<th>Head:</th>
 			<td>
-			[uniform_select]
+				[heads_select]
 			</td>
 		</tr>
 		<tr>
-			<th>Suit:</th>
+			<th>Mask:</th>
 			<td>
-				[suit_select]
+				[masks_select]
 			</td>
 		</tr>
 		<tr>
-			<th>Back:</th>
+			<th>Neck:</th>
 			<td>
-				<input type="text" name="outfit_back" value="">
+				[necks_select]
 			</td>
 		</tr>
 		<tr>
-			<th>Belt:</th>
+			<th>Cloak:</th>
 			<td>
-				<input type="text" name="outfit_belt" value="">
+				[cloaks_select]
+			</td>
+		</tr>
+		<tr>
+			<th>BackR:</th>
+			<td>
+				[backsr_select]
+			</td>
+		</tr>
+		<tr>
+			<th>BackL:</th>
+			<td>
+				[backsl_select]
+			</td>
+		</tr>
+		<tr>
+			<th>Ring:</th>
+			<td>
+				[rings_select]
+			</td>
+		</tr>
+		<tr>
+			<th>Wrists:</th>
+			<td>
+				[wrists_select]
 			</td>
 		</tr>
 		<tr>
@@ -139,63 +156,45 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 			</td>
 		</tr>
 		<tr>
+			<th>Shirt:</th>
+			<td>
+				[shirts_select]
+			</td>
+		</tr>
+		<tr>
+			<th>Armor:</th>
+			<td>
+				[armors_select]
+			</td>
+		</tr>
+		<tr>
+			<th>Pants:</th>
+			<td>
+				[pants_select]
+			</td>
+		</tr>
+		<tr>
+			<th>Belt:</th>
+			<td>
+				[belts_select]
+			</td>
+		</tr>
+		<tr>
 			<th>Shoes:</th>
 			<td>
 				[shoes_select]
 			</td>
 		</tr>
 		<tr>
-			<th>Head:</th>
+			<th>Scabbard 1:</th>
 			<td>
-				[head_select]
+				[scabbard1]
 			</td>
 		</tr>
 		<tr>
-			<th>Mask:</th>
+			<th>Scabbard 2:</th>
 			<td>
-				[mask_select]
-			</td>
-		</tr>
-		<tr>
-			<th>Ears:</th>
-			<td>
-				<input type="text" name="outfit_ears" value="">
-			</td>
-		</tr>
-		<tr>
-			<th>Glasses:</th>
-			<td>
-				[glasses_select]
-			</td>
-		</tr>
-		<tr>
-			<th>Left Pocket:</th>
-			<td>
-				<input type="text" name="outfit_l_pocket" value="">
-			</td>
-		</tr>
-		<tr>
-			<th>Right Pocket:</th>
-			<td>
-				<input type="text" name="outfit_r_pocket" value="">
-			</td>
-		</tr>
-		<tr>
-			<th>Suit Store:</th>
-			<td>
-				<input type="text" name="outfit_s_store" value="">
-			</td>
-		</tr>
-		<tr>
-			<th>Right Hand:</th>
-			<td>
-				<input type="text" name="outfit_r_hand" value="">
-			</td>
-		</tr>
-		<tr>
-			<th>Left Hand:</th>
-			<td>
-				<input type="text" name="outfit_l_hand" value="">
+				[scabbard2]
 			</td>
 		</tr>
 	</table>
@@ -203,29 +202,39 @@ GLOBAL_LIST_EMPTY(custom_outfits) //Admin created outfits
 	<input type="submit" value="Save">
 	</form></body></html>
 	"}
-	admin << browse(dat, "window=dressup;size=550x600")
 
+	var/datum/browser/popup = new (admin, "outfit_manager", "Outfit Manager", 300, 350)
+	popup.set_content(dat)
+
+	popup.open()
 
 /datum/admins/proc/create_outfit_finalize(mob/admin, list/href_list)
 	var/datum/outfit/O = new
 
 	O.name = href_list["outfit_name"]
-	O.uniform = text2path(href_list["outfit_uniform"])
-	O.shoes = text2path(href_list["outfit_shoes"])
-	O.gloves = text2path(href_list["outfit_gloves"])
-	O.suit = text2path(href_list["outfit_suit"])
 	O.head = text2path(href_list["outfit_head"])
-	O.back = text2path(href_list["outfit_back"])
 	O.mask = text2path(href_list["outfit_mask"])
-	O.glasses = text2path(href_list["outfit_glasses"])
-	O.r_hand = text2path(href_list["outfit_r_hand"])
-	O.l_hand = text2path(href_list["outfit_l_hand"])
-	O.suit_store = text2path(href_list["outfit_s_store"])
-	O.l_pocket = text2path(href_list["outfit_l_pocket"])
-	O.r_pocket = text2path(href_list["outfit_r_pocket"])
-	O.id = text2path(href_list["outfit_id"])
+	O.neck = text2path(href_list["outfit_neck"])
+	O.cloak = text2path(href_list["outfit_cloak"])
+	O.backl = text2path(href_list["outfit_backl"])
+	O.backr = text2path(href_list["outfit_backr"])
+	O.ring = text2path(href_list["outfit_ring"])
+	O.wrists = text2path(href_list["outfit_wrists"])
+	O.gloves = text2path(href_list["outfit_gloves"])
+	O.shirt = text2path(href_list["outfit_shirt"])
+	O.armor = text2path(href_list["outfit_armor"])
+	O.pants = text2path(href_list["outfit_pants"])
 	O.belt = text2path(href_list["outfit_belt"])
-	O.ears = text2path(href_list["outfit_ears"])
+	O.shoes = text2path(href_list["outfit_shoes"])
+	var/loaded_scabbard1 = text2path(href_list["outfit_scabbard1"])
+	if(loaded_scabbard1)
+		LAZYADD(O.scabbards, loaded_scabbard1)
+
+	var/loaded_scabbard2 = text2path(href_list["outfit_scabbard2"])
+	if(loaded_scabbard2)
+		LAZYADD(O.scabbards, loaded_scabbard2)
 
 	GLOB.custom_outfits.Add(O)
 	message_admins("[key_name(usr)] created \"[O.name]\" outfit!")
+
+	outfit_manager(admin)

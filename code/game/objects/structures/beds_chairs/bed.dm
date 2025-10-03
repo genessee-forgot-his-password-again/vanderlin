@@ -9,19 +9,23 @@
  */
 /obj/structure/bed
 	name = "bed"
-	desc = ""
+	desc = "A very nice bed. Perfect for sleeping, or lazying around."
 	icon_state = "bed"
-	icon = 'icons/obj/objects.dmi'
+	icon = 'icons/roguetown/misc/structure.dmi'
 	anchored = TRUE
 	can_buckle = TRUE
 	buckle_lying = 90
 	resistance_flags = FLAMMABLE
 	max_integrity = 100
 	integrity_failure = 0.35
+	buckleverb = "lay"
+	sleepy = 3
+	debris = list(/obj/item/natural/wood/plank = 1)
+	metalizer_result = /obj/machinery/anvil/crafted
+
 	var/buildstacktype
 	var/buildstackamount = 2
 	var/bolts = TRUE
-	buckleverb = "lay"
 
 /obj/structure/bed/deconstruct(disassembled = TRUE)
 	if(!(flags_1 & NODECONSTRUCT_1))
@@ -39,7 +43,7 @@
 	else
 		return ..()
 
-/obj/strucutre/bed/post_buckle_mob(mob/living/M)
+/obj/structure/bed/post_buckle_mob(mob/living/M)
 	. = ..()
 	M.update_cone_show()
 

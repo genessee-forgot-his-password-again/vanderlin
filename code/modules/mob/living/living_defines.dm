@@ -1,5 +1,3 @@
-
-
 /mob/living
 	see_invisible = SEE_INVISIBLE_LIVING
 	sight = 0
@@ -9,6 +7,7 @@
 	var/resize = 1 //Badminnery resize
 	var/lastattacker = null
 	var/lastattackerckey = null
+	var/datum/weakref/lastattacker_weakref = null
 
 	//Health and life related vars
 	var/maxHealth = 100 //Maximum health that should be possible.
@@ -20,8 +19,15 @@
 	var/toxloss = 0		//Toxic damage caused by being poisoned or radiated
 	var/fireloss = 0	//Burn damage caused by being way too hot, too cold or burnt.
 	var/cloneloss = 0	//Damage caused by being cloned or ejected from the cloner early. slimes also deal cloneloss damage to victims
-	var/crit_threshold = HEALTH_THRESHOLD_CRIT // when the mob goes from "normal" to crit
+	/// when the mob goes from "normal" to crit
+	var/crit_threshold = HEALTH_THRESHOLD_CRIT
+	///When the mob enters hard critical state and is fully incapacitated.
+	var/hardcrit_threshold = HEALTH_THRESHOLD_FULLCRIT
 
+	/// Generic bitflags for boolean conditions at the [/mob/living] level. Keep this for inherent traits of living types, instead of runtime-changeable ones.
+	var/living_flags = NONE
+
+	/// Flags that determine the potential of a mob to perform certain actions. Do not change this directly.
 	var/mobility_flags = MOBILITY_FLAGS_DEFAULT
 
 	var/resting = FALSE
@@ -31,8 +37,17 @@
 	var/pixelshift_x = 0
 	var/pixelshift_y = 0
 
-	var/lying = 0			//number of degrees. DO NOT USE THIS IN CHECKS. CHECK FOR MOBILITY FLAGS INSTEAD!!
-	var/lying_prev = 0		//last value of lying on update_mobility
+	///The y amount a mob's sprite should be offset due to the current position they're in (e.g. lying down moves your sprite down)Add commentMore actions
+	var/body_position_pixel_x_offset = 0
+	///The x amount a mob's sprite should be offset due to the current position they're in
+	var/body_position_pixel_y_offset = 0
+
+	/// Variable to track the body position of a mob, regardgless of the actual angle of rotation (usually matching it, but not necessarily).
+	var/body_position = STANDING_UP
+	/// Number of degrees of rotation of a mob. 0 means no rotation, up-side facing NORTH. 90 means up-side rotated to face EAST, and so on.
+	var/lying_angle = 0
+	/// Value of lying lying_angle before last change. TODO: Remove the need for this.
+	var/lying_prev = 0
 
 	var/confused = 0	//Makes the mob move in random directions.
 
@@ -53,6 +68,7 @@
 
 	var/on_fire = 0 //The "Are we on fire?" var
 	var/fire_stacks = 0 //Tracks how many stacks of fire we have on, max is usually 20
+	var/divine_fire_stacks = 0 //Identical to fire stacks but has less properties like spreading. Should never be negative.
 
 	var/bloodcrawl = 0 //0 No blood crawling, BLOODCRAWL for bloodcrawling, BLOODCRAWL_EAT for crawling+mob devour
 	var/holder = null //The holder for blood crawling
@@ -63,6 +79,20 @@
 	var/mob_biotypes = MOB_ORGANIC
 	var/metabolism_efficiency = 1 //more or less efficiency to metabolize helpful/harmful reagents and regulate body temperature..
 	var/has_limbs = 0 //does the mob have distinct limbs?(arms,legs, chest,head)
+
+	///How many legs does this mob have by default. This shouldn't change at runtime.
+	var/default_num_legs = 2
+	///How many legs does this mob currently have. Should only be changed through set_num_legs()
+	var/num_legs = 2
+	///How many usable legs this mob currently has. Should only be changed through set_usable_legs()
+	var/usable_legs = 2
+
+	///How many hands does this mob have by default. This shouldn't change at runtime.
+	var/default_num_hands = 2
+	///How many hands hands does this mob currently have. Should only be changed through set_num_hands()
+	var/num_hands = 2
+	///How many usable hands does this mob currently have. Should only be changed through set_usable_hands()
+	var/usable_hands = 2
 
 	var/list/pipes_shown = list()
 	var/last_played_vent
@@ -79,8 +109,6 @@
 	var/butcher_difficulty = 0 //effectiveness prob. is modified negatively by this amount; positive numbers make it more difficult, negative ones make it easier
 
 	var/hellbound = 0 //People who've signed infernal contracts are unrevivable.
-
-	var/list/weather_immunities = list()
 
 	var/stun_absorption = null //converted to a list of stun absorption sources this mob has when one is added
 
@@ -104,8 +132,6 @@
 	var/datum/language/selected_default_language
 
 	var/last_words	//used for database logging
-
-	var/list/obj/effect/proc_holder/abilities = list()
 
 	var/can_be_held = FALSE	//whether this can be picked up and held.
 
@@ -146,9 +172,6 @@
 
 	var/list/next_attack_msg = list()
 
-	var/datum/component/personal_crafting/craftingthing
-	var/last_crafted
-
 	var/obj/item/grabbing/r_grab = null
 	var/obj/item/grabbing/l_grab = null
 
@@ -175,3 +198,38 @@
 	var/blood_drained = 0
 	///are we skinned?
 	var/skinned = FALSE
+
+	///our reflection child
+	var/has_reflection = TRUE
+
+	var/mutable_appearance/reflective_icon
+
+	var/list/mob_offsets = list()
+
+	var/last_deadlife
+
+	var/datum/worker_mind/controller_mind
+
+	var/tempatarget = null
+	var/pegleg = 0			//Handles check & slowdown for peglegs. Fuckin' bootleg, literally, but hey it at least works.
+	var/pet_passive = FALSE
+
+	/// amount of spell points this mob currently has
+	var/spell_points
+	/// amount of spell points this mob has used
+	var/used_spell_points
+
+	var/list/affixes = list()
+	var/delve_level = 0
+
+	var/cold_res = 0
+	var/max_cold_res = 75
+	var/fire_res = 0
+	var/max_fire_res = 75
+	var/lightning_res = 0
+	var/max_lightning_res = 75
+
+	var/list/status_modifiers
+
+	/// cooldown for the next time this person can offer
+	COOLDOWN_DECLARE(offer_cooldown)

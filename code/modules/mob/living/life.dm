@@ -1,9 +1,5 @@
 /mob/living/proc/Life(seconds, times_fired)
 	set waitfor = FALSE
-	set invisibility = 0
-
-	if((movement_type & FLYING) && !(movement_type & FLOATING))	//TODO: Better floating
-		float(on = TRUE)
 
 	if (client)
 		var/turf/T = get_turf(src)
@@ -24,31 +20,29 @@
 		log_game("Z-TRACKING: [src] of type [src.type] has a Z-registration despite not having a client.")
 		update_z(null)
 
-	if (notransform)
-		return
-	if(!loc)
+	if(isnull(loc) || HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
 		return
 
-	//Breathing, if applicable
-	handle_breathing(times_fired)
-	if(HAS_TRAIT(src, TRAIT_SIMPLE_WOUNDS))
-		handle_wounds()
-		handle_embedded_objects()
-		handle_blood()
-		//passively heal even wounds with no passive healing
-		for(var/datum/wound/wound as anything in get_wounds())
-			wound.heal_wound(1)
+	if(!HAS_TRAIT(src, TRAIT_STASIS))
+		//Breathing, if applicable
+		handle_temperature()
+		handle_breathing(times_fired)
+		if(HAS_TRAIT(src, TRAIT_SIMPLE_WOUNDS))
+			handle_wounds()
+			handle_embedded_objects()
+			handle_blood()
+			//passively heal even wounds with no passive healing
+			for(var/datum/wound/wound as anything in get_wounds())
+				wound.heal_wound(1)
 
-	if (QDELETED(src)) // diseases can qdel the mob via transformations
-		return
+		if (QDELETED(src)) // diseases can qdel the mob via transformations
+			return
 
-	//Random events (vomiting etc)
-	handle_random_events()
+		//Random events (vomiting etc)
+		handle_random_events()
 
-	handle_gravity()
-
-	handle_traits() // eye, ear, brain damages
-	handle_status_effects() //all special effects, stun, knockdown, jitteryness, hallucination, sleeping, etc
+		handle_traits() // eye, ear, brain damages
+		handle_status_effects() //all special effects, stun, knockdown, jitteryness, hallucination, sleeping, etc
 
 	update_sneak_invis()
 	handle_fire()
@@ -64,12 +58,9 @@
 	if(stat != DEAD)
 		return 1
 
-/mob/living
-	var/last_deadlife
-
 /mob/living/proc/DeadLife()
 	set invisibility = 0
-	if (notransform)
+	if (HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
 		return
 	if(!loc)
 		return
@@ -80,45 +71,50 @@
 	update_sneak_invis()
 	handle_fire()
 	handle_typing_indicator()
-	if(istype(loc, /turf/open/water))
-		handle_inwater(loc)
+
+/mob/living/proc/handle_temperature()
+	return
 
 /mob/living/proc/handle_breathing(times_fired)
 	return
 
 /mob/living/proc/handle_random_events()
 	//random painstun
-	if(!stat && !HAS_TRAIT(src, TRAIT_NOPAINSTUN))
-		if(world.time > mob_timers["painstun"] + 600)
-			if(getBruteLoss() + getFireLoss() >= (STAEND * 10))
-				var/probby = 53 - (STAEND * 2)
-				if(!(mobility_flags & MOBILITY_STAND))
-					probby = probby - 20
-				if(prob(probby))
-					mob_timers["painstun"] = world.time
-					Immobilize(10)
-					emote("painscream")
-					visible_message("<span class='warning'>[src] freezes in pain!</span>",
-								"<span class='warning'>I'm frozen in pain!</span>")
-					sleep(10)
-					Stun(110)
-					Knockdown(110)
+	if(stat || HAS_TRAIT(src, TRAIT_NOPAINSTUN))
+		return
+	if(!MOBTIMER_FINISHED(src, MT_PAINSTUN, 60 SECONDS))
+		return
+	if((getBruteLoss() + getFireLoss()) < (STAEND * 10))
+		return
+
+	var/probby = 53 - (STAEND * 2)
+	if(body_position == LYING_DOWN)
+		probby = probby - 20
+	if(prob(probby))
+		MOBTIMER_SET(src, MT_PAINSTUN)
+		Immobilize(10)
+		emote("painscream")
+		visible_message("<span class='warning'>[src] freezes in pain!</span>",
+					"<span class='warning'>I'm frozen in pain!</span>")
+		sleep(10)
+		Stun(110)
+		Knockdown(110)
 
 /mob/living/proc/handle_fire()
 	if(fire_stacks < 0) //If we've doused ourselves in water to avoid fire, dry off slowly
 		fire_stacks = min(0, fire_stacks + 1)//So we dry ourselves back to default, nonflammable.
 	if(!on_fire)
-//		testing("handlefyre0 [src]")
 		return TRUE //the mob is no longer on fire, no need to do the rest.
-//	testing("handlefyre1 [src]")
-	if(fire_stacks > 0)
-		adjust_fire_stacks(-0.05) //the fire is slowly consumed
+	if(fire_stacks + divine_fire_stacks > 0)
+		adjust_divine_fire_stacks(-0.05)
+		if(fire_stacks > 0)
+			adjust_fire_stacks(-0.05) //the fire is slowly consumed
 	else
 		ExtinguishMob()
 		return TRUE //mob was put out, on_fire = FALSE via ExtinguishMob(), no need to update everything down the chain.
 	update_fire()
 	var/turf/location = get_turf(src)
-	location.hotspot_expose(700, 50, 1)
+	location?.hotspot_expose(700, 50, 1)
 
 /mob/living/proc/handle_wounds()
 	if(stat >= DEAD)
@@ -167,17 +163,9 @@
 /mob/living/proc/update_damage_hud()
 	return
 
-/mob/living/proc/handle_gravity()
-	var/gravity = mob_has_gravity()
-	update_gravity(gravity)
-
-	if(gravity > STANDARD_GRAVITY)
-		gravity_animate()
-		handle_high_gravity(gravity)
-
 /mob/living/proc/gravity_animate()
 	if(!get_filter("gravity"))
-		add_filter("gravity",1,list("type"="motion_blur", "x"=0, "y"=0))
+		add_filter("gravity", 1, motion_blur_filter(0, 0))
 	INVOKE_ASYNC(src, PROC_REF(gravity_pulse_animation))
 
 /mob/living/proc/gravity_pulse_animation()

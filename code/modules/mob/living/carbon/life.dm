@@ -1,39 +1,49 @@
 /mob/living/carbon/Life()
 	set invisibility = 0
 
-	if(notransform)
+	if(grab_fatigue > 0)
+		if(!pulling)
+			// Exponential decay mostly
+			grab_fatigue -= max(grab_fatigue * 0.15, 0.5)
+		else
+			grab_fatigue -= 0.5
+		grab_fatigue = max(0, grab_fatigue)
+
+	if(HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
 		return
 
 	if(damageoverlaytemp)
 		damageoverlaytemp = 0
 		update_damage_hud()
 
-	//Reagent processing needs to come before breathing, to prevent edge cases.
-	handle_organs()
+	if(HAS_TRAIT(src, TRAIT_STASIS))
+		. = ..()
+	else
+		//Reagent processing needs to come before breathing, to prevent edge cases.
+		handle_organs()
 
-	. = ..()
+		. = ..()
 
-	if (QDELETED(src))
-		return
+		if (QDELETED(src))
+			return
 
-	handle_wounds()
-	handle_embedded_objects()
-	handle_blood()
-	handle_roguebreath()
-	update_stress()
-	handle_nausea()
-	if(blood_volume > BLOOD_VOLUME_SURVIVE)
-		if(!heart_attacking)
-			if(oxyloss)
-				adjustOxyLoss(-1.6)
-		else
-			if(getOxyLoss() < 20)
-				heart_attacking = FALSE
+		handle_lingering_pain()
+		handle_wounds()
+		handle_embedded_objects()
+		handle_blood()
+		handle_roguebreath()
+		update_stress()
+		handle_nausea()
+		if((blood_volume > BLOOD_VOLUME_SURVIVE) || HAS_TRAIT(src, TRAIT_BLOODLOSS_IMMUNE))
+			if(!heart_attacking)
+				if(oxyloss)
+					adjustOxyLoss(-1.6)
+			else
+				if(getOxyLoss() < 20)
+					heart_attacking = FALSE
 
-	handle_sleep()
-
-	handle_brain_damage()
-
+		handle_sleep()
+		handle_brain_damage()
 
 	check_cremation()
 
@@ -43,7 +53,7 @@
 /mob/living/carbon/DeadLife()
 	set invisibility = 0
 
-	if(notransform)
+	if(HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
 		return
 
 	. = ..()
@@ -55,39 +65,88 @@
 
 	check_cremation()
 
-/mob/living/carbon/handle_random_events()//BP/WOUND BASED PAIN
+/mob/living/carbon/handle_random_events() //BP/WOUND BASED PAIN
 	if(HAS_TRAIT(src, TRAIT_NOPAIN))
 		return
-	if(!stat)
-		var/painpercent = get_complex_pain() / (STAEND * 10)
+	if(stat < UNCONSCIOUS)
+		// Calculate current shock level
+		var/current_shock = calculate_shock_stage()
+		var/raw_pain = get_complex_pain()
+
+		// Shock reduces pain perception (adrenaline effect)
+		if(current_shock >= 60)
+			var/shock_reduction = min(0.3, current_shock * 0.001) // Max 30% reduction
+			raw_pain *= (1.0 - shock_reduction)
+
+		// Base pain calculation - endurance affects how much pain you feel from damage
+		var/painpercent = raw_pain / (STAEND * 13)
 		painpercent = painpercent * 100
 
-		if(world.time > mob_timers["painstun"])
-			mob_timers["painstun"] = world.time + 100
-			var/probby = 40 - (STAEND * 2)
-			probby = max(probby, 10)
-			if(lying || IsKnockdown())
-				if(prob(3) && (painpercent >= 80) )
+		// Pain tolerance system - builds up to prevent infinite stunning
+		// High endurance characters build tolerance faster and lose it slower
+		var/tolerance_gain_rate = 1 + (STAEND * 0.25) // More endurance = faster adaptation
+		var/tolerance_decay_rate = max(1, 3 - (STAEND * 0.1)) // More endurance = slower decay
+
+		if(world.time - last_major_pain_time < 30 SECONDS)
+			pain_tolerance = min(pain_tolerance + tolerance_gain_rate, 60 + (STAEND * 1)) // Higher max tolerance with endurance
+		else
+			pain_tolerance = max(pain_tolerance - tolerance_decay_rate, 0)
+
+		// Apply pain tolerance to reduce effective pain
+		var/effective_pain = painpercent * (1.0 - (pain_tolerance * 0.01))
+
+		// Endurance-based pain threshold - higher endurance means higher pain threshold
+		var/pain_threshold = 55 + (STAEND * 1) // 1% higher threshold per endurance point
+		if(world.time > mob_timers[MT_PAINSTUN])
+			mob_timers[MT_PAINSTUN] = world.time + 10 SECONDS
+
+			// Base stun probability - endurance makes you much more resistant
+			var/probby = max(5, 50 - (STAEND * 1)) // 1% reduction per endurance point, minimum 5%
+
+			// Reduce stun probability based on shock stage and pain tolerance
+			if(current_shock >= 160)
+				probby *= 0.75 // Shock makes you less likely to be stunned by pain
+			if(body_position == LYING_DOWN || HAS_TRAIT(src, TRAIT_FLOORED))
+				if(prob(3) && (effective_pain >= 40))
 					emote("painmoan")
 			else
-				if(painpercent >= 100)
+				if(effective_pain >= pain_threshold) // Dynamic threshold based on endurance
 					if(prob(probby) && !HAS_TRAIT(src, TRAIT_NOPAINSTUN))
-						Immobilize(10)
+						// Major pain event - increase tolerance
+						pain_tolerance += tolerance_gain_rate
+						last_major_pain_time = world.time
+
+						// Endurance affects stun duration - tougher people recover faster
+						var/base_stun = 6 SECONDS
+						var/endurance_stun_reduction = STAEND * 1 // 2 deciseconds per endurance point
+						var/stun_duration = max(30, base_stun - endurance_stun_reduction)
+
+						var/base_immobilize = 1 SECONDS
+						var/immobilize_duration = max(2, base_immobilize - (STAEND * 0.05))
+
+						Immobilize(immobilize_duration)
 						emote("painscream")
-						stuttering += 5
-						addtimer(CALLBACK(src, PROC_REF(Stun), 110), 10)
-						addtimer(CALLBACK(src, PROC_REF(Knockdown), 110), 10)
-						mob_timers["painstun"] = world.time + 160
+						stuttering += max(1, 5 - STAEND) // Less stuttering with high endurance
+						addtimer(CALLBACK(src, PROC_REF(Stun), stun_duration), immobilize_duration)
+						addtimer(CALLBACK(src, PROC_REF(Knockdown), stun_duration), immobilize_duration)
+
+						mob_timers[MT_PAINSTUN] = world.time + (10 SECONDS + (STAEND * 0.25))
 					else
 						emote("painmoan")
-						stuttering += 5
+						stuttering += max(1, 5 - STAEND)
 				else
-					if(painpercent >= 80)
-						if(probby)
+					// Lower threshold for minor pain with high endurance
+					var/minor_pain_threshold = 35 + (STAEND * 1)
+					if(effective_pain >= minor_pain_threshold)
+						if(prob(probby * 0.5)) // Reduced chance for minor pain reactions
 							emote("painmoan")
 
-		if(painpercent >= 100)
-			add_stress(/datum/stressevent/painmax)
+		// Stress effects - endurance helps resist stress from pain
+		if(effective_pain >= pain_threshold)
+			if(current_shock < 160) // Only add stress if not in shock-induced numbness
+				// High endurance characters are less stressed by pain
+				if(prob(max(20, 100 - (STAEND * 2)))) // 2% less likely per endurance point (40% at 20 )
+					add_stress(/datum/stress_event/painmax)
 
 /mob/living/carbon/proc/handle_roguebreath()
 	return
@@ -104,92 +163,340 @@
 			adjustOxyLoss(5)
 	if(isopenturf(loc))
 		var/turf/open/T = loc
-		if(reagents&& T.pollution)
+		if(reagents && T.pollution)
 			T.pollution.breathe_act(src)
+			if(HAS_TRAIT(src, TRAIT_DEADNOSE))
+				return
 			if(next_smell <= world.time)
 				next_smell = world.time + 30 SECONDS
 				T.pollution.smell_act(src)
 
 /mob/living/proc/handle_inwater(turf/open/water/W)
-	ExtinguishMob()
+	if(body_position == LYING_DOWN || W.water_level == 3)
+		SoakMob(FULL_BODY)
+	else if(W.water_level == 2)
+		SoakMob(BELOW_CHEST)
 
 /mob/living/carbon/handle_inwater(turf/open/water/W)
-	..()
-	if(HAS_TRAIT(src, TRAIT_NOBREATH))
-		return TRUE
+	. = ..()
 	if(stat == DEAD)
-		return TRUE
-/*	if(W.water_level == 3)	// deep water, to dissuade diving in dirty lakes. Does not work quite right not worth the effort right now, TO DO
-		var/datum/reagents/reagentstouch = new()
-		reagentstouch.add_reagent(W.water_reagent, 2)
-		reagentstouch.trans_to(src, reagents.total_volume, transfered_by = src, method = TOUCH)	*/
-	if(lying)
-		adjustOxyLoss(5)
+		return
+	if(W.water_volume < 10 || !W.water_reagent)
+		return
+	var/react_volume = 2
+	var/react_type = TOUCH
+	var/is_laying = (body_position == LYING_DOWN)
+	if(!is_laying && W.water_level < 2)
+		return
+	if(is_laying && !(HAS_TRAIT(src, TRAIT_WATER_BREATHING) || HAS_TRAIT(src, TRAIT_NOBREATH)))
+		var/drown_damage = has_world_trait(/datum/world_trait/abyssor_rage) ? (is_ascendant(ABYSSOR) ? 15 : 10) : 5
+		adjustOxyLoss(drown_damage)
+		if(stat == DEAD && client)
+			record_round_statistic(STATS_PEOPLE_DROWNED)
+			return
 		emote("drown")
-		var/datum/reagents/reagents = new()
-		reagents.add_reagent(W.water_reagent, 2)
-		reagents.trans_to(src, reagents.total_volume, transfered_by = src, method = INGEST)
+		react_volume = 5
+		react_type = INGEST
+	var/datum/reagents/reagents = new()
+	reagents.add_reagent(W.water_reagent, react_volume)
+	reagents.reaction(src, react_type, W.level / 2)
 
 /mob/living/carbon/human/handle_inwater()
 	. = ..()
-	if(!lying)
+	if(body_position != LYING_DOWN)
 		if(istype(loc, /turf/open/water/bath))
 			if(!wear_armor && !wear_shirt && !wear_pants)
 				var/mob/living/carbon/V = src
-				V.add_stress(/datum/stressevent/bathwater)
+				V.add_stress(/datum/stress_event/bathwater)
 
 /mob/living/carbon/proc/get_complex_pain()
-	var/amt = 0
-	for(var/I in bodyparts)
-		var/obj/item/bodypart/BP = I
+	var/total_pain = 0
+
+	for(var/obj/item/bodypart/BP as anything in bodyparts)
 		if(BP.status == BODYPART_ROBOTIC)
 			continue
-		var/BPinteg
-		//pain from base damage is amplified based on how much con you have
-		BPinteg = ((BP.brute_dam / BP.max_damage) * 100) + BPinteg
-		BPinteg = ((BP.burn_dam / BP.max_damage) * 100) + BPinteg
-		for(var/W in BP.wounds) //wound damage is added normally and stacks higher than 100
+
+		var/bodypart_pain = 0
+
+		// Acute pain from current damage (immediate, sharp pain)
+		var/acute_pain = 0
+		acute_pain += ((BP.brute_dam / BP.max_damage) * 50)
+		acute_pain += ((BP.burn_dam / BP.max_damage) * 50)
+
+		// Wound-specific pain (can be higher intensity)
+		var/wound_pain = 0
+		for(var/W in BP.wounds)
 			var/datum/wound/WO = W
 			if(WO.woundpain > 0)
-				BPinteg += WO.woundpain
-//		BPinteg = min(((totwound / BP.max_damage) * 100) + BPinteg, initial(BP.max_damage))
-//		if(BPinteg > amt) //this is here to ensure that pain doesn't add up, but is rather picked from the worst limb
-		amt += ((BPinteg) * dna?.species?.pain_mod)
-	return amt
+				wound_pain += WO.woundpain
+
+		// Lingering pain (decays over time, separate from current damage)
+		if(!BP.lingering_pain)
+			BP.lingering_pain = 0
+
+		// Chronic pain system
+		if(!BP.chronic_pain)
+			BP.chronic_pain = 0
+		if(!BP.chronic_pain_type)
+			BP.chronic_pain_type = null
+
+		// Develop chronic pain from repeated or severe injuries
+		//process_chronic_pain_development(BP, current_damage_percent) //TODO seperate TM for balancing this lol
+
+		// Calculate chronic pain contribution
+		var/chronic_pain_amount = get_chronic_pain_amount(BP)
+
+		// Combine all pain sources for this bodypart
+		bodypart_pain = acute_pain + wound_pain + BP.lingering_pain + chronic_pain_amount
+
+		// Apply species pain modifier
+		bodypart_pain *= (dna?.species?.pain_mod || 1)
+
+		total_pain += bodypart_pain
+
+	// Apply pain medications/modifiers
+	total_pain *= pain_resistance_multiplier()
+
+	return max(0, total_pain)
+
+/mob/living/carbon/proc/process_chronic_pain_development(obj/item/bodypart/BP, current_damage_percent)
+	// Don't develop chronic pain if you already have it at max level
+	if(BP.chronic_pain >= 100)
+		return
+
+	// Factors that increase chronic pain development
+	var/development_chance = 0
+
+	// Severe current damage
+	if(current_damage_percent > 80)
+		development_chance += 0.1
+	else if(current_damage_percent > 60)
+		development_chance += 0.05
+
+	// Recent severe injury history (within last hour)
+	if(BP.last_severe_injury_time && (world.time - BP.last_severe_injury_time) < 1 HOURS)
+		development_chance += 0.08
+
+	// High lingering pain suggests tissue damage
+	if(BP.lingering_pain > 30)
+		development_chance += 0.05
+
+	// Poor general health increases chronic pain risk
+	if(getToxLoss() > 20 || nutrition < 200)
+		development_chance += 0.03
+
+	// Random chance to develop chronic pain
+	if(prob(development_chance * 100))
+		// Determine chronic pain type based on injury pattern
+		if(!BP.chronic_pain_type)
+			if(BP.brute_dam > BP.burn_dam)
+				BP.chronic_pain_type = prob(50) ? CHRONIC_OLD_FRACTURE : CHRONIC_SCAR_TISSUE
+			else
+				BP.chronic_pain_type = prob(50) ? CHRONIC_NERVE_DAMAGE : CHRONIC_SCAR_TISSUE
+
+		// Increase chronic pain level slowly
+		BP.chronic_pain = min(BP.chronic_pain + rand(1, 3), 100)
+
+		// Notify player when chronic pain develops significantly
+		if(BP.chronic_pain == 25 || BP.chronic_pain == 50 || BP.chronic_pain == 75)
+			var/bodypart_name = BP.name
+			var/pain_desc = get_chronic_pain_description(BP.chronic_pain_type, BP.chronic_pain)
+			to_chat(src, span_warning("You feel [pain_desc] developing in your [bodypart_name]."))
+
+/mob/living/carbon/proc/get_chronic_pain_amount(obj/item/bodypart/BP)
+	if(!BP.chronic_pain || !BP.chronic_pain_type)
+		return 0
+
+	var/base_pain = BP.chronic_pain * 0.3 // Base chronic pain
+
+	// Weather effects (if your game has weather)
+	/*
+	if(SSweather?.current_weather?.pressure == "low")
+		base_pain *= 1.3 // Arthritis flares up in low pressure
+	*/
+
+	// Activity level affects chronic pain
+	if(body_position == LYING_DOWN)
+		base_pain *= 0.8 // Rest helps
+	else if(m_intent == MOVE_INTENT_RUN)
+		base_pain *= 1.4 // Running aggravates chronic pain
+
+	// Time of day effects (morning stiffness)
+	var/game_hour = world.time / (1 HOURS) % 24
+	if(game_hour >= 6 && game_hour <= 8) // Morning hours
+		base_pain *= 1.2
+
+	// Chronic pain type modifiers
+	switch(BP.chronic_pain_type)
+		if(CHRONIC_ARTHRITIS)
+			// Worse when cold, better when warm
+			if(bodytemperature < BODYTEMP_NORMAL - 10)
+				base_pain *= 1.5
+			else if(bodytemperature > BODYTEMP_NORMAL + 10)
+				base_pain *= 0.8
+
+		if(CHRONIC_NERVE_DAMAGE)
+			// Consistent pain, hard to treat
+			base_pain *= 1.1
+
+		if(CHRONIC_OLD_FRACTURE)
+			// Worse with activity and weather
+			if(m_intent == MOVE_INTENT_RUN)
+				base_pain *= 1.3
+
+		if(CHRONIC_SCAR_TISSUE)
+			// Causes stiffness, worse with movement
+			if(m_intent != MOVE_INTENT_WALK)
+				base_pain *= 1.2
+
+	return base_pain
+
+/mob/living/carbon/proc/get_chronic_pain_description(pain_type, severity)
+	var/intensity = ""
+	switch(severity)
+		if(1 to 25)
+			intensity = "a mild ache"
+		if(26 to 50)
+			intensity = "a persistent discomfort"
+		if(51 to 75)
+			intensity = "a chronic pain"
+		if(76 to 100)
+			intensity = "a severe chronic condition"
+
+	switch(pain_type)
+		if(CHRONIC_ARTHRITIS)
+			return "[intensity] and stiffness"
+		if(CHRONIC_NERVE_DAMAGE)
+			return "[intensity] and tingling sensation"
+		if(CHRONIC_OLD_FRACTURE)
+			return "[intensity] from old bone damage"
+		if(CHRONIC_SCAR_TISSUE)
+			return "[intensity] from scar tissue"
+
+	return "[intensity]"
+
+/mob/living/carbon/proc/handle_lingering_pain()
+	for(var/obj/item/bodypart/BP as anything in bodyparts)
+		if(BP.status == BODYPART_ROBOTIC)
+			continue
+
+		// Process lingering pain decay
+		if(BP.lingering_pain > 0)
+			var/decay_rate = max(0.5, BP.lingering_pain * 0.02)
+
+			if(nutrition > 300 && !has_status_effect(/datum/status_effect/debuff/sleepytime))
+				decay_rate *= 1.25
+			if(getToxLoss() > 20 || getOxyLoss() > 20)
+				decay_rate *= 0.75
+
+			BP.lingering_pain = max(0, BP.lingering_pain - decay_rate)
+
+		// Chronic pain can very slowly improve with good care
+		if(BP.chronic_pain > 0)
+			// Chance for improvement if healthy and well-cared for
+			if(nutrition > 400 && getToxLoss() < 10 && getOxyLoss() < 10 && !has_status_effect(/datum/status_effect/debuff/sleepytime))
+				if(prob(0.1)) // Very small chance
+					BP.chronic_pain = max(0, BP.chronic_pain - 1)
+					if(BP.chronic_pain == 0)
+						BP.chronic_pain_type = null
+						to_chat(src, span_green("The chronic pain in your [BP.name] seems to have finally subsided."))
+	update_damage_hud()
+
+/mob/living/carbon/proc/pain_resistance_multiplier()
+	var/multiplier = 1.0
+
+	// Check for pain medications in bloodstream
+	if(reagents)
+		// Ozium
+		if(reagents.has_reagent(/datum/reagent/ozium))
+			multiplier *= 0.6 // 40% pain reduction
+
+		if(reagents.has_reagent(/datum/reagent/buff/herbal/battle_stim))
+			multiplier *= 0.8 // 20% pain reduction
+
+		// Alcohol (mild pain relief)
+		if(reagents.has_reagent(/datum/reagent/consumable/ethanol))
+			var/alcohol_amount = reagents.get_reagent_amount(/datum/reagent/consumable/ethanol)
+			multiplier *= max(0.8, 1.0 - (alcohol_amount * 0.01)) // Diminishing returns
+
+	return multiplier
+
+
+/mob/living/carbon/proc/calculate_shock_stage()
+	var/shock = 0
+
+	// Physical trauma contributes to shock
+	shock += getBruteLoss() * 0.7
+	shock += getFireLoss() * 0.8
+	shock += getToxLoss() * 0.4
+
+	// Blood loss is a major shock factor
+	var/shock_threshold = BLOOD_VOLUME_NORMAL / 2
+	if(blood_volume < shock_threshold)
+		shock += max(0, shock_threshold - blood_volume) * 0.5
+
+	// Gradually reduce shock over time if conditions improve
+	if(shock < shock_stage)
+		shock_stage -= max(0.5, shock_stage * 0.02)
+		shock_stage = max(shock, shock_stage)
+	else
+		shock_stage = shock
+
+	return shock_stage
+
 
 /mob/living/carbon/human/get_complex_pain()
 	. = ..()
-	. *= physiology.pain_mod
+	if(physiology)
+		. *= physiology.pain_mod
 
 ///////////////
 // BREATHING //
 ///////////////
 
+/mob/living/carbon/handle_temperature()
+	var/turf/open/turf = get_turf(src)
+	if(!istype(turf))
+		return
+	var/temp = turf.return_temperature()
+
+	if(temp < 0 )
+		snow_shiver = world.time + 3 SECONDS + abs(temp)
+
 //Start of a breath chain, calls breathe()
 /mob/living/carbon/handle_breathing(times_fired)
 	var/breath_effect_prob = 0
 	var/turf/turf = get_turf(src)
-	var/turf_temp = turf.temperature
+	var/turf_temp = turf ? turf.return_temperature() : BODYTEMP_NORMAL
 
-	if(turf_temp <= T0C - 50)
-		breath_effect_prob = 100
-	else if(turf_temp <= T0C - 25)
-		breath_effect_prob = 50
-	else if(turf_temp <= T0C - 10)
-		breath_effect_prob = 25
-	else if(turf_temp <= T0C)
-		breath_effect_prob = 15
+	// Breath visibility based on ambient temperature
+	// Only visible when it's actually cold enough for condensation
+	if(turf_temp <= -10)
+		breath_effect_prob = 100    // Always visible in extreme cold
+	else if(turf_temp <= -5)
+		breath_effect_prob = 90     // Very likely in freezing temps
+	else if(turf_temp <= 0)
+		breath_effect_prob = 40     // Common at freezing point
+	else if(turf_temp <= 5)
+		breath_effect_prob = 15     // Sometimes visible in cold
 
+	// Body temperature effects
+	if(bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT)
+		var/cold_severity = (BODYTEMP_COLD_DAMAGE_LIMIT - bodytemperature)
+		breath_effect_prob += min(cold_severity * 15, 40)
+
+	// Environmental modifiers
 	var/turf/snow_turf = get_turf(src)
-	if(snow_shiver > world.time)
-		breath_effect_prob += 50
-	else if(snow_turf.snow)
-		breath_effect_prob += 50
+	if(snow_shiver > world.time || snow_turf?.snow)
+		breath_effect_prob = min(breath_effect_prob + 30, 100)
 
-	if(prob(breath_effect_prob))
-		// Breathing into your mask, no particle. We can add fogged up glasses later
-		if(is_mouth_covered())
-			return
+	// Heavy breathing from exertion or cold body
+	if(bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT - 3)
+		breath_effect_prob = min(breath_effect_prob + 50, 100)
+		if(prob(15) && !is_mouth_covered())
+			visible_message(span_notice("[src]'s breath comes out in heavy puffs of vapor."))
+
+	if(prob(breath_effect_prob) && !is_mouth_covered())
 		emit_breath_particle(/particles/fog/breath)
 
 	return
@@ -236,12 +543,10 @@
 
 /mob/living/carbon/proc/handle_organs()
 	if(stat != DEAD)
-		for(var/V in internal_organs)
-			var/obj/item/organ/O = V
+		for(var/obj/item/organ/O as anything in internal_organs)
 			O.on_life()
 	else
-		for(var/V in internal_organs)
-			var/obj/item/organ/O = V
+		for(var/obj/item/organ/O as anything in internal_organs)
 			O.on_death() //Needed so organs decay while inside the body.
 
 /mob/living/carbon/handle_embedded_objects()
@@ -277,20 +582,6 @@ All effects don't start immediately, but rather get worse over time; the rate is
 81-90: Extremely high alcohol content - light brain damage, passing out
 91-100: Dangerously toxic - swift death
 */
-#define BALLMER_POINTS 5
-GLOBAL_LIST_INIT(ballmer_good_msg, list("Hey guys, what if we rolled out a bluespace wiring system so mice can't destroy the powergrid anymore?",
-										"Hear me out here. What if, and this is just a theory, we made R&D controllable from our PDAs?",
-										"I'm thinking we should roll out a git repository for our research under the AGPLv3 license so that we can share it among the other stations freely.",
-										"I dunno about you guys, but IDs and PDAs being separate is clunky as fuck. Maybe we should merge them into a chip in our arms? That way they can't be stolen easily.",
-										"Why the fuck aren't we just making every pair of shoes into galoshes? We have the technology."))
-GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put a webserver that's automatically turned on with default admin passwords into every PDA?",
-												"So like, you know how we separate our codebase from the master copy that runs on our consumer boxes? What if we merged the two and undid the separation between codebase and server?",
-												"Dude, radical idea: H.O.N.K mechs but with no bananium required.",
-												"Best idea ever: Disposal pipes instead of hallways.",
-												"We should store bank records in a webscale datastore, like /dev/null.",
-												"You ever wonder if /dev/null supports sharding?",
-												"Do you know who ate all the donuts?",
-												"What if we use a language that was written on a napkin and created over 1 weekend for all of our servers?"))
 
 //this updates all special effects: stun, sleeping, knockdown, druggy, stuttering, etc..
 /mob/living/carbon/handle_status_effects()
@@ -298,39 +589,13 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 
 	var/restingpwr = 1 + 4 * resting
 
+	// These should all be real status effects :)))))))))
+
 	//Dizziness
 	if(dizziness)
-		var/client/C = client
-		var/pixel_x_diff = 0
-		var/pixel_y_diff = 0
-		var/temp
-		var/saved_dizz = dizziness
-		if(C)
-			var/oldsrc = src
-			var/amplitude = dizziness*(sin(dizziness * world.time) + 1) // This shit is annoying at high strength
-			src = null
-			spawn(0)
-				if(C)
-					temp = amplitude * sin(saved_dizz * world.time)
-					pixel_x_diff += temp
-					C.pixel_x += temp
-					temp = amplitude * cos(saved_dizz * world.time)
-					pixel_y_diff += temp
-					C.pixel_y += temp
-					sleep(3)
-					if(C)
-						temp = amplitude * sin(saved_dizz * world.time)
-						pixel_x_diff += temp
-						C.pixel_x += temp
-						temp = amplitude * cos(saved_dizz * world.time)
-						pixel_y_diff += temp
-						C.pixel_y += temp
-					sleep(3)
-					if(C)
-						C.pixel_x -= pixel_x_diff
-						C.pixel_y -= pixel_y_diff
-			src = oldsrc
 		dizziness = max(dizziness - restingpwr, 0)
+		if(client)
+			handle_dizziness()
 
 	if(drowsyness)
 		drowsyness = max(drowsyness - restingpwr, 0)
@@ -342,9 +607,9 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 	if(jitteriness)
 		do_jitter_animation(jitteriness)
 		jitteriness = max(jitteriness - restingpwr, 0)
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "jittery", /datum/mood_event/jittery)
+		add_stress(/datum/stress_event/jittery)
 	else
-		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "jittery")
+		remove_stress(/datum/stress_event/jittery)
 
 	if(stuttering)
 		stuttering = max(stuttering-1, 0)
@@ -367,33 +632,14 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 			if(has_flaw(/datum/charflaw/addiction/alcoholic))
 				sate_addiction()
 		if(drunkenness >= 3)
-//			SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "drunk", /datum/mood_event/drunk)
 			if(prob(3))
 				slurring += 2
 			jitteriness = max(jitteriness - 3, 0)
 			apply_status_effect(/datum/status_effect/buff/drunk)
 		else
-			remove_stress(/datum/stressevent/drunk)
+			remove_stress(/datum/stress_event/drunk)
 		if(drunkenness >= 11 && slurring < 5)
 			slurring += 1.2
-/*
-		if(mind && (mind.assigned_role == "Scientist" || mind.assigned_role == "Research Director"))
-			if(SSresearch.science_tech)
-				if(drunkenness >= 12.9 && drunkenness <= 13.8)
-					drunkenness = round(drunkenness, 0.01)
-					var/ballmer_percent = 0
-					if(drunkenness == 13.35) // why run math if I dont have to
-						ballmer_percent = 1
-					else
-						ballmer_percent = (-abs(drunkenness - 13.35) / 0.9) + 1
-					if(prob(5))
-						say(pick(GLOB.ballmer_good_msg), forced = "ballmer")
-					SSresearch.science_tech.add_point_list(list(TECHWEB_POINT_TYPE_GENERIC = BALLMER_POINTS * ballmer_percent))
-				if(drunkenness > 26) // by this point you're into windows ME territory
-					if(prob(5))
-						SSresearch.science_tech.remove_point_list(list(TECHWEB_POINT_TYPE_GENERIC = BALLMER_POINTS))
-						say(pick(GLOB.ballmer_windows_me_msg), forced = "ballmer")
-*/
 		if(drunkenness >= 41)
 			if(prob(25))
 				confused += 2
@@ -423,13 +669,57 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 
 		if(drunkenness >= 91)
 			adjustToxLoss(5)
-//			adjustOrganLoss(ORGAN_SLOT_BRAIN, 0.4)
 			if(prob(20) && !stat)
 				to_chat(src, "<span class='warning'>Just a quick nap...</span>")
 				Sleeping(900)
 
 		if(drunkenness >= 101)
 			adjustToxLoss(5) //Let's be honest you shouldn't be alive by now
+
+/mob/living/carbon/proc/handle_dizziness()
+	// How strong the dizziness effect is on us.
+	// If we're resting, the effect is 5x as strong, but also decays 5x fast.
+	// Meaning effectively, 1 tick is actually dizziness_strength ticks of duration
+	var/dizziness_strength = resting ? 5 : 1
+
+	// How much time will be left, in seconds, next tick
+	var/next_amount = max((dizziness - (dizziness_strength * 0.1)), 0)
+
+	// Now we can do the actual dizzy effects.
+	// Don't bother animating if they're clientless.
+	if(!client)
+		return
+
+	// Want to be able to offset things by the time the animation should be "playing" at
+	var/time = world.time
+	var/delay = 0
+	var/pixel_x_diff = 0
+	var/pixel_y_diff = 0
+
+	// This shit is annoying at high strengthvar/pixel_x_diff = 0
+	var/list/view_range_list = getviewsize(client.view)
+	var/view_range = view_range_list[1]
+	var/amplitude = dizziness * (sin(dizziness * (time)) + 1)
+	var/x_diff = clamp(amplitude * sin(dizziness * time), -view_range, view_range)
+	var/y_diff = clamp(amplitude * cos(dizziness * time), -view_range, view_range)
+	pixel_x_diff += x_diff
+	pixel_y_diff += y_diff
+	// Brief explanation. We're basically snapping between different pixel_x/ys instantly, with delays between
+	// Doing this with relative changes. This way we don't override any existing pixel_x/y values
+	// We use EASE_OUT here for similar reasons, we want to act at the end of the delay, not at its start
+	// Relative animations are weird, so we do actually need this
+	animate(client, pixel_x = x_diff, pixel_y = y_diff, 3, easing = JUMP_EASING | EASE_OUT, flags = ANIMATION_RELATIVE)
+	delay += 0.3 SECONDS // This counts as a 0.3 second wait, so we need to shift the sine wave by that much
+
+	x_diff = amplitude * sin(next_amount * (time + delay))
+	y_diff = amplitude * cos(next_amount * (time + delay))
+	pixel_x_diff += x_diff
+	pixel_y_diff += y_diff
+	animate(pixel_x = x_diff, pixel_y = y_diff, 3, easing = JUMP_EASING | EASE_OUT, flags = ANIMATION_RELATIVE)
+
+	// Now we reset back to our old pixel_x/y, since these animates are relative
+	animate(pixel_x = -pixel_x_diff, pixel_y = -pixel_y_diff, 3, easing = JUMP_EASING | EASE_OUT, flags = ANIMATION_RELATIVE)
+
 
 //used in human and monkey handle_environment()
 /mob/living/carbon/proc/natural_bodytemperature_stabilization()
@@ -515,7 +805,7 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 			head.cremation_progress += rand(1,4)
 			if(head.cremation_progress >= 50)
 				if(head.status == BODYPART_ORGANIC) //Non-organic limbs don't burn
-					limb.skeletonize()
+					head.skeletonize()
 					should_update_body = TRUE
 					head.drop_limb()
 					head.visible_message("<span class='warning'>[src]'s head crumbles into ash!</span>")
@@ -587,7 +877,10 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 		return FALSE
 	return TRUE
 
-/mob/living/carbon/proc/set_heartattack(status)
+/mob/living/proc/set_heartattack(status)
+	return
+
+/mob/living/carbon/set_heartattack(status)
 	if(!can_heartattack())
 		return FALSE
 
@@ -611,12 +904,17 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 	if(HAS_TRAIT(src, TRAIT_NOSLEEP))
 		return
 	var/cant_fall_asleep = FALSE
-	var/cause = " I just can't..."
-	for(var/obj/item/clothing/thing in get_equipped_items(FALSE))
-		if(thing.clothing_flags & CANT_SLEEP_IN)
-			cant_fall_asleep = TRUE
-			cause = " \The [thing] bothers me..."
-			break
+	var/cause = "I just can't..."
+	var/list/equipped_items = get_equipped_items(FALSE)
+	if(HAS_TRAIT(src, TRAIT_NUDE_SLEEPER) && length(equipped_items))
+		cant_fall_asleep = TRUE
+		cause = "I can't sleep in clothes, it's too uncomfortable.."
+	else
+		for(var/obj/item/clothing/thing in equipped_items)
+			if(thing.clothing_flags & CANT_SLEEP_IN)
+				cant_fall_asleep = TRUE
+				cause = "\The [thing] bothers me..."
+				break
 
 	//Healing while sleeping in a bed
 	if(stat >= UNCONSCIOUS)
@@ -627,6 +925,8 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 			adjust_energy(sleepy_mod * (max_energy * 0.02))
 		if(HAS_TRAIT(src, TRAIT_BETTER_SLEEP))
 			adjust_energy(sleepy_mod * (max_energy * 0.004))
+		if(locate(/obj/item/bedsheet) in get_turf(src))
+			adjust_energy(sleepy_mod * (max_energy * 0.004))
 		if(hydration > 0 || yess)
 			if(!bleed_rate)
 				blood_volume = min(blood_volume + (4 * sleepy_mod), BLOOD_VOLUME_NORMAL)
@@ -634,13 +934,14 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 				//for context, it takes 5 small cuts (0.4 x 5) or 3 normal cuts (0.8 x 3) for a bodypart to not be able to heal itself
 				if(affecting.get_bleed_rate() >= 2)
 					continue
-				if(affecting.heal_damage(sleepy_mod, sleepy_mod, required_status = BODYPART_ORGANIC))
+				if(affecting.heal_damage(sleepy_mod * 1.5, sleepy_mod * 1.5, required_status = BODYPART_ORGANIC, updating_health = FALSE)) // multiplier due to removing healing from sleep effect
 					src.update_damage_overlays()
 				for(var/datum/wound/wound as anything in affecting.wounds)
 					if(!wound.sleep_healing)
 						continue
 					wound.heal_wound(wound.sleep_healing * sleepy_mod)
-			adjustToxLoss( - ( sleepy_mod * 0.5) )
+			adjustToxLoss( - ( sleepy_mod * 0.15) )
+			updatehealth()
 			if(eyesclosed && !HAS_TRAIT(src, TRAIT_NOSLEEP))
 				Sleeping(300)
 		tiredness = 0
@@ -660,7 +961,7 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 			else
 				adjust_energy(buckled.sleepy * (max_energy * 0.01))
 		// Resting on the ground (not sleeping or with eyes closed and about to fall asleep)
-		else if(!(mobility_flags & MOBILITY_STAND))
+		else if(body_position == LYING_DOWN)
 			if(eyesclosed && !cant_fall_asleep || (eyesclosed && !(fallingas >= 10 && cant_fall_asleep)))
 				if(!fallingas)
 					to_chat(src, span_warning("I'll fall asleep soon, although a bed would be more comfortable..."))

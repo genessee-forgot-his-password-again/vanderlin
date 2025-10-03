@@ -29,7 +29,7 @@ SUBSYSTEM_DEF(vote)
 			var/datum/browser/noclose/client_popup
 			for(var/client/C in voting)
 				client_popup = new(C, "vote", "Voting Panel")
-				client_popup.set_window_options("can_close=0")
+				client_popup.set_window_options(can_close = FALSE)
 				client_popup.set_content(interface(C))
 				client_popup.open(FALSE)
 
@@ -144,18 +144,21 @@ SUBSYSTEM_DEF(vote)
 				SSmapping.changemap(global.config.maplist[.])
 				SSmapping.map_voted = TRUE
 			if("endround")
+				if(SSgamemode.roundvoteend)
+					log_game("LOG VOTE: END VOTE TRIGGERED RESULT AS ROUND IS ENDING")
+					return
 				if(. == "Continue Playing")
 					log_game("LOG VOTE: CONTINUE PLAYING AT [REALTIMEOFDAY]")
-					addomen(OMEN_ROUNDSTART)
 					GLOB.round_timer = GLOB.round_timer + (32 MINUTES)
 				else
 					log_game("LOG VOTE: ELSE  [REALTIMEOFDAY]")
-					var/datum/game_mode/chaosmode/C = SSticker.mode
-					if(istype(C))
-						log_game("LOG VOTE: ROUNDVOTEEND [REALTIMEOFDAY]")
-						to_chat(world, "\n<font color='purple'>[ROUND_END_TIME_VERBAL]</font>")
-						C.roundvoteend = TRUE
-						C.round_ends_at = GLOB.round_timer + ROUND_END_TIME
+					log_game("LOG VOTE: ROUNDVOTEEND [REALTIMEOFDAY]")
+					to_chat(world, "\n<font color='purple'>[ROUND_END_TIME_VERBAL]</font>")
+					SSgamemode.roundvoteend = TRUE
+					SSgamemode.round_ends_at = GLOB.round_timer + ROUND_END_TIME
+			if("storyteller")
+				SSgamemode.storyteller_vote_result(.)
+
 	if(restart)
 		var/active_admins = 0
 		for(var/client/C in GLOB.admins)
@@ -221,9 +224,9 @@ SUBSYSTEM_DEF(vote)
 			if("gamemode")
 				choices.Add(config.votable_modes)
 			if("map")
-				for(var/map in global.config.maplist)
+				for(var/map in config.maplist)
 					var/datum/map_config/VM = config.maplist[map]
-					if(!VM.votable)
+					if(!VM.available_for_vote())
 						continue
 					choices.Add(VM.map_name)
 			if("custom")
@@ -236,14 +239,24 @@ SUBSYSTEM_DEF(vote)
 						break
 					choices.Add(option)
 			if("endround")
-				initiator_key = pick("Zlod", "Sun King", "Gaia", "Aeon", "Gemini", "Aries")
+				var/rng = rand(1, 1000)
+				if(rng > 200) // 80%
+					initiator_key = pick("Astrata", "Noc", "Dendor", "Abyssor", "Necra", "Ravox", "Xylix", "Pestra", "Malum", "Eora")
+				else if(rng > 50) // 15%
+					initiator_key = pick("Zizo", "Graggar", "Matthios", "Baotha")
+				else
+					initiator_key = "Psydon"
 				choices.Add("Continue Playing","End Round")
+			if("storyteller")
+				choices.Add(SSgamemode.storyteller_vote_choices())
 			else
 				return 0
 		mode = vote_type
 		initiator = initiator_key
 		started_time = world.time
 		var/text = "[capitalize(mode)] vote started by [initiator]."
+		if(mode == "storyteller")
+			text = initiator
 		if(mode == "custom")
 			text += "\n[question]"
 		log_vote(text)
@@ -368,8 +381,7 @@ SUBSYSTEM_DEF(vote)
 	usr.vote()
 
 /datum/controller/subsystem/vote/proc/remove_action_buttons()
-	for(var/v in generated_actions)
-		var/datum/action/vote/V = v
+	for(var/datum/action/vote/V as anything in generated_actions)
 		if(!QDELETED(V))
 			V.remove_from_client()
 			V.Remove(V.owner)
@@ -380,7 +392,7 @@ SUBSYSTEM_DEF(vote)
 	set name = "Vote"
 	set hidden = 1
 	var/datum/browser/noclose/popup = new(src, "vote", "Voting Panel")
-	popup.set_window_options("can_close=0")
+	popup.set_window_options(can_close = FALSE)
 	popup.set_content(SSvote.interface(client))
 	popup.open(FALSE)
 
@@ -388,7 +400,7 @@ SUBSYSTEM_DEF(vote)
 	name = "Vote!"
 	button_icon_state = "vote"
 
-/datum/action/vote/Trigger()
+/datum/action/vote/Trigger(trigger_flags)
 	if(owner)
 		owner.vote()
 		remove_from_client()

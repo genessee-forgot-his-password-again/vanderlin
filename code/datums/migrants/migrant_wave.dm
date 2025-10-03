@@ -26,145 +26,19 @@
 	var/downgrade_wave
 	/// If defined, this will be the wave type to increment for purposes of checking `max_spawns`
 	var/shared_wave_type = null
-		/// Whether we want to spawn people on the rolled location, this may not be desired for bandits or other things that set the location
+	/// Whether we want to spawn people on the rolled location, this may not be desired for bandits or other things that set the location
 	var/spawn_on_location = TRUE
+	/// Triumph contributions for this wave type (ckey -> amount)
+	var/list/triumph_contributions = list()
+	/// Total triumph invested in this wave
+	var/triumph_total = 0
+	/// Threshold at which this wave is guaranteed to be next
+	var/triumph_threshold = 25
+	/// Whether triumph contributions reset after wave spawns
+	var/reset_contributions_on_spawn = TRUE
 
 /datum/migrant_wave/proc/get_roles_amount()
 	var/amount = 0
 	for(var/role_type in roles)
 		amount += roles[role_type]
 	return amount
-
-/datum/migrant_wave/pilgrim
-	name = "Pilgrimage"
-	downgrade_wave = /datum/migrant_wave/pilgrim_down_one
-	roles = list(
-		/datum/migrant_role/pilgrim = 4,
-	)
-	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Vanderlin, looking for refuge and work, finally almost being there, almost..."
-
-/datum/migrant_wave/pilgrim_down_one
-	name = "Pilgrimage"
-	downgrade_wave = /datum/migrant_wave/pilgrim_down_two
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/pilgrim = 3,
-	)
-	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Vanderlin, looking for refuge and work, finally almost being there, almost..."
-
-/datum/migrant_wave/pilgrim_down_two
-	name = "Pilgrimage"
-	downgrade_wave = /datum/migrant_wave/pilgrim_down_three
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/pilgrim = 2,
-	)
-	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Vanderlin, looking for refuge and work, finally almost being there, almost..."
-
-/datum/migrant_wave/pilgrim_down_three
-	name = "Pilgrimage"
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/pilgrim = 1,
-	)
-	greet_text = "Fleeing from misfortune and hardship, you and a handful of survivors get closer to Vanderlin, looking for refuge and work, finally almost being there, almost..."
-
-/datum/migrant_wave/adventurer
-	name = "Adventure Party"
-	downgrade_wave = /datum/migrant_wave/adventurer_down_one
-	roles = list(
-		/datum/migrant_role/adventurer = 4,
-	)
-	greet_text = "Together with a party of trusted friends we decided to venture out, seeking thrills, glory and treasure, ending up in the misty and damp bog underneath Vanderlin, perhaps getting ourselves into more than what we bargained for."
-
-/datum/migrant_wave/adventurer_down_one
-	name = "Adventure Party"
-	downgrade_wave = /datum/migrant_wave/adventurer_down_two
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/adventurer = 3,
-	)
-	greet_text = "Together with a party of trusted friends we decided to venture out, seeking thrills, glory and treasure, ending up in the misty and damp bog underneath Vanderlin, perhaps getting ourselves into more than what we bargained for."
-
-/datum/migrant_wave/adventurer_down_two
-	name = "Adventure Party"
-	downgrade_wave = /datum/migrant_wave/adventurer_down_three
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/adventurer = 2,
-	)
-	greet_text = "Together with a party of trusted friends we decided to venture out, seeking thrills, glory and treasure, ending up in the misty and damp bog underneath Vanderlin, perhaps getting ourselves into more than what we bargained for."
-
-/datum/migrant_wave/adventurer_down_three
-	name = "Adventure Party"
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/adventurer = 1,
-	)
-	greet_text = "Together with a party of trusted friends we decided to venture out, seeking thrills, glory and treasure, ending up in the misty and damp bog underneath Vanderlin, perhaps getting ourselves into more than what we bargained for."
-
-/datum/migrant_wave/bandit
-	name = "Bandit Raid"
-	spawn_landmark = "Bandit"
-	downgrade_wave = /datum/migrant_wave/bandit_down_one
-	weight = 8
-	roles = list(
-		/datum/migrant_role/bandit = 4,
-	)
-
-/datum/migrant_wave/bandit_down_one
-	name = "Bandit Raid"
-	spawn_landmark = "Bandit"
-	downgrade_wave = /datum/migrant_wave/bandit_down_two
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/bandit = 3,
-	)
-
-/datum/migrant_wave/bandit_down_two
-	name = "Bandit Raid"
-	spawn_landmark = "Bandit"
-	downgrade_wave = /datum/migrant_wave/bandit_down_three
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/bandit = 2,
-	)
-
-/datum/migrant_wave/bandit_down_three
-	name = "Bandit Raid"
-	spawn_landmark = "Bandit"
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/bandit = 1,
-	)
-
-/datum/migrant_wave/merc
-	name = "Band of Mercenaries"
-	downgrade_wave = /datum/migrant_wave/merc_down_one
-	weight = 8
-	roles = list(
-		/datum/migrant_role/mercenary = 4,
-	)
-
-/datum/migrant_wave/merc_down_one
-	name = "Band of Mercenaries"
-	downgrade_wave = /datum/migrant_wave/merc_down_two
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/mercenary = 3,
-	)
-
-/datum/migrant_wave/merc_down_two
-	name = "Band of Mercenaries"
-	downgrade_wave = /datum/migrant_wave/merc_down_three
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/mercenary = 2,
-	)
-
-/datum/migrant_wave/merc_down_three
-	name = "Band of Mercenaries"
-	can_roll = FALSE
-	roles = list(
-		/datum/migrant_role/mercenary = 1,
-	)

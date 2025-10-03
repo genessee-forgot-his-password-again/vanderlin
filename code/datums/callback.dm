@@ -60,33 +60,28 @@
  * * ... an optional list of extra arguments to pass to the proc
  */
 /datum/callback/New(thingtocall, proctocall, ...)
-	if (thingtocall)
+	if(thingtocall)
 		object = thingtocall
 	delegate = proctocall
-	if (length(args) > 2)
+	if(length(args) > 2)
 		arguments = args.Copy(3)
 	if(usr)
 		user = WEAKREF(usr)
+
 /**
- * Immediately Invoke proctocall on thingtocall, with waitfor set to false
+ * Qdel a callback datum
+ * This is not allowed and will stack trace. callback datums are structs, if they are referenced they exist
  *
- * Arguments:
- * * thingtocall Object to call on
- * * proctocall Proc to call on that object
- * * ... optional list of arguments to pass as arguments to the proc being called
+ * Arguments
+ * * force set to true to force the deletion to be allowed.
+ * * ... an optional list of extra arguments to pass to the proc
  */
-/world/proc/ImmediateInvokeAsync(thingtocall, proctocall, ...)
-	set waitfor = FALSE
-
-	if (!thingtocall)
-		return
-
-	var/list/calling_arguments = length(args) > 2 ? args.Copy(3) : null
-
-	if (thingtocall == GLOBAL_PROC)
-		call(proctocall)(arglist(calling_arguments))
-	else
-		call(thingtocall, proctocall)(arglist(calling_arguments))
+/datum/callback/Destroy(force = FALSE, ...)
+	SHOULD_CALL_PARENT(FALSE)
+	if(force)
+		return ..()
+	stack_trace("Callbacks can not be qdeleted. If they are referenced, they must exist. ([object == GLOBAL_PROC ? GLOBAL_PROC : object.type] [delegate])")
+	return QDEL_HINT_LETMELIVE
 
 /**
  * Invoke this callback
@@ -115,14 +110,14 @@
 			return
 
 	var/list/calling_arguments = arguments
-	if (length(args))
+	if(length(args))
 		if (length(arguments))
 			calling_arguments = calling_arguments + args //not += so that it creates a new list so the arguments list stays clean
 		else
 			calling_arguments = args
 	if(datum_flags & DF_VAR_EDITED)
 		return WrapAdminProcCall(object, delegate, calling_arguments)
-	if (object == GLOBAL_PROC)
+	if(object == GLOBAL_PROC)
 		return call(delegate)(arglist(calling_arguments))
 	return call(object, delegate)(arglist(calling_arguments))
 

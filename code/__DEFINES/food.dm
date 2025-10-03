@@ -19,3 +19,14 @@
 #define DRINK_VERYGOOD	3
 #define DRINK_FANTASTIC	4
 #define FOOD_AMAZING 5
+
+#define FARE_IMPOVERISHED 1
+#define FARE_POOR 2
+#define FARE_NEUTRAL 3
+#define FARE_FINE 4
+#define FARE_LAVISH 5
+
+#define CULINARY_FAVOURITE_FOOD "Favourite Food"
+#define CULINARY_FAVOURITE_DRINK "Favourite Drink"
+#define CULINARY_HATED_FOOD "Hated Food"
+#define CULINARY_HATED_DRINK "Hated Drink"

@@ -1,8 +1,12 @@
+#ifndef ABSOLUTE_MINIMUM_MODE
+#include "map_files\shared\CentCom.dmm" //this MUST be loaded no matter what for SSmapping's multi-z to work correctly
+#else
+#include "map_files\shared\CentCom_minimal.dmm"
+#endif
+
 #ifndef LOWMEMORYMODE
-	#include "map_files\generic\CentCom.dmm"
 	#ifdef ALL_MAPS
-		#include "map_files\roguetown\roguetown.dmm"
-		#include "map_files\roguetest\roguetest.dmm"
+		#include "map_files\debug\roguetest.dmm"
 
 		#ifdef CIBUILDING
 			#include "templates.dm"

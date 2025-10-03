@@ -1,47 +1,46 @@
 
-/obj/structure/flora/roguegrass/maneater
-	name = "grass"
+/obj/structure/flora/grass/maneater
 	icon = 'icons/roguetown/mob/monster/maneater.dmi'
 	icon_state = "maneater-hidden"
-	max_integrity = 5
+	num_random_icons = 0
 
-/obj/structure/flora/roguegrass/maneater/update_icon()
-	return
-
-/obj/structure/flora/roguegrass/maneater/real
-	var/aggroed = 0
+/obj/structure/flora/grass/maneater/real
+	icon_state = MAP_SWITCH("maneater-hidden", "maneater")
 	max_integrity = 100
 	integrity_failure = 0.15
 	attacked_sound = list('sound/vo/mobs/plant/pain (1).ogg','sound/vo/mobs/plant/pain (2).ogg','sound/vo/mobs/plant/pain (3).ogg','sound/vo/mobs/plant/pain (4).ogg')
-	var/list/eatablez = list(/obj/item/bodypart, /obj/item/organ, /obj/item/reagent_containers/food/snacks/rogue/meat)
+	buckle_lying = FALSE
+	buckle_prevents_pull = TRUE
+	var/list/eatablez = list(/obj/item/bodypart, /obj/item/organ, /obj/item/reagent_containers/food/snacks/meat)
 	var/last_eat
-	buckle_lying = 0
-	buckle_prevents_pull = 1
+	var/aggroed = FALSE
 
-/obj/structure/flora/roguegrass/maneater/real/Initialize()
+	///Proximity monitor associated with this atom, needed for proximity checks.
+	var/datum/proximity_monitor/proximity_monitor
+
+/obj/structure/flora/grass/maneater/real/Initialize()
 	. = ..()
 	proximity_monitor = new(src, 1)
 
-/obj/structure/flora/roguegrass/maneater/real/Destroy()
+/obj/structure/flora/grass/maneater/real/Destroy()
 	QDEL_NULL(proximity_monitor)
 	unbuckle_all_mobs()
-	STOP_PROCESSING(SSobj, src)
 	. = ..()
 
-/obj/structure/flora/roguegrass/maneater/real/obj_break(damage_flag)
-	..()
+/obj/structure/flora/grass/maneater/real/atom_break(damage_flag)
+	. = ..()
 	QDEL_NULL(proximity_monitor)
 	unbuckle_all_mobs()
-	STOP_PROCESSING(SSobj, src)
-	update_icon()
+	update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
 
-/obj/structure/flora/roguegrass/maneater/real/process()
+/obj/structure/flora/grass/maneater/real/atom_fix()
+	. = ..()
+	proximity_monitor = new(src, 1)
+
+/obj/structure/flora/grass/maneater/real/process()
 	if(!has_buckled_mobs())
 		if(world.time > last_eat + 8 SECONDS)
 			var/list/around = view(1, src)
-			for(var/mob/living/M in around)
-				HasProximity(M)
-				return
 			for(var/obj/item/F in around)
 				if(is_type_in_list(F, eatablez))
 					aggroed = world.time
@@ -51,10 +50,11 @@
 					return
 		if(world.time > aggroed + 30 SECONDS)
 			aggroed = 0
-			update_icon()
+			update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
 			STOP_PROCESSING(SSobj, src)
 			return TRUE
-	for(var/mob/living/L in buckled_mobs)
+		return
+	for(var/mob/living/L as anything in buckled_mobs)
 		if(world.time > last_eat + 8 SECONDS)
 			if(L.status_flags & GODMODE)
 				continue
@@ -94,19 +94,23 @@
 						L.gib()
 						return
 
-/obj/structure/flora/roguegrass/maneater/real/update_icon()
+/obj/structure/flora/grass/maneater/real/update_icon_state()
+	. = ..()
 	if(obj_broken)
-		name = "MANEATER"
 		icon_state = "maneater-dead"
-		return
-	if(aggroed)
-		name = "MANEATER"
+	else if(aggroed)
 		icon_state = "maneater"
 	else
-		name = "grass"
 		icon_state = "maneater-hidden"
 
-/obj/structure/flora/roguegrass/maneater/real/user_unbuckle_mob(mob/living/M, mob/user)
+/obj/structure/flora/grass/maneater/real/update_name()
+	. = ..()
+	if(obj_broken || aggroed)
+		name = "MANEATER"
+	else
+		name = "grass"
+
+/obj/structure/flora/grass/maneater/real/user_unbuckle_mob(mob/living/M, mob/user)
 	if(obj_broken)
 		..()
 		return
@@ -125,10 +129,10 @@
 		else
 			user.visible_message("<span class='warning'>[user] tries to break free of [src]!</span>")
 
-/obj/structure/flora/roguegrass/maneater/real/user_buckle_mob(mob/living/M, mob/living/user) //Don't want them getting put on the rack other than by spiking
+/obj/structure/flora/grass/maneater/real/user_buckle_mob(mob/living/M, mob/living/user) //Don't want them getting put on the rack other than by spiking
 	return
 
-/obj/structure/flora/roguegrass/maneater/real/HasProximity(atom/movable/AM)
+/obj/structure/flora/grass/maneater/real/HasProximity(atom/movable/AM)
 	if(has_buckled_mobs())
 		return
 	if(world.time > last_eat + 8 SECONDS)
@@ -144,7 +148,7 @@
 				return
 			aggroed = world.time
 			last_eat = world.time
-			update_icon()
+			update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
 			buckle_mob(L, TRUE, check_loc = FALSE)
 			START_PROCESSING(SSobj, src)
 			if(!HAS_TRAIT(L, TRAIT_NOPAIN))
@@ -156,11 +160,13 @@
 				aggroed = world.time
 				last_eat = world.time
 				START_PROCESSING(SSobj, src)
-				update_icon()
+				update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
 				playsound(src,'sound/misc/eat.ogg', rand(30,60), TRUE)
 				qdel(AM)
 				return
-/obj/structure/flora/roguegrass/maneater/real/attackby(obj/item/W, mob/user, params)
+
+/obj/structure/flora/grass/maneater/real/attackby(obj/item/W, mob/user, params)
 	. = ..()
+	if(!aggroed)
+		update_appearance(UPDATE_ICON_STATE | UPDATE_NAME)
 	aggroed = world.time
-	update_icon()

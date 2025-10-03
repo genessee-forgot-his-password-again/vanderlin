@@ -23,16 +23,15 @@
 
 /mob/living/carbon/human/Life()
 //	set invisibility = 0
-	if (notransform)
+	if (HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
 		return
 
 	. = ..()
 
+	SEND_SIGNAL(src, COMSIG_HUMAN_LIFE)
+
 	if (QDELETED(src))
 		return 0
-
-	if(. && (mode != AI_OFF))
-		handle_ai()
 
 	if(advsetup)
 		Stun(50)
@@ -42,55 +41,53 @@
 		for(var/datum/antagonist/A in mind.antag_datums)
 			A.on_life(src)
 
-		handle_vamp_dreams()
-		if(IsSleeping())
-			if(health > 0)
-				remove_status_effect(/datum/status_effect/debuff/trainsleep)
-				if(has_status_effect(/datum/status_effect/debuff/sleepytime))
-					remove_status_effect(/datum/status_effect/debuff/sleepytime)
-					if(mind)
-						mind.sleep_adv.advance_cycle()
-					var/datum/game_mode/chaosmode/C = SSticker.mode
-					if(istype(C))
-						if(mind)
-							if(!mind.antag_datums || !mind.antag_datums.len)
-								allmig_reward++
-								to_chat(src, span_danger("Nights Survived: \Roman[allmig_reward]"))
-								if(C.allmig)
-									if(allmig_reward > 3)
-										adjust_triumphs(1)
+	handle_vamp_dreams()
+	if(IsSleeping())
+		if(health > 0)
+			remove_status_effect(/datum/status_effect/debuff/trainsleep)
+			remove_status_effect(/datum/status_effect/debuff/sleepytime)
+			if(has_status_effect(/datum/status_effect/debuff/dreamytime))
+				remove_status_effect(/datum/status_effect/debuff/dreamytime)
+				if(mind)
+					mind.sleep_adv.advance_cycle()
+					if(!mind.antag_datums || !mind.antag_datums.len)
+						allmig_reward++
+						to_chat(src, span_danger("Nights Survived: \Roman[allmig_reward]"))
+						if(allmig_reward > 0 && allmig_reward % 2 == 0)
+							adjust_triumphs(1)
+	if(!HAS_TRAIT(src, TRAIT_STASIS))
 		if(HAS_TRAIT(src, TRAIT_LEPROSY))
-			if(!mob_timers["leper_bleed"] || mob_timers["leper_bleed"] + 6 MINUTES < world.time)
-				if(prob(10))
+			if(MOBTIMER_FINISHED(src, MT_LEPERBLEED, 12 MINUTES))
+				if(prob(5))
 					to_chat(src, span_warning("My skin opens up and bleeds..."))
-					mob_timers["leper_bleed"] = world.time
+					MOBTIMER_SET(src, MT_LEPERBLEED)
 					var/obj/item/bodypart/part = pick(bodyparts)
 					if(part)
-						part.add_wound(/datum/wound/slash)
-			adjustToxLoss(0.3)
-		//heart attack stuff
-		handle_curses()
+						part.add_wound(/datum/wound/slash/small)
+					adjustToxLoss(10)
 		handle_heart()
 		handle_liver()
 		update_stamina()
 		update_energy()
 		handle_environment()
-		if(charflaw && !charflaw.ephemeral)
-			charflaw.flaw_on_life(src)
+		handle_hygiene()
 		if(health <= 0)
-			adjustOxyLoss(0.3)
-		if(mode == AI_OFF && !client && !HAS_TRAIT(src, TRAIT_NOSLEEP))
-			if(mob_timers["slo"])
-				if(world.time > mob_timers["slo"] + 90 SECONDS)
-					Sleeping(100)
-			else
-				mob_timers["slo"] = world.time
-		else
-			if(mob_timers["slo"])
-				mob_timers["slo"] = null
-
+			apply_damage(1, OXY)
 		if(dna?.species)
 			dna.species.spec_life(src) // for mutantraces
+
+	//heart attack stuff
+	handle_curses()
+	if(charflaw && !charflaw.ephemeral)
+		charflaw.flaw_on_life(src)
+	if(!client && !HAS_TRAIT(src, TRAIT_NOSLEEP) && !ai_controller)
+		if(MOBTIMER_EXISTS(src, MT_SLO))
+			if(MOBTIMER_FINISHED(src, MT_SLO, 90 SECONDS)) //?????
+				Sleeping(100)
+		else
+			MOBTIMER_SET(src, MT_SLO)
+	else
+		MOBTIMER_UNSET(src, MT_SLO)
 
 	if(!typing)
 		set_typing_indicator(FALSE)
@@ -103,7 +100,7 @@
 /mob/living/carbon/human/DeadLife()
 	set invisibility = 0
 
-	if(notransform)
+	if(HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
 		return
 
 	if(mind)
@@ -120,21 +117,73 @@
 				if(gender == MALE)
 					if(prob(50))
 						has_stubble = TRUE
-						update_hair()
+						update_body()
 
 
 /mob/living/carbon/human/handle_traits()
 	if (getOrganLoss(ORGAN_SLOT_BRAIN) >= 60)
-		SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "brain_damage", /datum/mood_event/brain_damage)
+		add_stress(/datum/stress_event/brain_damage)
 	else
-		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "brain_damage")
+		remove_stress(/datum/stress_event/brain_damage)
 	return ..()
 
 /mob/living/proc/handle_environment()
 	return
 
 /mob/living/carbon/human/handle_environment()
-	dna.species.handle_environment(src)
+	dna?.species.handle_environment(src)
+
+/mob/living/carbon/human/proc/handle_hygiene()
+	if(stat == DEAD || HAS_TRAIT(src, TRAIT_NOHYGIENE))
+		return
+	if(HAS_TRAIT(src, TRAIT_ALWAYS_CLEAN))
+		set_hygiene(HYGIENE_LEVEL_CLEAN)
+
+	else
+		var/hygiene_adjustment = 0
+
+		//Are our clothes dirty?
+		var/obj/item/head = get_item_by_slot(ITEM_SLOT_HEAD)
+		if(head && HAS_BLOOD_DNA(head))
+			hygiene_adjustment -= 1 * HYGIENE_FACTOR
+
+		var/obj/item/neck = get_item_by_slot(ITEM_SLOT_NECK)
+		if(neck && HAS_BLOOD_DNA(neck))
+			hygiene_adjustment -= 1 * HYGIENE_FACTOR
+
+		var/obj/item/mask = get_item_by_slot(ITEM_SLOT_MASK)
+		if(mask && HAS_BLOOD_DNA(mask))
+			hygiene_adjustment -= 1 * HYGIENE_FACTOR
+
+		var/obj/item/shirt = get_item_by_slot(ITEM_SLOT_SHIRT)
+		if(shirt && HAS_BLOOD_DNA(shirt))
+			hygiene_adjustment -= 2 * HYGIENE_FACTOR
+
+		var/obj/item/cloak = get_item_by_slot(ITEM_SLOT_CLOAK)
+		if(cloak && HAS_BLOOD_DNA(cloak))
+			hygiene_adjustment -= 2 * HYGIENE_FACTOR
+
+		var/obj/item/pants = get_item_by_slot(ITEM_SLOT_PANTS)
+		if(pants && HAS_BLOOD_DNA(pants))
+			hygiene_adjustment -= 3 * HYGIENE_FACTOR
+
+		var/obj/item/armor = get_item_by_slot(ITEM_SLOT_ARMOR)
+		if(armor && HAS_BLOOD_DNA(armor))
+			hygiene_adjustment -= 3 * HYGIENE_FACTOR
+
+		var/obj/item/shoes = get_item_by_slot(ITEM_SLOT_SHOES)
+		if(shoes && HAS_BLOOD_DNA(shoes))
+			hygiene_adjustment -= 0.5 * HYGIENE_FACTOR
+
+		//Are we bathing?
+		var/current_turf = get_turf(src)
+		if(istype(current_turf, /turf/open/water))
+			var/turf/open/water/bathing_liquid = current_turf
+			hygiene_adjustment += bathing_liquid.cleanliness_factor
+
+
+		adjust_hygiene(hygiene_adjustment)
+	dna?.species.handle_hygiene(src)
 
 ///FIRE CODE
 /mob/living/carbon/human/handle_fire()
@@ -146,9 +195,9 @@
 		. = dna.species.handle_fire(src) //do special handling based on the mob's species. TRUE = they are immune to the effects of the fire.
 
 	if(!last_fire_update)
-		last_fire_update = fire_stacks
-	if((fire_stacks > 10 && last_fire_update <= 10) || (fire_stacks <= 10 && last_fire_update > 10))
-		last_fire_update = fire_stacks
+		last_fire_update = fire_stacks + divine_fire_stacks
+	if((fire_stacks + divine_fire_stacks > 10 && last_fire_update <= 10) || (fire_stacks + divine_fire_stacks <= 10 && last_fire_update > 10))
+		last_fire_update = fire_stacks + divine_fire_stacks
 		update_fire()
 
 
@@ -168,7 +217,7 @@
 	//If firestacks are high enough
 	if(!dna || dna.species.CanIgniteMob(src))
 		if(!on_fire)
-			if(fire_stacks > 10)
+			if(fire_stacks + divine_fire_stacks > 10)
 				Immobilize(30)
 				emote("firescream", TRUE)
 			else
@@ -184,9 +233,8 @@
 /mob/living/carbon/human/SoakMob(locations)
 	. = ..()
 	var/coverhead
-//	var/coverfeet
 	//add belt slots to this for rusting
-	var/list/body_parts = list(head, wear_mask, wear_wrists, wear_shirt, wear_neck, cloak, wear_armor, wear_pants, backr, backl, gloves, shoes, belt, s_store, glasses, ears, wear_ring) //Everything but pockets. Pockets are l_store and r_store. (if pockets were allowed, putting something armored, gloves or hats for example, would double up on the armor)
+	var/list/body_parts = list(head, wear_mask, wear_wrists, wear_shirt, wear_neck, cloak, wear_armor, wear_pants, backr, backl, gloves, shoes, belt, wear_ring)
 	for(var/bp in body_parts)
 		if(!bp)
 			continue
@@ -194,16 +242,10 @@
 			var/obj/item/clothing/C = bp
 			if(zone2covered(BODY_ZONE_HEAD, C.body_parts_covered))
 				coverhead = TRUE
-//			if(zone2covered(BODY_ZONE_PRECISE_L_FOOT, C.body_parts_covered))
-//				coverfeet = TRUE
 	if(locations & HEAD)
 		if(!coverhead)
 			var/mob/living/carbon/V = src
-			V.add_stress(/datum/stressevent/coldhead)
-//	if(locations & FEET)
-//		if(!coverfeet)
-//			add_stress(/datum/stressevent/coldfeet)
-
+			V.add_stress(/datum/stress_event/coldhead)
 //END FIRE CODE
 
 
@@ -213,22 +255,22 @@
 	//Handle normal clothing
 	if(head)
 		if(head.max_heat_protection_temperature && head.max_heat_protection_temperature >= temperature)
-			thermal_protection_flags |= head.heat_protection
+			thermal_protection_flags |= head.body_parts_covered
 	if(wear_armor)
 		if(wear_armor.max_heat_protection_temperature && wear_armor.max_heat_protection_temperature >= temperature)
-			thermal_protection_flags |= wear_armor.heat_protection
+			thermal_protection_flags |= wear_armor.body_parts_covered
 	if(wear_pants)
 		if(wear_pants.max_heat_protection_temperature && wear_pants.max_heat_protection_temperature >= temperature)
-			thermal_protection_flags |= wear_pants.heat_protection
+			thermal_protection_flags |= wear_pants.body_parts_covered
 	if(shoes)
 		if(shoes.max_heat_protection_temperature && shoes.max_heat_protection_temperature >= temperature)
-			thermal_protection_flags |= shoes.heat_protection
+			thermal_protection_flags |= shoes.body_parts_covered
 	if(gloves)
 		if(gloves.max_heat_protection_temperature && gloves.max_heat_protection_temperature >= temperature)
-			thermal_protection_flags |= gloves.heat_protection
+			thermal_protection_flags |= gloves.body_parts_covered
 	if(wear_mask)
 		if(wear_mask.max_heat_protection_temperature && wear_mask.max_heat_protection_temperature >= temperature)
-			thermal_protection_flags |= wear_mask.heat_protection
+			thermal_protection_flags |= wear_mask.body_parts_covered
 
 	return thermal_protection_flags
 
@@ -270,22 +312,22 @@
 
 	if(head)
 		if(head.min_cold_protection_temperature && head.min_cold_protection_temperature <= temperature)
-			thermal_protection_flags |= head.cold_protection
+			thermal_protection_flags |= head.body_parts_covered
 	if(wear_armor)
 		if(wear_armor.min_cold_protection_temperature && wear_armor.min_cold_protection_temperature <= temperature)
-			thermal_protection_flags |= wear_armor.cold_protection
+			thermal_protection_flags |= wear_armor.body_parts_covered
 	if(wear_pants)
 		if(wear_pants.min_cold_protection_temperature && wear_pants.min_cold_protection_temperature <= temperature)
-			thermal_protection_flags |= wear_pants.cold_protection
+			thermal_protection_flags |= wear_pants.body_parts_covered
 	if(shoes)
 		if(shoes.min_cold_protection_temperature && shoes.min_cold_protection_temperature <= temperature)
-			thermal_protection_flags |= shoes.cold_protection
+			thermal_protection_flags |= shoes.body_parts_covered
 	if(gloves)
 		if(gloves.min_cold_protection_temperature && gloves.min_cold_protection_temperature <= temperature)
-			thermal_protection_flags |= gloves.cold_protection
+			thermal_protection_flags |= gloves.body_parts_covered
 	if(wear_mask)
 		if(wear_mask.min_cold_protection_temperature && wear_mask.min_cold_protection_temperature <= temperature)
-			thermal_protection_flags |= wear_mask.cold_protection
+			thermal_protection_flags |= wear_mask.body_parts_covered
 
 	return thermal_protection_flags
 
@@ -325,15 +367,12 @@
 	//Puke if toxloss is too high
 	if(!stat)
 		if(prob(33) && getToxLoss() >= 75)
-			mob_timers["puke"] = world.time
+			MOBTIMER_SET(src, MT_PUKE)
 			vomit(1, blood = TRUE)
 
 /mob/living/carbon/human/has_smoke_protection()
 	if(wear_mask)
 		if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-			return TRUE
-	if(glasses)
-		if(glasses.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 			return TRUE
 	if(head && istype(head, /obj/item/clothing))
 		var/obj/item/clothing/CH = head
@@ -362,7 +401,7 @@
 		return
 	if(!eyesclosed)
 		return
-	if(mobility_flags & MOBILITY_STAND)
+	if(body_position != LYING_DOWN)
 		return
 	if(!istype(loc, /obj/structure/closet/crate/coffin))
 		return

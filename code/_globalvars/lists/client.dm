@@ -2,8 +2,6 @@ GLOBAL_LIST_EMPTY(classic_keybinding_list_by_key)
 GLOBAL_LIST_EMPTY(hotkey_keybinding_list_by_key)
 GLOBAL_LIST_EMPTY(keybindings_by_name)
 
-GLOBAL_LIST_EMPTY(mouseicons_human)
-
 // This is a mapping from JS keys to Byond - ref: https://keycode.info/
 GLOBAL_LIST_INIT(_kbMap, list(
 	"UP" = "North",
@@ -16,7 +14,7 @@ GLOBAL_LIST_INIT(_kbMap, list(
 	"DEL" = "Delete",
 	"END" = "Southwest",
 	"PAGEDOWN" = "Southeast",
-	"SPACEBAR" = "Space",
+	" " = "Space",
 	"ALT" = "Alt",
 	"SHIFT" = "Shift",
 	"CONTROL" = "Ctrl"

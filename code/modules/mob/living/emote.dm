@@ -20,133 +20,49 @@
 
 	emote("pray", intentional = TRUE)
 
-/mob/living/carbon/human/proc/canpray()
-	var/turf/L = get_turf(src)
-
-	if(istype(src.patron, /datum/patron/divine))
-		var/area/A = get_area(L)
-		var/found = FALSE
-		for(var/obj/structure/fluff/psycross/P in view(4, get_turf(L)) )
-			if(!P.obj_broken)
-				found = TRUE
-		if(found)
-			return TRUE
-		if(istype(A, /area/rogue/indoors/town/church))
-			return TRUE
-		to_chat(src, "<span class='danger'>I need a nearby Pantheon Cross for my prayers to be heard...</span>")
-		return FALSE
-
-	if(istype(src.patron, /datum/patron/inhumen))
-		var/found = FALSE
-		for(var/obj/structure/fluff/psycross/P in view(7, get_turf(L)) )
-			if(!P.obj_broken)
-				found = TRUE
-		if(!found) // Cant pray to ZIZO if you're in the sight of the gods, stupid!
-			return TRUE
-		to_chat(src, "<span class='danger'>That accursed cross won't let me commune with the Forbidden One!</span>")
-		return FALSE
-
-	if(istype(src.patron, /datum/patron/psydon))
-		if(istype(wear_neck, /obj/item/clothing/neck/roguetown/psycross))
-			return TRUE
-		to_chat(src, "<span class='danger'>I can not talk to Him... I need His cross on my neck!</span>")
-		return FALSE
-
-	return TRUE // If you have any different god then I guess just pray whereever
-
 /datum/emote/living/pray/run_emote(mob/user, params, type_override, intentional)
-	if(ishuman(user))
-		var/mob/living/carbon/human/L = user
-		var/area/C = get_area(user)
-		if(HAS_TRAIT(usr, TRAIT_ATHEISM_CURSE))
-			to_chat(usr, span_danger("Praying is for fools."))
-			return
-		if(!L.canpray())
-			if(!istype(C, /area/rogue/underworld))
-				return
-		var/msg = input("Whisper your prayer:", "Prayer") as text|null
-		if(msg)
-			L.whisper(msg)
-			L.roguepray(msg)
-			if(istype(C, /area/rogue/underworld))
-				L.check_prayer_underworld(L,msg)
-				return
-			L.check_prayer(L,msg)
-			for(var/mob/living/LICKMYBALLS in hearers(2,src))
-				LICKMYBALLS.succumb_timer = world.time
+	if(HAS_TRAIT(user, TRAIT_ATHEISM_CURSE))
+		to_chat(user, span_danger("Praying is for fools."))
+		return
 
-/mob/living/proc/check_prayer(mob/living/L,message)
-	if(!L || !message)
-		return FALSE
-	var/list/bannedwords = list("zizo","cock","dick","fuck","shit","pussy","cuck","fucker","fucked","cunt","asshole")
-	var/message2recognize = sanitize_hear_message(message)
-	var/mob/living/carbon/human/M = L
-	var/mob/living/carbon/V = L
-	if(istype(M.patron, /datum/patron/inhumen))
-		bannedwords = list()
-	for(var/T in bannedwords)
-		if(findtext(message2recognize, T))
-			V.add_stress(/datum/stressevent/psycurse)
-			L.adjust_fire_stacks(100)
-			SSticker.pplsmited++
-			L.IgniteMob()
-			return FALSE
-	if(length(message2recognize) > 15)
-		if(L.has_flaw(/datum/charflaw/addiction/godfearing))
-			L.sate_addiction()
-		if(L.mob_timers[MT_PSYPRAY])
-			if(world.time < L.mob_timers[MT_PSYPRAY] + 1 MINUTES)
-				L.mob_timers[MT_PSYPRAY] = world.time
-				return FALSE
-		else
-			L.mob_timers[MT_PSYPRAY] = world.time
-		if(!findtext(message2recognize, "[M.patron]"))
-			return FALSE
-		else
-			L.playsound_local(L, 'sound/misc/notice (2).ogg', 100, FALSE)
-			V.add_stress(/datum/stressevent/psyprayer)
-			return TRUE
-	else to_chat(L, "<span class='danger'>My prayer was kinda short...</span>")
+	if(!intentional || (!ishuman(user) && !isroguespirit(user)))
+		return ..() //they get to do a fake prayer cause they SUCK
 
-/mob/living/proc/check_prayer_underworld(mob/living/L,message)
-	if(!L || !message)
-		return FALSE
-	var/list/bannedwords = list("zizo","cock","dick","fuck","shit","pussy","ass","cuck","fucker","fucked","cunt","asshole")
-	var/message2recognize = sanitize_hear_message(message)
-	var/mob/living/carbon/spirit/M = L
-	for(var/T in bannedwords)
-		var/list/turfs = list()
-		if(findtext(message2recognize, T))
-			for(var/turf/U in /area/rogue/underworld)
-				if(U.density)
-					continue
-				turfs.Add(U)
+	var/mob/living/carbon/follower = user
+	var/datum/patron/patron = follower.patron
 
-			var/turf/U = safepick(turfs)
-			if(!U)
-				return
-			to_chat(L, "<font color='yellow'>INSOLENT WRETCH, YOUR STRUGGLE CONTINUES</font>")
-			L.forceMove(T)
-			return FALSE
-	if(length(message2recognize) > 15)
-		if(findtext(message2recognize, "[M.patron]"))
-			L.playsound_local(L, 'sound/misc/notice (2).ogg', 100, FALSE)
-			to_chat(L, "<font color='yellow'>I, [M.patron], have heard your prayer and yet cannot aid you.</font>")
-			var/obj/item/underworld/coin/C = new
-			L.put_in_active_hand(C)
-			return TRUE
-		else
-			return TRUE
-	else to_chat(L, "<span class='danger'>My prayer was kinda short...</span>")
+	var/in_literal_hell = ( istype(get_area(user), /area/rogue/underworld) )
+	if(!in_literal_hell && !patron?.can_pray(follower))
+		return
+
+	var/prayer = input("Whisper your prayer:", "Prayer") as text|null
+	if(!prayer)
+		return
+
+	/* admin stuff */
+	var/follower_ident = "[follower.key]/([follower.real_name]) (follower of [patron])"
+	message_admins("[follower_ident] [ADMIN_SM(follower)] [ADMIN_FLW(follower)] prays: [span_info(html_encode(prayer))]")
+	user.log_message("(follower of [patron]) prays: [prayer]", LOG_GAME)
+
+	follower.whisper(prayer)
+
+	if(SEND_SIGNAL(follower, COMSIG_CARBON_PRAY, prayer) & CARBON_PRAY_CANCEL)
+		return
+
+	if(patron.hear_prayer(follower, prayer))
+		if(follower.has_flaw(/datum/charflaw/addiction/godfearing)) //make this a fucking signal!!!!
+			follower.sate_addiction() //why is this being handled by the mob!!!! and why does this cover every addiction??
+
+	for(var/mob/living/crit_guy in hearers(2, follower)) //as of writing succumb_timer does literally nothing btw
+		crit_guy.succumb_timer = world.time
 
 // ............... Me (custom emote) ..................
 /datum/emote/living/custom
 	key = "me"
 	key_third_person = "custom"
-#ifdef MATURESERVER
 	message_param = "%t"
-#endif
 	mute_time = 1
+
 /datum/emote/living/custom/can_run_emote(mob/user, status_check, intentional)
 	. = ..() && intentional
 
@@ -186,14 +102,13 @@
 
 /datum/emote/living/custom/replace_pronoun(mob/user, message)
 	return message
+
 /* A terrible idea, commenting out subtler
 // ............... Subtle ..................
 /datum/emote/living/subtle
 	key = "subtle"
 	key_third_person = "subtleemote"
-#ifdef MATURESERVER
 	message_param = "%t"
-#endif
 	restraint_check = TRUE
 
 /datum/emote/living/subtle/can_run_emote(mob/user, status_check, intentional)
@@ -232,7 +147,6 @@
 
 	user.visible_message("<i>[message]</i>", vision_distance = 1)
 */
-
 
 // ............... A ..................
 /datum/emote/living/attnwhistle
@@ -463,36 +377,6 @@
 		else
 			L.Knockdown(10)
 
-/datum/emote/living/flap
-	key = "flap"
-	key_third_person = "flaps"
-	message = "flaps their wings."
-	restraint_check = TRUE
-	var/wing_time = 20
-/datum/emote/living/carbon/human/flap/can_run_emote(mob/user, status_check = TRUE , intentional)
-	return FALSE
-/datum/emote/living/flap/run_emote(mob/user, params, type_override, intentional)
-	. = ..()
-	if(. && ishuman(user))
-		var/mob/living/carbon/human/H = user
-		var/open = FALSE
-		if(H.dna.features["wings"] != "None")
-			if("wingsopen" in H.dna.species.mutant_bodyparts)
-				open = TRUE
-				H.CloseWings()
-			else
-				H.OpenWings()
-			addtimer(CALLBACK(H, open ? TYPE_PROC_REF(/mob/living/carbon/human, OpenWings) : TYPE_PROC_REF(/mob/living/carbon/human, CloseWings)), wing_time)
-
-/datum/emote/living/flap/aflap
-	key = "aflap"
-	key_third_person = "aflaps"
-	message = "flaps their wings ANGRILY!"
-	restraint_check = TRUE
-	wing_time = 10
-/datum/emote/living/carbon/human/aflap/can_run_emote(mob/user, status_check = TRUE , intentional)
-	return FALSE
-
 /datum/emote/living/fatigue
 	key = "fatigue"
 	emote_type = EMOTE_AUDIBLE
@@ -618,6 +502,13 @@
 	emote_type = EMOTE_AUDIBLE
 	only_forced_audio = TRUE
 
+/datum/emote/living/haltyellorphan
+
+	key = "haltyellorphan"
+	message = "tries to shout a convincing halt!"
+	emote_type = EMOTE_AUDIBLE
+	only_forced_audio = TRUE
+
 /datum/emote/living/hmm
 	key = "hmm"
 	key_third_person = "hmms"
@@ -697,8 +588,37 @@
 		return
 	if(ishuman(target))
 		var/mob/living/carbon/H = target
-		H.add_stress(/datum/stressevent/hug)
+		H.add_stress(/datum/stress_event/hug)
 		playsound(target.loc, pick('sound/vo/hug.ogg'), 100, FALSE, -1)
+
+		if(user.mind)
+			SEND_SIGNAL(user, COMSIG_MOB_HUGGED, H)
+			record_round_statistic(STATS_HUGS_MADE)
+
+/datum/emote/living/headpat
+	key = "headpat"
+	key_third_person = "pats"
+	message = ""
+	message_param = "pats %t on the head."
+	emote_type = EMOTE_VISIBLE
+	restraint_check = TRUE
+
+/mob/living/carbon/human/verb/emote_headpat()
+	set name = "Headpat"
+	set category = "Emotes"
+	emote("headpat", intentional = TRUE, targetted = TRUE)
+
+/datum/emote/living/headpat/adjacentaction(mob/user, mob/target)
+	. = ..()
+	if(!user || !target)
+		return
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		playsound(target.loc, pick('sound/vo/hug.ogg'), 100, FALSE, -1)
+		if(israkshari(H))
+			if(prob(10))
+				H.emote("purr")
+
 
 // ............... I ..................
 /datum/emote/living/idle
@@ -753,6 +673,16 @@
 			to_chat(E, "<span class='warning'>I feel unexplicably repelled!</span>")
 			E.cursed_freak_out()
 
+		// anti pedophile logging
+		var/log_msg
+		if(E.age == AGE_CHILD)
+			log_msg = "[key_name(H)][ADMIN_FLW(H)] kissed [key_name(E)] [ADMIN_FLW(E)], a CHILD!"
+			if(H.age == AGE_CHILD)
+				log_msg += " As a child."
+			else
+				log_msg += " As an adult."
+			message_admins(log_msg)
+
 		var/do_change
 		if(target.loc == user.loc)
 			do_change = TRUE
@@ -766,12 +696,14 @@
 				message_param = "kisses %t on the ear."
 				if(E.dna.species?.id == "elf")
 					if(!E.cmode)
-						to_chat(target, "<span class='love'>It tickles...</span>")
+						to_chat(target, span_love("It tickles..."))
 			else if(H.zone_selected == BODY_ZONE_PRECISE_R_EYE || H.zone_selected == BODY_ZONE_PRECISE_L_EYE)
 				message_param = "kisses %t on the brow."
 			else
 				message_param = "kisses %t on \the [parse_zone(H.zone_selected)]."
 	playsound(target.loc, pick('sound/vo/kiss (1).ogg','sound/vo/kiss (2).ogg'), 100, FALSE, -1)
+	if(user.mind)
+		record_round_statistic(STATS_KISSES_MADE)
 
 // ............... L ..................
 /datum/emote/living/laugh
@@ -787,6 +719,11 @@
 	if(. && iscarbon(user))
 		var/mob/living/carbon/C = user
 		return !C.silent
+
+/datum/emote/living/laugh/run_emote(mob/user, params, type_override, intentional, targetted)
+	. = ..()
+	if(. && user.mind)
+		record_round_statistic(STATS_LAUGHS_MADE)
 
 /mob/living/carbon/human/verb/emote_laugh()
 	set name = "Laugh"
@@ -866,6 +803,7 @@
 	message_param = "pinches %t."
 	emote_type = EMOTE_VISIBLE
 	restraint_check = TRUE
+
 /datum/emote/living/pinch/adjacentaction(mob/user, mob/target)
 	. = ..()
 	if(!user || !target)
@@ -873,6 +811,7 @@
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
 		H.flash_fullscreen("redflash1")
+
 /mob/living/carbon/human/verb/emote_pinch()
 	set name = "Pinch"
 	set category = "Emotes"
@@ -888,8 +827,8 @@
 	message_param = initial(message_param) // reset
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.get_num_arms() == 0)
-			if(H.get_num_legs() != 0)
+		if(H.usable_hands == 0)
+			if(H.usable_legs != 0)
 				message_param = "tries to point at %t with a leg, <span class='danger'>falling down</span> in the process!"
 				H.Paralyze(20)
 			else
@@ -903,18 +842,48 @@
 	message = "pouts."
 	emote_type = EMOTE_AUDIBLE
 
+/datum/emote/living/preen
+	key = "preen"
+	key_third_person = "preens"
+	message = "preens their feathers."
+	emote_type = EMOTE_AUDIBLE
+	COOLDOWN_DECLARE(time_to_next_preen)
+
+
+/mob/living/carbon/human/verb/emote_preen()
+	set hidden = TRUE
+	set name = "Preen"
+	set category = "Emotes"
+	emote("preen", intentional = TRUE)
+
+/datum/emote/living/preen/can_run_emote(mob/living/user, status_check = TRUE , intentional)
+	. = ..()
+	if(!isharpy(user))
+		return FALSE
+
+/datum/emote/living/preen/run_emote(mob/user, params, type_override, intentional, targetted)
+	. = ..()
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(!isharpy(H))
+			return
+		var/time_left = COOLDOWN_TIMELEFT(src, time_to_next_preen)
+		if(time_left)
+			to_chat(H, span_warning("I have preened my feathers recently! It has no effect on my hygiene."))
+		else
+			COOLDOWN_START(src, time_to_next_preen, HARPY_PREENING_COOLDOWN)
+			H.set_hygiene(HYGIENE_LEVEL_NORMAL)
+			if(prob(50))
+				var/preened_feather = /obj/item/natural/feather
+				new preened_feather(user.loc)
+
+
+
 /datum/emote/living/scream/painscream
 	key = "painscream"
 	message = "screams in pain!"
 	emote_type = EMOTE_AUDIBLE
 	only_forced_audio = TRUE
-
-/datum/emote/living/scream/painscream/run_emote(mob/user, params, type_override, intentional, targetted)
-	. = ..()
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.has_flaw(/datum/charflaw/addiction/masochist))
-			H.sate_addiction()
 
 /datum/emote/living/scream/agony
 	key = "agony"
@@ -922,25 +891,11 @@
 	emote_type = EMOTE_AUDIBLE
 	only_forced_audio = TRUE
 
-/datum/emote/living/screan/agony/run_emote(mob/user, params, type_override, intentional, targetted)
-	. = ..()
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.has_flaw(/datum/charflaw/addiction/masochist))
-			H.sate_addiction()
-
 /datum/emote/living/scream/firescream
 	key = "firescream"
 	nomsg = TRUE
 	emote_type = EMOTE_AUDIBLE
 	only_forced_audio = TRUE
-
-/datum/emote/living/scream/firescream/run_emote(mob/user, params, type_override, intentional, targetted)
-	. = ..()
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.has_flaw(/datum/charflaw/addiction/masochist))
-			H.sate_addiction()
 
 /datum/emote/living/aggro
 	key = "aggro"
@@ -981,6 +936,12 @@
 	key = "rage"
 	message = "screams in rage!"
 	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/rage/run_emote(mob/user, params, type_override, intentional, targetted)
+	. = ..()
+	if(. && user.mind)
+		record_round_statistic(STATS_WARCRIES)
+
 /mob/living/carbon/human/verb/emote_rage()
 	set name = "Rage"
 	set category = "Noises"
@@ -993,10 +954,12 @@
 	message = "spits on the ground."
 	message_param = "spits on %t."
 	emote_type = EMOTE_VISIBLE
+
 /mob/living/carbon/human/verb/emote_spit()
 	set name = "Spit"
 	set category = "Emotes"
 	emote("spit", intentional = TRUE, targetted = TRUE)
+
 /datum/emote/living/spit/run_emote(mob/user, params, type_override, intentional)
 	message_param = initial(message_param) // reset
 	var/mob/living/carbon/human/H = user
@@ -1007,6 +970,7 @@
 				H.dropItemToGround(H.mouth, silent = FALSE)
 			return
 	..()
+
 /datum/emote/living/spit/adjacentaction(mob/user, mob/target)
 	. = ..()
 	if(!user || !target)
@@ -1016,7 +980,7 @@
 			playsound(target.loc, pick('sound/vo/male/gen/spit.ogg','sound/vo/male/gen/spit_floor.ogg'), 100, FALSE, -1)
 		else
 			playsound(target.loc, pick('sound/vo/female/gen/spit.ogg', 'sound/vo/female/gen/spit_floor.ogg'), 100, FALSE, -1)
-
+		SEND_SIGNAL(user, COMSIG_SPAT_ON, target)
 
 /datum/emote/living/slap
 	key = "slap"
@@ -1025,17 +989,38 @@
 	message_param = "slaps %t in the face."
 	emote_type = EMOTE_VISIBLE
 	restraint_check = TRUE
+
+/datum/emote/living/slap/adjacentaction(mob/user, mob/target)
+	. = ..()
+	if(!user || !target)
+		return
+	if(ishuman(target) && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/mob/living/carbon/human/E = target
+		if(H.zone_selected == BODY_ZONE_PRECISE_GROIN)
+		// anti pedophile logging
+			var/log_msg
+			if(E.age == AGE_CHILD)
+				log_msg = "[key_name(H)][ADMIN_FLW(H)] slapped [key_name(E)][ADMIN_FLW(E)] on the ass, a CHILD!"
+				if(H.age == AGE_CHILD)
+					log_msg += " As a child."
+				else
+					log_msg += " As an adult."
+				message_admins(log_msg)
+
 /datum/emote/living/slap/run_emote(mob/user, params, type_override, intentional)
 	message_param = initial(message_param) // reset
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.zone_selected == BODY_ZONE_PRECISE_GROIN)
 			message_param = "slaps %t on the ass!"
+
 	..()
 /mob/living/carbon/human/verb/emote_slap()
 	set name = "Slap"
 	set category = "Emotes"
 	emote("slap", intentional = TRUE, targetted = TRUE)
+
 /datum/emote/living/slap/adjacentaction(mob/user, mob/target)
 	. = ..()
 	if(!user || !target)
@@ -1068,6 +1053,11 @@
 				to_chat(C, "<span class='warning'>I try to scream but my voice fails me.</span>")
 				. = FALSE
 
+/datum/emote/living/scream/run_emote(mob/user, params, type_override, intentional, targetted)
+	. = ..()
+	if(. && user.mind)
+		record_featured_stat(FEATURED_STATS_SCREAMERS, user)
+
 /datum/emote/living/scowl
 	key = "scowl"
 	key_third_person = "scowls"
@@ -1079,6 +1069,7 @@
 	key_third_person = "shakeshead"
 	message = "shakes their head."
 	emote_type = EMOTE_VISIBLE
+
 /mob/living/carbon/human/verb/emote_shakehead()
 	set name = "Shakehead"
 	set category = "Emotes"

@@ -12,7 +12,7 @@
 ////////
 
 
-/mob/living/carbon/monkey/update_hair()
+/mob/living/carbon/monkey/proc/update_hair()
 	remove_overlay(HAIR_LAYER)
 
 	var/obj/item/bodypart/head/HD = get_bodypart(BODY_ZONE_HEAD)
@@ -29,7 +29,7 @@
 		if(I.flags_inv & HIDEHAIR)
 			hair_hidden = 1
 	if(wear_mask)
-		var/obj/item/clothing/mask/M = wear_mask
+		var/obj/item/clothing/face/M = wear_mask
 		if(M.flags_inv & HIDEHAIR)
 			hair_hidden = 1
 	if(!hair_hidden)
@@ -68,10 +68,4 @@
 /mob/living/carbon/monkey/update_hud_neck(obj/item/I)
 	if(client && hud_used && hud_used.hud_shown)
 		I.screen_loc = ui_monkey_neck
-		client.screen += I
-
-//update whether our back item appears on our hud.
-/mob/living/carbon/monkey/update_hud_back(obj/item/I)
-	if(client && hud_used && hud_used.hud_shown)
-		I.screen_loc = ui_monkey_back
 		client.screen += I

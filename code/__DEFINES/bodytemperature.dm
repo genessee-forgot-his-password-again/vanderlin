@@ -1,23 +1,15 @@
+#define TEMPERATURE_DAMAGE_COEFFICIENT      1.5
+#define BODYTEMP_NORMAL                     37      // Normal body temperature in Celsius
+#define BODYTEMP_AUTORECOVERY_DIVISOR       22
+#define BODYTEMP_AUTORECOVERY_MINIMUM       1       // 1 degree per tick minimum recovery
+#define BODYTEMP_COLD_DIVISOR               12
+#define BODYTEMP_HEAT_DIVISOR               30
+#define BODYTEMP_COOLING_MAX                -5      // Max 5 degrees cooling per tick
+#define BODYTEMP_HEATING_MAX                3       // Max 3 degrees heating per tick
+#define BODYTEMP_MAX_TEMPERATURE            80      // Death from heat
+#define BODYTEMP_MIN_TEMPERATURE            -10     // Death from cold
+#define BODYTEMP_HEAT_DAMAGE_LIMIT          49
+#define BODYTEMP_COLD_DAMAGE_LIMIT          10
 
-/// This is used in handle_temperature_damage() for humans, and in reagents that affect body temperature. Temperature damage is multiplied by this amount.
-#define TEMPERATURE_DAMAGE_COEFFICIENT		1.5
-
-/// The natural temperature for a body
-#define BODYTEMP_NORMAL						310.15
-/// This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
-#define BODYTEMP_AUTORECOVERY_DIVISOR		11
-/// Minimum amount of kelvin moved toward 310K per tick. So long as abs(310.15 - bodytemp) is more than 50.
-#define BODYTEMP_AUTORECOVERY_MINIMUM		12
-///Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
-#define BODYTEMP_COLD_DIVISOR				6
-/// Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is higher than their body temperature. Make it lower to gain bodytemp faster.
-#define BODYTEMP_HEAT_DIVISOR				15
-/// The maximum number of degrees that your body can cool in 1 tick, due to the environment, when in a cold area.
-#define BODYTEMP_COOLING_MAX				-100
-/// The maximum number of degrees that your body can heat up in 1 tick, due to the environment, when in a hot area.
-#define BODYTEMP_HEATING_MAX				30
-
-/// The limit the human body can take before it starts taking damage from heat.
-#define BODYTEMP_HEAT_DAMAGE_LIMIT			(BODYTEMP_NORMAL + 50)
-/// The limit the human body can take before it starts taking damage from coldness.
-#define BODYTEMP_COLD_DAMAGE_LIMIT			(BODYTEMP_NORMAL - 50)
+#define AMBIENT_COMFORT_MIN             18      // Below this, you feel cool
+#define AMBIENT_COMFORT_MAX             26      // Above this, you feel warm

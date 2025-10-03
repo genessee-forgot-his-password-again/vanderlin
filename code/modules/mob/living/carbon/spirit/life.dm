@@ -6,7 +6,7 @@
 /mob/living/carbon/spirit/Life()
 	set invisibility = 0
 
-	if (notransform)
+	if (HAS_TRAIT(src, TRAIT_NO_TRANSFORM))
 		return
 
 /mob/living/carbon/spirit/handle_environment()
@@ -21,13 +21,13 @@
 	if(bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT && !HAS_TRAIT(src, TRAIT_RESISTHEAT))
 		switch(bodytemperature)
 			if(360 to 400)
-				throw_alert("temp", /atom/movable/screen/alert/hot, 1)
+				throw_alert("temp", /atom/movable/screen/alert/status_effect/debuff/hot, 1)
 				apply_damage(HEAT_DAMAGE_LEVEL_1, BURN)
 			if(400 to 460)
-				throw_alert("temp", /atom/movable/screen/alert/hot, 2)
+				throw_alert("temp", /atom/movable/screen/alert/status_effect/debuff/hot, 2)
 				apply_damage(HEAT_DAMAGE_LEVEL_2, BURN)
 			if(460 to INFINITY)
-				throw_alert("temp", /atom/movable/screen/alert/hot, 3)
+				throw_alert("temp", /atom/movable/screen/alert/status_effect/debuff/hot, 3)
 				if(on_fire)
 					apply_damage(HEAT_DAMAGE_LEVEL_3, BURN)
 				else
@@ -36,13 +36,13 @@
 	else if(bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT && !HAS_TRAIT(src, TRAIT_RESISTCOLD))
 		switch(bodytemperature)
 			if(200 to 260)
-				throw_alert("temp", /atom/movable/screen/alert/cold, 1)
+				throw_alert("temp", /atom/movable/screen/alert/status_effect/debuff/cold, 1)
 				apply_damage(COLD_DAMAGE_LEVEL_1, BURN)
 			if(120 to 200)
-				throw_alert("temp", /atom/movable/screen/alert/cold, 2)
+				throw_alert("temp", /atom/movable/screen/alert/status_effect/debuff/cold, 2)
 				apply_damage(COLD_DAMAGE_LEVEL_2, BURN)
 			if(-INFINITY to 120)
-				throw_alert("temp", /atom/movable/screen/alert/cold, 3)
+				throw_alert("temp", /atom/movable/screen/alert/status_effect/debuff/cold, 3)
 				apply_damage(COLD_DAMAGE_LEVEL_3, BURN)
 
 	else
@@ -81,10 +81,9 @@
 	if(back)
 		burning_items += back
 
-	for(var/X in burning_items)
-		var/obj/item/I = X
+	for(var/obj/item/I as anything in burning_items)
 		I.fire_act((fire_stacks * 50)) //damage taken is reduced to 2% of this value by fire_act()
 
 	adjust_bodytemperature(BODYTEMP_HEATING_MAX)
-	SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "on_fire", /datum/mood_event/on_fire)
+	add_stress(/datum/stress_event/on_fire)
 */

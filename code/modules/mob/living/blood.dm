@@ -12,7 +12,7 @@
 /mob/living/proc/resume_bleeding()
 	bleedsuppress = 0
 	if(stat != DEAD && bleed_rate)
-		to_chat(src, "<span class='warning'>The blood soaks through my bandage.</span>")
+		to_chat(src, span_warning("The blood soaks through my bandage."))
 
 /mob/living/carbon/monkey/handle_blood()
 	if(HAS_TRAIT(src, TRAIT_HUSK)) //cryosleep or husked people do not pump the blood.
@@ -35,35 +35,35 @@
 		blood_volume = min(blood_volume+0.5, BLOOD_VOLUME_MAXIMUM)
 
 	//Effects of bloodloss
-	if(!HAS_TRAIT(src, TRAIT_BLOODLOSS_IMMUNE) && !DEAD)
+	if(!HAS_TRAIT(src, TRAIT_BLOODLOSS_IMMUNE) && stat != DEAD)
 		switch(blood_volume)
 			if(BLOOD_VOLUME_OKAY to BLOOD_VOLUME_SAFE)
 				if(prob(3))
-					to_chat(src, "<span class='warning'>I feel dizzy.</span>")
+					to_chat(src, span_warning("I feel dizzy."))
 				remove_status_effect(/datum/status_effect/debuff/bleedingworse)
 				remove_status_effect(/datum/status_effect/debuff/bleedingworst)
 				apply_status_effect(/datum/status_effect/debuff/bleeding)
 			if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
 				if(prob(3))
 					blur_eyes(6)
-					to_chat(src, "<span class='warning'>I feel faint.</span>")
+					to_chat(src, span_warning("I feel faint."))
 				remove_status_effect(/datum/status_effect/debuff/bleeding)
 				remove_status_effect(/datum/status_effect/debuff/bleedingworst)
 				apply_status_effect(/datum/status_effect/debuff/bleedingworse)
 			if(0 to BLOOD_VOLUME_BAD)
 				if(prob(3))
 					blur_eyes(6)
-					to_chat(src, "<span class='warning'>I feel faint.</span>")
-				if(prob(3) && !IsUnconscious())
+					to_chat(src, span_warning("I feel faint."))
+				if(prob(3) && stat < UNCONSCIOUS)
 					Unconscious(rand(5 SECONDS,10 SECONDS))
-					to_chat(src, "<span class='warning'>I feel drained.</span>")
+					to_chat(src, span_warning("I feel drained."))
 				remove_status_effect(/datum/status_effect/debuff/bleedingworse)
 				remove_status_effect(/datum/status_effect/debuff/bleeding)
 				apply_status_effect(/datum/status_effect/debuff/bleedingworst)
 		if(blood_volume <= BLOOD_VOLUME_BAD)
-			adjustOxyLoss(1)
-			//if(blood_volume <= BLOOD_VOLUME_SURVIVE)
-				//adjustOxyLoss(2)
+			adjustOxyLoss(2)
+			if(blood_volume <= BLOOD_VOLUME_SURVIVE)
+				adjustOxyLoss(4)
 	else
 		remove_status_effect(/datum/status_effect/debuff/bleeding)
 		remove_status_effect(/datum/status_effect/debuff/bleedingworse)
@@ -87,10 +87,11 @@
 	if(dna?.species)
 		if(NOBLOOD in dna.species.species_traits)
 			blood_volume = BLOOD_VOLUME_NORMAL
-			remove_stress(/datum/stressevent/bleeding)
+			remove_stress(/datum/stress_event/bleeding)
 			remove_status_effect(/datum/status_effect/debuff/bleeding)
 			remove_status_effect(/datum/status_effect/debuff/bleedingworse)
 			remove_status_effect(/datum/status_effect/debuff/bleedingworst)
+			REMOVE_TRAIT(src, TRAIT_KNOCKEDOUT, BLOODLOSS_TRAIT)
 			return
 
 	//Blood regeneration if there is some space
@@ -104,44 +105,48 @@
 			switch(blood_volume)
 				if(BLOOD_VOLUME_OKAY to BLOOD_VOLUME_SAFE)
 					if(prob(3))
-						to_chat(src, "<span class='warning'>I feel dizzy.</span>")
+						to_chat(src, span_warning("I feel dizzy."))
 					remove_status_effect(/datum/status_effect/debuff/bleedingworse)
 					remove_status_effect(/datum/status_effect/debuff/bleedingworst)
 					apply_status_effect(/datum/status_effect/debuff/bleeding)
 				if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
 					if(prob(3))
 						blur_eyes(6)
-						to_chat(src, "<span class='warning'>I feel faint.</span>")
+						to_chat(src, span_warning("I feel faint."))
 					remove_status_effect(/datum/status_effect/debuff/bleeding)
 					remove_status_effect(/datum/status_effect/debuff/bleedingworst)
 					apply_status_effect(/datum/status_effect/debuff/bleedingworse)
 				if(0 to BLOOD_VOLUME_BAD)
 					if(prob(3))
 						blur_eyes(6)
-						to_chat(src, "<span class='warning'>I feel faint.</span>")
-					if(prob(3) && !IsUnconscious())
+						to_chat(src, span_warning("I feel faint."))
+					if(prob(3) && stat < UNCONSCIOUS)
 						Unconscious(rand(5 SECONDS,10 SECONDS))
-						to_chat(src, "<span class='warning'>I feel drained.</span>")
+						to_chat(src, span_warning("I feel drained."))
 					remove_status_effect(/datum/status_effect/debuff/bleedingworse)
 					remove_status_effect(/datum/status_effect/debuff/bleeding)
 					apply_status_effect(/datum/status_effect/debuff/bleedingworst)
 			if(blood_volume <= BLOOD_VOLUME_BAD)
-				adjustOxyLoss(1)
-				//if(blood_volume <= BLOOD_VOLUME_SURVIVE)
-					//adjustOxyLoss(2)
+				adjustOxyLoss(2)
+			if(blood_volume <= BLOOD_VOLUME_SURVIVE)
+				adjustOxyLoss(4)
+				ADD_TRAIT(src, TRAIT_KNOCKEDOUT, BLOODLOSS_TRAIT)
+			else
+				REMOVE_TRAIT(src, TRAIT_KNOCKEDOUT, BLOODLOSS_TRAIT)
 		else
 			remove_status_effect(/datum/status_effect/debuff/bleeding)
 			remove_status_effect(/datum/status_effect/debuff/bleedingworse)
 			remove_status_effect(/datum/status_effect/debuff/bleedingworst)
+			REMOVE_TRAIT(src, TRAIT_KNOCKEDOUT, BLOODLOSS_TRAIT)
 
 	//Bleeding out
 	if(bleed_rate)
 		for(var/obj/item/bodypart/bodypart as anything in bodyparts)
 			bodypart.try_bandage_expire()
 		bleed(bleed_rate)
-		add_stress(/datum/stressevent/bleeding)
+		add_stress(/datum/stress_event/bleeding)
 	else
-		remove_stress(/datum/stressevent/bleeding)
+		remove_stress(/datum/stress_event/bleeding)
 
 /mob/living/proc/get_bleed_rate()
 	var/bleed_rate = 0
@@ -152,6 +157,8 @@
 	return bleed_rate
 
 /mob/living/carbon/get_bleed_rate()
+	if(NOBLOOD in dna?.species?.species_traits)
+		return 0
 	var/bleed_rate = 0
 	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
 		bleed_rate += bodypart.get_bleed_rate()
@@ -164,9 +171,11 @@
 			return
 	if(blood_volume)
 		blood_volume = max(blood_volume - amt, 0)
-		SSticker.blood_lost += amt
+		if(src.client)
+			record_featured_stat(FEATURED_STATS_BLEEDERS, src)
+		record_round_statistic(STATS_BLOOD_SPILT, amt / 100)
 		if(isturf(src.loc)) //Blood loss still happens in locker, floor stays clean
-			add_drip_floor(src.loc, amt)
+			add_drip_floor(get_turf(src), amt)
 		var/vol2use
 		if(amt > 1)
 			vol2use = 'sound/misc/bleed (1).ogg'
@@ -174,7 +183,7 @@
 			vol2use = 'sound/misc/bleed (2).ogg'
 		if(amt > 3)
 			vol2use = 'sound/misc/bleed (3).ogg'
-		if(lying || stat)
+		if(body_position == LYING_DOWN || stat)
 			vol2use = null
 		if(vol2use)
 			playsound(get_turf(src), vol2use, 100, FALSE)
@@ -182,11 +191,10 @@
 	updatehealth()
 
 /mob/living/carbon/human/bleed(amt)
-	amt *= physiology.bleed_mod
-	if(!(NOBLOOD in dna.species.species_traits))
+	if(physiology)
+		amt *= physiology.bleed_mod
+	if(!(NOBLOOD in dna?.species?.species_traits))
 		return ..()
-
-
 
 /mob/living/proc/restore_blood()
 	blood_volume = initial(blood_volume)
@@ -220,6 +228,13 @@
 	RETURN_TYPE(/datum/blood_type)
 	return GLOB.blood_types[/datum/blood_type/animal]
 
+/mob/living/proc/get_lux_status()
+	var/datum/blood_type/blood = get_blood_type()
+
+	if(has_status_effect(/datum/status_effect/debuff/lux_drained) || has_status_effect(/datum/status_effect/debuff/flaw_lux_taken))//accounts for luxless flaw
+		return LUX_DRAINED
+
+	return blood.contains_lux
 
 /mob/living/carbon/human/get_blood_type()
 	RETURN_TYPE(/datum/blood_type)
@@ -269,12 +284,12 @@
 			W.water_reagent = blood.reagent_type // this is dumb, but it works for now
 			W.mapped = FALSE // no infinite vitae glitch
 			W.water_volume = 10
-			W.update_icon()
+			W.update_appearance()
 		return
 	var/obj/effect/decal/cleanable/blood/splatter/splatter = new /obj/effect/decal/cleanable/blood/splatter(T)
 
 	splatter.transfer_mob_blood_dna(src)
-	splatter.update_icon()
+	splatter.update_appearance()
 	T?.pollute_turf(/datum/pollutant/metallic_scent, 30)
 
 /mob/living/proc/add_drip_floor(turf/T, amt)
@@ -294,24 +309,24 @@
 			W.mapped = FALSE // no infinite vitae glitch
 			W.water_maximum = 10
 			W.water_volume = 10
-			W.update_icon()
+			W.update_appearance()
 			return
 	var/obj/effect/decal/cleanable/blood/puddle/P = locate() in T
 	if(P)
 		P.blood_vol += amt
 		P.transfer_mob_blood_dna(src)
-		P.update_icon()
+		P.update_appearance()
 	else
 		var/obj/effect/decal/cleanable/blood/drip/D = locate() in T
 		if(D)
 			D.blood_vol += amt
 			D.drips++
 			D.transfer_mob_blood_dna(src)
-			D.update_icon()
+			D.update_appearance()
 		else
 			var/obj/effect/decal/cleanable/blood/drip/splatter = new /obj/effect/decal/cleanable/blood/drip(T)
 			splatter.transfer_mob_blood_dna(src)
-			splatter.update_icon()
+			splatter.update_appearance()
 
 /mob/living/carbon/human/add_splatter_floor(turf/T, small_drip)
 	if(!(NOBLOOD in dna.species.species_traits))

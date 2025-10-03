@@ -8,10 +8,10 @@
 //skull
 /atom/movable/screen/ghost/orbit/rogue
 	name = "AFTER LIFE"
-	icon = 'icons/mob/ghostspin.dmi'
-	icon_state = ""
+	icon = 'icons/mob/afterlife.dmi'
+	icon_state = "skull"
 	screen_loc = "WEST-4,SOUTH+6"
-	nomouseover = FALSE
+	no_over_text = FALSE
 
 /atom/movable/screen/ghost/orbit/rogue/Click(location, control, params)
 	var/mob/dead/observer/G = usr
@@ -33,11 +33,8 @@
 				G.client.descend()
 				return
 
-//		var/take_triumph = FALSE
-		var/datum/game_mode/chaosmode/C = SSticker.mode
-		if(istype(C))
-			if(C.skeletons)
-				G.returntolobby()
+		if(has_world_trait(/datum/world_trait/skeleton_siege) || has_world_trait(/datum/world_trait/rousman_siege) || has_world_trait(/datum/world_trait/goblin_siege))
+			G.returntolobby()
 		G.client.descend()
 /*		if(world.time < G.ghostize_time + RESPAWNTIME)
 			var/ttime = round((G.ghostize_time + RESPAWNTIME - world.time) / 10)
@@ -52,9 +49,10 @@
 	..()
 	var/atom/movable/screen/using
 
-	using =  new /atom/movable/screen/backhudl/ghost()
-	using.hud = src
-	static_inventory += using
+	if(!GLOB.admin_datums[owner.ckey]) // If you are adminned, you will not get the dead hud obstruction.
+		using =  new /atom/movable/screen/backhudl/ghost()
+		using.hud = src
+		static_inventory += using
 
 	scannies = new /atom/movable/screen/scannies
 	scannies.hud = src

@@ -11,11 +11,12 @@
 	density = TRUE
 	layer = MOB_LAYER
 	animate_movement = SLIDE_STEPS
-	flags_1 = HEAR_1
 	hud_possible = list(ANTAG_HUD)
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 	throwforce = 10
 	vis_flags = VIS_INHERIT_PLANE
+	pass_flags_self = PASSMOB
+	blocks_emissive = EMISSIVE_BLOCK_GENERIC
 
 	//FOV STUFF
 	plane = GAME_PLANE_FOV_HIDDEN
@@ -24,7 +25,7 @@
 	var/datum/mind/mind
 	var/static/next_mob_id = 0
 
-///Cursor icon used when holding shift over things
+	///Cursor icon used when holding shift over things
 	var/examine_cursor_icon = 'icons/effects/mousemice/human_looking.dmi'
 
 	/// List of movement speed modifiers applying to this mob
@@ -63,14 +64,6 @@
 	var/next_lmove = null
 	var/used_hand = 1
 
-	/**
-	 * Magic var that stops you moving and interacting with anything
-	 *
-	 * Set when you're being turned into something else and also used in a bunch of places
-	 * it probably shouldn't really be
-	 */
-	var/notransform = null	//Carbon
-
 	/// Is the mob blind
 	var/eye_blind = 0		//Carbon
 	/// Does the mob have blurry sight
@@ -108,6 +101,7 @@
 	var/overeatduration = 0		// How long this guy is overeating //Carbon
 
 	/// The current intent of the mob
+	var/uses_intents = TRUE
 	var/datum/intent/a_intent = INTENT_HELP//Living
 	var/datum/intent/o_intent = INTENT_HELP
 	var/datum/rmb_intent/rmb_intent //Living
@@ -120,12 +114,12 @@
 	var/list/possible_a_intents = list()//Living
 	var/list/possible_offhand_intents = list()//Living
 	var/list/possible_rmb_intents = list()
-	var/list/base_intents = list() //bare hand intents
+	var/list/base_intents = list(INTENT_HARM) //bare hand intents
 	var/l_index = 1
 	var/r_index = 1
 	var/r_ua_index = 1
 	var/l_ua_index = 1
-	var/oactive = FALSE //offhand active
+
 	/// The movement intent of the mob (run/wal)
 	var/m_intent = MOVE_INTENT_WALK//Living
 
@@ -139,7 +133,7 @@
 
 	//Hands
 	///What hand is the active hand
-	var/active_hand_index = 1
+	var/active_hand_index = 2
 	/**
 	 * list of items held in hands
 	 *
@@ -167,25 +161,15 @@
 
 	/// What job does this mob have
 	var/job = null//Living
-	var/migrant_type = null
 
 	/// A list of factions that this mob is currently in, for hostile mob targetting, amongst other things
-	var/list/faction = list("neutral")
+	var/list/faction = list(FACTION_NEUTRAL)
 
 	///The last mob/living/carbon to push/drag/grab this mob (exclusively used by slimes friend recognition)
 	var/mob/living/carbon/LAssailant = null
 
-	/**
-	 * construct spells and mime spells.
-	 *
-	 * Spells that do not transfer from one mob to another and can not be lost in mindswap.
-	 * obviously do not live in the mind
-	 */
-	var/list/mob_spell_list = list()
-
-
 	/// bitflags defining which status effects can be inflicted (replaces canknockdown, canstun, etc)
-	var/status_flags = CANSTUN|CANKNOCKDOWN|CANUNCONSCIOUS|CANPUSH
+	var/status_flags = CANSTUN|CANKNOCKDOWN|CANUNCONSCIOUS|CANPUSH|CANSLOWDOWN
 
 	/// Can they interact with station electronics
 	var/has_unlimited_silicon_privilege = 0
@@ -210,7 +194,10 @@
 	var/list/observers = null
 
 	///List of progress bars this mob is currently seeing for actions
-	var/list/progressbars = null	//for stacking do_after bars
+	var/list/progressbars = null
+
+	///For storing what do_after's someone has, key = string, value = amount of interactions of that type happening.
+	var/list/do_afters
 
 	///Allows a datum to intercept all click calls this mob is the source of
 	var/datum/click_intercept
@@ -275,10 +262,20 @@
 	var/cmode = 0
 	var/d_intent = INTENT_DODGE
 	var/islatejoin = FALSE
-	var/obj/effect/proc_holder/ranged_ability //Any ranged ability the mob has, as a click override
 
 	var/list/mob_timers = list()
 
 	var/music_playing = FALSE
 	/// Tracker for amount of turfs we sprinted over, for things like bumping and charging
 	var/sprinted_tiles = 0
+	///how many tiles we can move while casting
+	var/cast_move = 0
+
+	/// pronouns of the mob, set in the character sheet.
+	var/pronouns = null
+
+	/// Weakref to the item we are offering
+	var/datum/weakref/offered_item_ref
+
+	/// A ref of the area we're taking our ambient loop from.
+	var/area/ambience_tracked_area

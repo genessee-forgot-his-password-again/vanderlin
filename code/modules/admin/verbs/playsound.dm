@@ -64,6 +64,8 @@
 		mob.update_music_volume(CHANNEL_MUSIC, prefs.musicvol)
 		mob.update_music_volume(CHANNEL_LOBBYMUSIC, prefs.musicvol)
 		mob.update_music_volume(CHANNEL_ADMIN, prefs.musicvol)
+		mob.update_music_volume(CHANNEL_BUZZ, prefs.musicvol)
+		mob.update_music_volume(CHANNEL_AMBIENCE, prefs.musicvol)
 
 
 /client/verb/show_rolls()
@@ -212,11 +214,3 @@
 		if(C && C.chatOutput && !C.chatOutput.broken && C.chatOutput.loaded)
 			C.chatOutput.stopMusic()
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Stop All Playing Sounds") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/verb/preload_sounds()
-	set category = "Options"
-	set name = "Preload Ambience"
-
-	for(var/music in GLOB.ambience_files)
-		mob.playsound_local(mob, music, 0.1)
-		sleep(10)

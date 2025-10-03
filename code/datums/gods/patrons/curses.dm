@@ -1,12 +1,11 @@
-/mob/living/carbon/human
-	/// List of curses on this mob
-	var/list/curses = list()
+//the way this file is organized is also cursed! Enjoy
 /datum/curse
 	var/name = "Debug Curse"
 	/// Whats shown to the player upon being cursed
 	var/description = "This is a debug curse."
 	/// Trait given by this curse
 	var/trait
+
 /datum/curse/proc/on_life()
 	return
 /datum/curse/proc/on_death()
@@ -28,8 +27,7 @@
 	return
 
 /mob/living/carbon/human/proc/handle_curses()
-	for(var/curse in curses)
-		var/datum/curse/C = curse
+	for(var/datum/curse/C as anything in curses)
 		C.on_life(src)
 
 /mob/living/carbon/human/proc/add_curse(datum/curse/C, silent = FALSE)
@@ -59,6 +57,7 @@
 			return TRUE
 
 	return FALSE
+
 //////////////////////
 /// SPECIAL CURSES ///
 //////////////////////
@@ -83,7 +82,7 @@
 
 /datum/curse/ravox
 	name = "Ravox's Curse"
-	description = "Violence disgusts me. I cannot bring myself to wield any kind of weapon."
+	description = "Violence disgusts me. I struggle to bring myself to wield any kind of weapon."
 	trait = TRAIT_RAVOX_CURSE
 
 /datum/curse/necra
@@ -103,7 +102,7 @@
 
 /datum/curse/eora
 	name = "Eora's Curse"
-	description = "I am unable to show any kind of affection or love, whether carnal or platonic."
+	description = "I am unable to show any kind of affection or love, whether intimate or platonic."
 	trait = TRAIT_EORA_CURSE
 
 //////////////////////
@@ -113,7 +112,14 @@
 	name = "Zizo's Curse"
 	description = "I can no longer distinguish reality from delusion."
 	trait = TRAIT_ZIZO_CURSE
+	/// Chance to call hallucination handle procs on life
+	var/hallucination_prob = 100
 	var/atom/movable/screen/fullscreen/maniac/hallucinations
+
+/datum/curse/zizo/minor
+	name = "Zizo's Minor Curse"
+	description = "I struggle to distinguish reality from delusion."
+	hallucination_prob = 10
 
 /datum/curse/schizophrenic //zizo curse but without the jumpscares and meta hallucinations
 	name = "Schizophrenic"
@@ -127,30 +133,32 @@
 
 /datum/curse/matthios
 	name = "Matthios' Curse"
-	description = "I hate the sight of wealth, and I cannot have anything to do with mammons."
+	description = "I hate the sight of wealth, and I struggle to do anything with mammons."
 	trait = TRAIT_MATTHIOS_CURSE
 
 /datum/curse/baotha
 	name = "Baotha's Curse"
-	description = "I'm in a constant state of ecstacy."
+	description = "I'm in a constant state of ecstasy."
 	trait = TRAIT_BAOTHA_CURSE
+
 //////////////////////
 /// ON GAIN / LOSS ///
 //////////////////////
 /datum/curse/atheism/on_gain(mob/living/carbon/human/owner)
 	. = ..()
 	old_patron = owner.patron
-	owner.patron = /datum/patron/godless
+	owner.set_patron(/datum/patron/godless)
 	owner.gain_trauma(/datum/brain_trauma/mild/phobia/religion)
 
 /datum/curse/atheism/on_loss(mob/living/carbon/human/owner)
 	. = ..()
-	owner.patron = old_patron
+	owner.set_patron(old_patron)
 	owner.cure_trauma_type(/datum/brain_trauma/mild/phobia/religion)
 
 /datum/curse/zizo/on_gain(mob/living/carbon/human/owner)
 	. = ..()
 	hallucinations = owner.overlay_fullscreen("maniac", /atom/movable/screen/fullscreen/maniac)
+
 /datum/curse/zizo/on_loss(mob/living/carbon/human/owner)
 	. = ..()
 	hallucinations = null
@@ -168,10 +176,11 @@
 //////////////////////
 /datum/curse/pestra/on_life(mob/living/carbon/human/owner)
 	. = ..()
-	if(owner.mob_timers["pestra_curse"])
-		if(world.time < owner.mob_timers["pestra_curse"] + rand(30,60)SECONDS)
-			return
-	owner.mob_timers["pestra_curse"] = world.time
+	if(!MOBTIMER_FINISHED(owner, MT_CURSE_PESTRA, rand(120, 480) SECONDS)) //this isn't how mob timers work
+		return
+
+	MOBTIMER_SET(owner, MT_CURSE_PESTRA)
+
 	var/effect = rand(1, 4)
 	switch(effect)
 		if(1)
@@ -188,20 +197,19 @@
 
 /datum/curse/baotha/on_life(mob/living/carbon/human/owner)
 	. = ..()
-	if(owner.mob_timers["baotha_curse"])
-		if(world.time < owner.mob_timers["baotha_curse"] + rand(15,60)SECONDS)
-			return
-	owner.mob_timers["baotha_curse"] = world.time
+	if(!MOBTIMER_FINISHED(owner, MT_CURSE_BAOTHA, rand(60, 420) SECONDS)) //this isn't how mob timers work
+		return
+
+	MOBTIMER_SET(owner, MT_CURSE_BAOTHA)
 
 	owner.reagents.add_reagent(/datum/reagent/druqks, 3)
 
 /datum/curse/graggar/on_life(mob/living/carbon/human/owner)
 	. = ..()
-	if(owner.mob_timers["graggar_curse"])
-		if(world.time < owner.mob_timers["graggar_curse"] + rand(15,60)SECONDS)
-			return
+	if(!MOBTIMER_FINISHED(owner, MT_CURSE_GRAGGAR, rand(180, 480) SECONDS)) //this isn't how mob timers work
+		return
 
-	owner.mob_timers["graggar_curse"] = world.time
+	MOBTIMER_SET(owner, MT_CURSE_GRAGGAR)
 	for(var/mob/living/carbon/human in view(1, owner))
 		owner.emote("rage")
 		human.attacked_by(owner.get_active_held_item(), owner)
@@ -211,10 +219,11 @@
 // Currently calls maniac hallucinations
 /datum/curse/zizo/on_life(mob/living/carbon/human/owner)
 	. = ..()
-	handle_maniac_visions(owner, hallucinations)
-	handle_maniac_hallucinations(owner)
-	//handle_maniac_floors(owner)
-	handle_maniac_walls(owner)
+	if(prob(hallucination_prob))
+		handle_maniac_visions(owner, hallucinations)
+		handle_maniac_hallucinations(owner)
+		//handle_maniac_floors(owner)
+		handle_maniac_walls(owner)
 
 /datum/curse/schizophrenic/on_life(mob/living/carbon/human/owner)
 	. = ..()
@@ -232,11 +241,11 @@
 	emote("scream", forced=TRUE)
 
 /mob/living/carbon/cursed_freak_out()
-	if(mob_timers["freakout"])
-		if(world.time < mob_timers["freakout"] + 10 SECONDS)
-			flash_fullscreen("stressflash")
-			return
-	mob_timers["freakout"] = world.time
+	if(!MOBTIMER_FINISHED(src, MT_FREAKOUT, 10 SECONDS))
+		flash_fullscreen("stressflash")
+		return
+
+	MOBTIMER_SET(src, MT_FREAKOUT)
 	shake_camera(src, 1, 3)
 	flash_fullscreen("stressflash")
 	changeNext_move(CLICK_CD_EXHAUSTED)

@@ -1,0 +1,2 @@
+/obj/structure/fluff/railing/fence : /obj/structure/fluff/railing/tall/palisade{@OLD}
+/obj/structure/fluff/railing/woodfence : /obj/structure/fluff/railing/tall{@OLD}

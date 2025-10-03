@@ -11,58 +11,67 @@
 #define TEXT_EAST			"[EAST]"
 #define TEXT_WEST			"[WEST]"
 
+/// Use male sprites
+#define MALE_SPRITES 	0
+/// Use female sprites only
+#define FEMALE_SPRITES 	1
+/// Use female sprites and boob
+#define FEMALE_BOOB 	2
 
 //Human Overlays Indexes/////////
-#define REFLECTION_LAYER		49
-#define MUTATIONS_LAYER			48		//mutations. Tk headglows, cold resistance glow, etc
-#define CLOAK_BEHIND_LAYER		47
-#define HANDS_BEHIND_LAYER		46
-#define BELT_BEHIND_LAYER		45
-#define BACK_BEHIND_LAYER		44
-#define BODY_BEHIND_LAYER		43		//certain mutantrace features (tail when looking south) that must appear behind the body parts
-#define BODY_UNDER_LAYER		42		// Things under the bodyparts but above the "behind body" layer
-#define BODYPARTS_LAYER			41		//Initially "AUGMENTS", this was repurposed to be a catch-all bodyparts flag
-#define BODY_ADJ_LAYER			40		//certain mutantrace features (snout, body markings) that must appear above the body parts
-#define BODY_LAYER				39		//underwear, undershirts, socks, eyes, lips(makeup)
-#define FRONT_MUTATIONS_LAYER	38		//mutations that should appear above body, body_adj and bodyparts layer (e.g. laser eyes)
-#define DAMAGE_LAYER			37		//damage indicators (cuts and burns)
-#define PANTS_LAYER				36
-#define SHOES_LAYER				35
-#define LEG_PART_LAYER			34
-#define LEG_DAMAGE_LAYER		33
-#define LEGSLEEVE_LAYER			32
-#define SHOESLEEVE_LAYER		31
-#define SHIRT_LAYER				30
-#define GLOVES_LAYER			29
-#define WRISTS_LAYER			28
-#define ARMOR_LAYER				27
-#define TABARD_LAYER			26
-#define BELT_LAYER				25		//only when looking south
-#define UNDER_CLOAK_LAYER		24
-#define HANDS_PART_LAYER		23
-#define ARM_DAMAGE_LAYER		22
-#define SHIRTSLEEVE_LAYER		21
-#define GLOVESLEEVE_LAYER		20
-#define WRISTSLEEVE_LAYER		19
-#define ARMORSLEEVE_LAYER		18
-#define RING_LAYER				17
-#define GLASSES_LAYER			16
-#define NECK_LAYER				15
-#define CLOAK_LAYER				14		//only when looking north or west/east
-#define HAIR_LAYER				13		//TODO: make part of head layer?
-#define MASK_LAYER				12
-#define HAIREXTRA_LAYER			11
-#define MOUTH_LAYER				10
-#define HEAD_LAYER				9
-#define BACK_LAYER				8		//only when looking north
-#define HANDS_LAYER				7
-#define HANDCUFF_LAYER			6
-#define LEGCUFF_LAYER			5
-#define BODY_FRONT_LAYER		4
-#define HALO_LAYER				3		//blood cult ascended halo, because there's currently no better solution for adding/removing
+#define SMELL_LAYER				52		//Hygiene
+#define REFLECTION_LAYER		51
+#define POTENCE_LAYER			50
+#define MUTATIONS_LAYER			49		//mutations. Tk headglows, cold resistance glow, etc
+#define CLOAK_BEHIND_LAYER		48
+#define HANDS_BEHIND_LAYER		47
+#define BELT_BEHIND_LAYER		46
+#define BACK_BEHIND_LAYER		45
+#define BODY_BEHIND_LAYER		44		//certain mutantrace features (tail when looking south) that must appear behind the body parts
+#define BODY_UNDER_LAYER		43		// Things under the bodyparts but above the "behind body" layer
+#define BODYPARTS_LAYER			42		//Initially "AUGMENTS", this was repurposed to be a catch-all bodyparts flag
+#define BODY_ADJ_LAYER			41		//certain mutantrace features (snout, body markings) that must appear above the body parts
+#define BODY_LAYER				40		//underwear, undershirts, socks, eyes, lips(makeup)
+#define FRONT_MUTATIONS_LAYER	39		//mutations that should appear above body, body_adj and bodyparts layer (e.g. laser eyes)
+#define DAMAGE_LAYER			38		//damage indicators (cuts and burns)
+#define PANTS_LAYER				37
+#define SHOES_LAYER				36
+#define LEG_PART_LAYER			35
+#define LEG_DAMAGE_LAYER		34
+#define LEGSLEEVE_LAYER			33
+#define SHOESLEEVE_LAYER		32
+#define SHIRT_LAYER				31
+#define GLOVES_LAYER			30
+#define WRISTS_LAYER			29
+#define ARMOR_LAYER				28
+#define TABARD_LAYER			27
+#define BELT_LAYER				26		//only when looking south
+#define UNDER_CLOAK_LAYER		25
+#define HANDS_PART_LAYER		24
+#define ARM_DAMAGE_LAYER		23
+#define SHIRTSLEEVE_LAYER		22
+#define GLOVESLEEVE_LAYER		21
+#define WRISTSLEEVE_LAYER		20
+#define ARMORSLEEVE_LAYER		19
+#define RING_LAYER				18
+#define GLASSES_LAYER			17
+#define NECK_LAYER				16
+#define CLOAK_LAYER				15		//only when looking north or west/east
+#define HAIR_LAYER				14		//TODO: make part of head layer?
+#define MASK_LAYER				13
+#define HAIREXTRA_LAYER			12
+#define MOUTH_LAYER				11
+#define HEAD_LAYER				10
+#define BACK_LAYER				9		//only when looking north
+#define HANDS_LAYER				8
+#define HANDCUFF_LAYER			7
+#define LEGCUFF_LAYER			6
+#define BODY_FRONT_LAYER		5
+#define HALO_LAYER				4		//blood cult ascended halo, because there's currently no better solution for adding/removing
+#define BITE_LAYER				3
 #define FIRE_LAYER				2		//If you're on fire
 #define TURF_LAYER				1		//If you're on fire
-#define TOTAL_LAYERS			49		//KEEP THIS UP-TO-DATE OR SHIT WILL BREAK ;_;
+#define TOTAL_LAYERS			52		//KEEP THIS UP-TO-DATE OR SHIT WILL BREAK ;_;
 
 #define BACK_CLOAK_SOUTH_LAYER		(BODY_BEHIND_LAYER+1)
 
@@ -92,11 +101,6 @@
 #define MANIFEST_ERROR_ITEM			4
 
 #define TRANSITIONEDGE			7 //Distance from edge to move to another z-level
-
-#define BE_CLOSE TRUE		//in the case of a silicon, to select if they need to be next to the atom
-#define NO_DEXTERITY TRUE	//if other mobs (monkeys, aliens, etc) can use this // I had to change 20+ files because some non-dnd-playing fuckchumbis can't spell "dexterity"
-#define NO_TK TRUE
-//used by canUseTopic()
 
 //singularity defines
 #define STAGE_ONE 1
@@ -159,20 +163,6 @@ GLOBAL_LIST_EMPTY(bloody_footprints_cache)
 #define BLOOD_STATE_GREEN			"green"
 #define BLOOD_STATE_NOT_BLOODY		"no blood whatsoever"
 
-//suit sensors: sensor_mode defines
-
-#define SENSOR_OFF 0
-#define SENSOR_LIVING 1
-#define SENSOR_VITALS 2
-#define SENSOR_COORDS 3
-
-//suit sensors: has_sensor defines
-
-#define BROKEN_SENSORS -1
-#define NO_SENSORS 0
-#define HAS_SENSORS 1
-#define LOCKED_SENSORS 2
-
 //Wet floor type flags. Stronger ones should be higher in number.
 #define TURF_DRY			(0)
 #define TURF_WET_WATER		(1<<0)
@@ -197,6 +187,9 @@ GLOBAL_LIST_EMPTY(bloody_footprints_cache)
 
 //subtypesof(), typesof() without the parent path
 #define subtypesof(typepath) ( typesof(typepath) - typepath )
+
+/// Takes a datum as input, returns its ref string
+#define text_ref(datum) ref(datum)
 
 //Gets the turf this atom inhabits
 #define get_turf(A) (get_step(A, 0))
@@ -234,10 +227,10 @@ GLOBAL_LIST_INIT(ghost_accs_options, list(GHOST_ACCS_NONE, GHOST_ACCS_DIR, GHOST
 
 #define GHOST_OTHERS_DEFAULT_OPTION			GHOST_OTHERS_THEIR_SETTING
 
-#define GHOST_MAX_VIEW_RANGE_DEFAULT 10
-#define GHOST_MAX_VIEW_RANGE_MEMBER 14
+#define GHOST_MAX_VIEW_RANGE 24
 
 
+GLOBAL_LIST_EMPTY(coven_breakers_list)
 GLOBAL_LIST_INIT(ghost_others_options, list(GHOST_OTHERS_SIMPLE, GHOST_OTHERS_DEFAULT_SPRITE, GHOST_OTHERS_THEIR_SETTING)) //Same as ghost_accs_options.
 
 //pda fonts
@@ -271,10 +264,6 @@ GLOBAL_LIST_INIT(pda_styles, sortList(list(MONO, VT, ORBITRON, SHARE)))
 #define APPEARANCE_LONG_GLIDE				LONG_GLIDE
 
 */
-
-// Consider these images/atoms as part of the UI/HUD
-#define APPEARANCE_UI_IGNORE_ALPHA			(RESET_COLOR|RESET_TRANSFORM|NO_CLIENT_COLOR|RESET_ALPHA|PIXEL_SCALE)
-#define APPEARANCE_UI						(RESET_COLOR|RESET_TRANSFORM|NO_CLIENT_COLOR|PIXEL_SCALE)
 
 //Just space
 #define SPACE_ICON_STATE	"[((x + y) ^ ~(x * y) + z) % 25]"
@@ -362,6 +351,12 @@ GLOBAL_LIST_INIT(pda_styles, sortList(list(MONO, VT, ORBITRON, SHARE)))
 
 //for obj explosion block calculation
 #define EXPLOSION_BLOCK_PROC -1
+
+#define EXPLOSION_FALLOFF_SHAPE_LINEAR   0
+#define EXPLOSION_FALLOFF_SHAPE_EXPONENTIAL  1
+#define EXPLOSION_FALLOFF_SHAPE_EXPONENTIAL_HALF 2
+#define EXPLOSION_MAX_POWER 5000
+
 
 //for determining which type of heartbeat sound is playing
 #define BEAT_FAST 1
@@ -457,7 +452,11 @@ GLOBAL_LIST_INIT(pda_styles, sortList(list(MONO, VT, ORBITRON, SHARE)))
 #define CAMERA_SEE_GHOSTS_BASIC 1
 #define CAMERA_SEE_GHOSTS_ORBIT 2
 
-#define CLIENT_FROM_VAR(I) (ismob(I) ? I:client : (istype(I, /client) ? I : (istype(I, /datum/mind) ? I:current?:client : null)))
+#define CLIENT_FROM_VAR(I) (\
+	ismob(I) ? I:client : (\
+	istype(I, /client) ? I : (\
+	istype(I, /datum/mind) ? I:current?:client :\
+	null)))
 
 #define AREASELECT_CORNERA "corner A"
 #define AREASELECT_CORNERB "corner B"
@@ -503,3 +502,15 @@ GLOBAL_LIST_INIT(pda_styles, sortList(list(MONO, VT, ORBITRON, SHARE)))
 #define CANTHOLD_STATIC(comp, L) \
 	var/static/list/canthold_typecache = L; \
 	comp.cant_hold = canthold_typecache
+
+// timed_action_flags parameter for `/proc/do_after`
+#define IGNORE_USER_LOC_CHANGE (1<<0)
+#define IGNORE_TARGET_LOC_CHANGE (1<<1)
+#define IGNORE_HELD_ITEM (1<<2)
+#define IGNORE_INCAPACITATED (1<<3)
+/// Used to prevent important slowdowns from being abused by drugs like kronkaine
+#define IGNORE_SLOWDOWNS (1<<4)
+#define IGNORE_USER_DIR_CHANGE (1<<5)
+#define IGNORE_USER_DOING (1<<6)
+
+#define MESSAGE_ADMINS_ROLES list(/datum/job/lord, /datum/job/priest)

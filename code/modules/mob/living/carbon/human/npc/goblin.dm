@@ -8,7 +8,7 @@
 	bodyparts = list(/obj/item/bodypart/chest/goblin, /obj/item/bodypart/head/goblin, /obj/item/bodypart/l_arm/goblin,
 					/obj/item/bodypart/r_arm/goblin, /obj/item/bodypart/r_leg/goblin, /obj/item/bodypart/l_leg/goblin)
 	rot_type = /datum/component/rot/corpse/goblin
-	var/gob_outfit = /datum/outfit/job/roguetown/npc/goblin
+	var/gob_outfit = /datum/outfit/npc/goblin
 	ambushable = FALSE
 	base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/unarmed/claw)
 	a_intent = INTENT_HELP
@@ -16,15 +16,39 @@
 	possible_rmb_intents = list(/datum/rmb_intent/feint, /datum/rmb_intent/swift, /datum/rmb_intent/riposte, /datum/rmb_intent/weak)
 	flee_in_pain = TRUE
 	stand_attempts = 6
-	vitae_pool = 250 // Small, frail creechers with not so much vitality to gain from.
+	bloodpool = 250 // Small, frail creechers with not so much vitality to gain from.
+	dodgetime = 30 //they can dodge easily, but have a cooldown on it
+
+/mob/living/carbon/human/species/goblin/apply_prefs_job(client/player_client, datum/job/job)
+	return
+
+/mob/living/carbon/human/species/goblin/slaved
+	gob_outfit = null
+	ai_controller = /datum/ai_controller/human_npc
+
+/mob/living/carbon/human/species/goblin/slaved/Initialize()
+	. = ..()
+	var/static/list/pet_commands = list(
+				/datum/pet_command/idle,
+				/datum/pet_command/free,
+				/datum/pet_command/follow,
+				/datum/pet_command/attack,
+				/datum/pet_command/protect_owner,
+				/datum/pet_command/aggressive,
+				/datum/pet_command/calm,
+			)
+	AddComponent(/datum/component/obeys_commands, pet_commands)
 
 /mob/living/carbon/human/species/goblin/npc
-	aggressive=1
-	mode = AI_IDLE
-	dodgetime = 30 //they can dodge easily, but have a cooldown on it
+	ai_controller = /datum/ai_controller/human_npc
 	flee_in_pain = TRUE
 
 	wander = FALSE
+
+/mob/living/carbon/human/species/goblin/npc/Initialize()
+	. = ..()
+	AddComponent(/datum/component/ai_aggro_system)
+	AddComponent(/datum/component/combat_noise, list("laugh" = 2))
 
 /mob/living/carbon/human/species/goblin/npc/ambush
 	simpmob_attack = 35
@@ -32,7 +56,7 @@
 	wander = TRUE
 	attack_speed = 2
 
-/mob/living/carbon/human/species/goblin/hell
+/mob/living/carbon/human/species/goblin/npc/hell
 	name = "hell goblin"
 	race = /datum/species/goblin/hell
 
@@ -108,8 +132,9 @@
 /obj/item/bodypart/head/goblin/skeletonize()
 	. = ..()
 	icon_state = "goblin_skel_head"
-	if(sellprice)
-		sellprice = 2
+	sellprice = 2
+	if(headprice)
+		headprice = 2
 
 /obj/item/bodypart/head/goblin/drop_organs(mob/user, violent_removal)
 	. = ..()
@@ -117,21 +142,23 @@
 
 /datum/species/goblin
 	name = "goblin"
-	id = "goblin"
-	species_traits = list(NO_UNDERWEAR,NOEYESPRITES)
+	id = SPEC_ID_GOBLIN
+	species_traits = list(NO_UNDERWEAR)
 	inherent_traits = list(TRAIT_RESISTCOLD,TRAIT_RESISTHIGHPRESSURE,TRAIT_RESISTLOWPRESSURE,TRAIT_RADIMMUNE, TRAIT_EASYDISMEMBER, TRAIT_CRITICAL_WEAKNESS, TRAIT_NASTY_EATER, TRAIT_LEECHIMMUNE, TRAIT_INHUMENCAMP)
-	no_equip = list(SLOT_SHIRT, SLOT_WEAR_MASK, SLOT_GLOVES, SLOT_SHOES, SLOT_PANTS, SLOT_S_STORE)
-	nojumpsuit = 1
-	sexes = 1
-	offset_features = list(OFFSET_HANDS = list(0,-4), OFFSET_HANDS_F = list(0,-4))
+
+	no_equip = list(ITEM_SLOT_SHIRT, ITEM_SLOT_MASK, ITEM_SLOT_GLOVES, ITEM_SLOT_SHOES, ITEM_SLOT_PANTS)
+	offset_features_m = list(OFFSET_HANDS = list(0,-4))
+	offset_features_f = list(OFFSET_HANDS = list(0,-4))
+
+	dam_icon_f = null
+	dam_icon_m = null
 	damage_overlay_type = ""
-	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | RACE_SWAP | SLIME_EXTRACT
+	changesource_flags = WABBAJACK
 	var/raceicon = "goblin"
 
 /datum/species/goblin/regenerate_icons(mob/living/carbon/human/H)
-//	H.cut_overlays()
 	H.icon_state = ""
-	if(H.notransform)
+	if(HAS_TRAIT(H, TRAIT_NO_TRANSFORM))
 		return 1
 	H.update_inv_hands()
 	H.update_inv_handcuffed()
@@ -174,7 +201,7 @@
 	apply_overlay(BODY_LAYER)
 	dna.species.update_damage_overlays()
 
-/mob/living/carbon/human/species/goblin/proc/update_wearable()
+/mob/living/carbon/human/proc/update_wearable()
 	remove_overlay(ARMOR_LAYER)
 
 	var/list/standing = list()
@@ -192,7 +219,8 @@
 
 	apply_overlay(ARMOR_LAYER)
 
-/mob/living/carbon/human/species/goblin/update_inv_head()
+
+/mob/living/carbon/human/species/goblin/update_inv_head(hide_nonstandard = FALSE)
 	update_wearable()
 /mob/living/carbon/human/species/goblin/update_inv_armor()
 	update_wearable()
@@ -204,22 +232,17 @@
 	. = ..()
 	addtimer(CALLBACK(src, PROC_REF(after_creation)), 1 SECONDS)
 
-/mob/living/carbon/human/species/goblin/handle_combat()
-	if(mode == AI_HUNT)
-		if(prob(2))
-			emote("laugh")
-	. = ..()
-
 /mob/living/carbon/human/species/goblin/after_creation()
 	..()
 	gender = MALE
 	if(src.dna && src.dna.species)
 		src.dna.species.soundpack_m = new /datum/voicepack/goblin()
 		src.dna.species.soundpack_f = new /datum/voicepack/goblin()
-		var/obj/item/headdy = get_bodypart("head")
+		var/obj/item/bodypart/head/headdy = get_bodypart("head")
 		if(headdy)
 			headdy.icon = 'icons/roguetown/mob/monster/goblins.dmi'
 			headdy.icon_state = "[src.dna.species.id]_head"
+			headdy.headprice = rand(7,20)
 			headdy.sellprice = rand(7,20)
 	var/obj/item/organ/eyes/eyes = src.getorganslot(ORGAN_SLOT_EYES)
 	if(eyes)
@@ -234,7 +257,7 @@
 	if(src.charflaw)
 		QDEL_NULL(src.charflaw)
 	update_body()
-	faction = list("orcs")
+	faction = list(FACTION_ORCS)
 	name = "goblin"
 	real_name = "goblin"
 	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
@@ -250,10 +273,14 @@
 
 /datum/component/rot/corpse/goblin/process()
 	var/amt2add = 10 //1 second
+	var/time_elapsed = last_process ? (world.time - last_process)/10 : 1
 	if(last_process)
 		amt2add = ((world.time - last_process)/10) * amt2add
 	last_process = world.time
 	amount += amt2add
+	if(has_world_trait(/datum/world_trait/pestra_mercy))
+		amount -= (is_ascendant(PESTRA) ? 2.5 : 5) * time_elapsed
+
 	var/mob/living/carbon/C = parent
 	if(!C)
 		qdel(src)
@@ -272,10 +299,10 @@
 			if(!B.rotted)
 				B.rotted = TRUE
 				should_update = TRUE
-			if(B.rotted && amount < 16 MINUTES)
+			if(B.rotted && amount < 16 MINUTES && !(FACTION_MATTHIOS in C.faction))
 				var/turf/open/T = C.loc
 				if(istype(T))
-					T.pollute_turf(/datum/pollutant/rot, 10)
+					T.pollute_turf(/datum/pollutant/rot, 4)
 	if(should_update)
 		if(amount > 20 MINUTES)
 			C.update_body()
@@ -291,14 +318,16 @@
 ////
 ///
 
-/datum/outfit/job/roguetown/npc/goblin/pre_equip(mob/living/carbon/human/H)
+/datum/outfit/npc/goblin/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.TOTALSTR = rand(6, 10)
-	H.TOTALPER = rand(5, 10)
-	H.TOTALINT = rand(1, 4)
-	H.TOTALCON = rand(4, 8)
-	H.TOTALEND = rand(8, 12)
-	H.TOTALSPD = rand(8, 14)
+	H.base_strength = rand(6, 10)
+	H.base_perception = rand(5, 10)
+	H.base_intelligence = rand(1, 4)
+	H.base_constitution = rand(4, 8)
+	H.base_endurance = rand(8, 12)
+	H.base_speed = rand(8, 14)
+	H.recalculate_stats(FALSE)
+
 	if(is_species(H, /datum/species/goblin/hell))
 		H.STASTR += 6
 		H.STACON += 6
@@ -319,50 +348,50 @@
 	var/loadout = rand(1,5)
 	switch(loadout)
 		if(1) //tribal spear
-			r_hand = /obj/item/rogueweapon/polearm/spear/stone
-			armor = /obj/item/clothing/suit/roguetown/armor/leather/hide/goblin
+			r_hand = /obj/item/weapon/polearm/spear/stone
+			armor = /obj/item/clothing/armor/leather/hide/goblin
 		if(2) //tribal axe
-			r_hand = /obj/item/rogueweapon/axe/stone
-			armor = /obj/item/clothing/suit/roguetown/armor/leather/hide/goblin
+			r_hand = /obj/item/weapon/axe/stone
+			armor = /obj/item/clothing/armor/leather/hide/goblin
 		if(3) //tribal club
-			r_hand = /obj/item/rogueweapon/mace/woodclub
-			armor = /obj/item/clothing/suit/roguetown/armor/leather/hide/goblin
+			r_hand = /obj/item/weapon/mace/woodclub
+			armor = /obj/item/clothing/armor/leather/hide/goblin
 			if(prob(10))
-				head = /obj/item/clothing/head/roguetown/helmet/leather/goblin
+				head = /obj/item/clothing/head/helmet/leather/goblin
 		if(4) //lightly armored sword/flail/daggers
 			H.simpmob_attack += 25
 			H.simpmob_defend += 10
 			if(prob(50))
-				r_hand = /obj/item/rogueweapon/sword/iron
+				r_hand = /obj/item/weapon/sword/iron
 			else
-				r_hand = /obj/item/rogueweapon/mace/spiked
+				r_hand = /obj/item/weapon/mace/spiked
 			if(prob(30))
-				l_hand = /obj/item/rogueweapon/shield/wood
+				l_hand = /obj/item/weapon/shield/wood
 			if(prob(23))
-				r_hand = /obj/item/rogueweapon/knife/stone
-				l_hand = /obj/item/rogueweapon/knife/stone
-			armor = /obj/item/clothing/suit/roguetown/armor/leather/goblin
+				r_hand = /obj/item/weapon/knife/stone
+				l_hand = /obj/item/weapon/knife/stone
+			armor = /obj/item/clothing/armor/leather/goblin
 			if(prob(80))
-				head = /obj/item/clothing/head/roguetown/helmet/leather/goblin
+				head = /obj/item/clothing/head/helmet/leather/goblin
 		if(5) //heavy armored sword/flail/shields
 			H.simpmob_attack += 45
 			H.simpmob_defend += 25
 			ADD_TRAIT(src, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 			if(prob(30))
-				armor = /obj/item/clothing/suit/roguetown/armor/cuirass/iron/goblin
+				armor = /obj/item/clothing/armor/cuirass/iron/goblin
 			else
-				armor = /obj/item/clothing/suit/roguetown/armor/leather/goblin
+				armor = /obj/item/clothing/armor/leather/goblin
 			if(prob(80))
-				head = /obj/item/clothing/head/roguetown/helmet/goblin
+				head = /obj/item/clothing/head/helmet/goblin
 			else
-				head = /obj/item/clothing/head/roguetown/helmet/leather/goblin
+				head = /obj/item/clothing/head/helmet/leather/goblin
 			if(prob(50))
-				r_hand = /obj/item/rogueweapon/sword/iron
+				r_hand = /obj/item/weapon/sword/iron
 			else
-				r_hand = /obj/item/rogueweapon/mace/spiked
+				r_hand = /obj/item/weapon/mace/spiked
 			if(prob(20))
-				r_hand = /obj/item/rogueweapon/flail
-			l_hand = /obj/item/rogueweapon/shield/wood
+				r_hand = /obj/item/weapon/flail
+			l_hand = /obj/item/weapon/shield/wood
 
 
 ////
@@ -393,6 +422,11 @@
 	soundloop = new(src, FALSE)
 	soundloop.start()
 	spawn_gob()
+
+/obj/structure/gob_portal/Destroy()
+	if(soundloop)
+		QDEL_NULL(soundloop)
+	return ..()
 
 /obj/structure/gob_portal/attack_ghost(mob/dead/observer/user)
 	if(QDELETED(user))
@@ -425,7 +459,7 @@
 	else
 		new /mob/living/carbon/human/species/goblin/npc(get_turf(src))
 	gobs++
-	update_icon()
+	update_appearance()
 	if(living_player_count() < 10)
 		maxgobs = 1
 	if(gobs < maxgobs)
@@ -437,7 +471,7 @@
 	if(spawning)
 		return
 	spawning = TRUE
-	update_icon()
+	update_appearance()
 	addtimer(CALLBACK(src, PROC_REF(creategob)), 2 SECONDS)
 
 /obj/structure/gob_portal/Destroy()

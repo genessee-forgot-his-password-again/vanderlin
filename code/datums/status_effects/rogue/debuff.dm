@@ -6,7 +6,7 @@
 /datum/status_effect/debuff/hungryt1
 	id = "hungryt1"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/hungryt1
-	effectedstats = list("speed" = -1,"strength" = -1, "constitution" = -1, "endurance" = -1)
+	effectedstats = list(STATKEY_SPD = -1, STATKEY_STR = -1, STATKEY_CON = -1, STATKEY_END = -1)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/hungryt1
@@ -18,24 +18,18 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/peckish)
-
-/datum/status_effect/debuff/hungryt1/refresh()
-	. = ..()
-	if(iscarbon(owner))
-		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/peckish)
+		C.add_stress(/datum/stress_event/peckish)
 
 /datum/status_effect/debuff/hungryt1/on_remove()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.remove_stress(/datum/stressevent/peckish)
+		C.remove_stress(/datum/stress_event/peckish)
 
 /datum/status_effect/debuff/hungryt2
 	id = "hungryt2"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/hungryt2
-	effectedstats = list("speed" = -4,"strength" = -2, "constitution" = -2, "endurance" = -1)
+	effectedstats = list(STATKEY_SPD = -4, STATKEY_STR = -2, STATKEY_CON = -2, STATKEY_END = -1)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/hungryt2
@@ -47,24 +41,18 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/hungry)
-
-/datum/status_effect/debuff/hungryt2/refresh()
-	. = ..()
-	if(iscarbon(owner))
-		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/hungry)
+		C.add_stress(/datum/stress_event/hungry)
 
 /datum/status_effect/debuff/hungryt2/on_remove()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.remove_stress(/datum/stressevent/hungry)
+		C.remove_stress(/datum/stress_event/hungry)
 
 /datum/status_effect/debuff/hungryt3
 	id = "hungryt3"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/hungryt3
-	effectedstats = list("speed" = -6,"strength" = -6, "constitution" = -6, "endurance" = -6)
+	effectedstats = list(STATKEY_SPD = -6, STATKEY_STR = -6, STATKEY_CON = -6, STATKEY_END = -6)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/hungryt3
@@ -76,26 +64,40 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/starving)
-
-/datum/status_effect/debuff/hungryt3/refresh()
-	. = ..()
-	if(iscarbon(owner))
-		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/starving)
+		C.add_stress(/datum/stress_event/starving)
 
 /datum/status_effect/debuff/hungryt3/on_remove()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.remove_stress(/datum/stressevent/starving)
+		C.remove_stress(/datum/stress_event/starving)
+
+/datum/status_effect/debuff/hungryt4
+	id = "hungryt4"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/hungryt4
+	duration = 100
+
+
+//Used only when starvation damage is enabled
+/atom/movable/screen/alert/status_effect/debuff/hungryt4
+	name = "Dying of Starvation"
+	desc = "<span class='boldwarning'>I am dying of starvation! I need to find food, quick!</span>\n"
+	icon_state = "hunger4"
+
+/datum/status_effect/debuff/hungryt4/tick()
+	owner.adjustToxLoss(CONFIG_GET(number/starvation_damage_per_tick))
+
+/datum/status_effect/debuff/hungryt4/on_apply()
+	. = ..()
+	to_chat(owner, "<span class='danger'>I am starving to death! I need to eat something before it's too late!</span>")
+
 
 //SILVER DAGGER EFFECT
 
 /datum/status_effect/debuff/silver_curse
 	id = "silver_curse"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/silver_curse
-	effectedstats = list(STATKEY_STR = -2,STATKEY_PER = -2,STATKEY_INT = -2, STATKEY_CON = -2, STATKEY_END = -2, STATKEY_SPD = -2, STATKEY_LCK = -2)
+	effectedstats = list(STATKEY_STR = -2, STATKEY_PER = -2, STATKEY_INT = -2, STATKEY_CON = -2, STATKEY_END = -2, STATKEY_SPD = -2, STATKEY_LCK = -2)
 	duration = 1 MINUTES
 
 /*	Pointless subtype, code doesnt handle it well, dont use
@@ -110,7 +112,7 @@
 /datum/status_effect/debuff/wiz
 	id = "wiz"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/wiz
-	effectedstats = list("intelligence" = -5)
+	effectedstats = list(STATKEY_INT = -5)
 	duration = -1
 
 /atom/movable/screen/alert/status_effect/debuff/wiz
@@ -123,7 +125,7 @@
 /datum/status_effect/debuff/thirstyt1
 	id = "thirsty1"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/thirstyt1
-	effectedstats = list("endurance" = -1, "speed" = -1)
+	effectedstats = list(STATKEY_END = -1, STATKEY_SPD = -1)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/thirstyt1
@@ -136,18 +138,18 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/drym)
+		C.add_stress(/datum/stress_event/drym)
 
 /datum/status_effect/debuff/thirstyt1/on_remove()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.remove_stress(/datum/stressevent/drym)
+		C.remove_stress(/datum/stress_event/drym)
 
 /datum/status_effect/debuff/thirstyt2
 	id = "thirsty2"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/thirstyt2
-	effectedstats = list("speed" = -4, "endurance" = -4)
+	effectedstats = list(STATKEY_SPD = -4, STATKEY_END = -4)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/thirstyt2
@@ -159,24 +161,18 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/thirst)
-
-/datum/status_effect/debuff/thirstyt2/refresh()
-	. = ..()
-	if(iscarbon(owner))
-		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/thirst)
+		C.add_stress(/datum/stress_event/thirst)
 
 /datum/status_effect/debuff/thirstyt2/on_remove()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.remove_stress(/datum/stressevent/thirst)
+		C.remove_stress(/datum/stress_event/thirst)
 
 /datum/status_effect/debuff/thirstyt3
 	id = "thirsty3"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/thirstyt3
-	effectedstats = list("strength" = -6, "speed" = -6, "endurance" = -6)
+	effectedstats = list(STATKEY_STR = -6, STATKEY_SPD = -6, STATKEY_END = -6)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/thirstyt3
@@ -188,19 +184,32 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/parched)
-
-/datum/status_effect/debuff/thirstyt3/refresh()
-	. = ..()
-	if(iscarbon(owner))
-		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/parched)
+		C.add_stress(/datum/stress_event/parched)
 
 /datum/status_effect/debuff/thirstyt3/on_remove()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.remove_stress(/datum/stressevent/parched)
+		C.remove_stress(/datum/stress_event/parched)
+
+/datum/status_effect/debuff/thirstyt4
+	id = "thirstyt4"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/thirstyt4
+	duration = 100
+
+
+//Used only when starvation damage is enabled
+/atom/movable/screen/alert/status_effect/debuff/thirstyt4
+	name = "Dying of Thirst"
+	desc = "<span class='boldwarning'>I am dying of thirst! I need to find water, quick!</span>\n"
+	icon_state = "thirst4"
+
+/datum/status_effect/debuff/thirstyt4/tick()
+	owner.adjustToxLoss(CONFIG_GET(number/dehydration_damage_per_tick))
+
+/datum/status_effect/debuff/thirstyt4/on_apply()
+	. = ..()
+	to_chat(owner, "<span class='danger'>I am dying of thirst! I need to find water before it's too late!</span>")
 
 /////////
 
@@ -222,7 +231,7 @@
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
 		C.add_nausea(100)
-		C.add_stress(/datum/stressevent/uncookedfood)
+		C.add_stress(/datum/stress_event/uncookedfood)
 
 /datum/status_effect/debuff/badmeal
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/badmeal
@@ -239,7 +248,7 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/badmeal)
+		C.add_stress(/datum/stress_event/badmeal)
 
 /datum/status_effect/debuff/burnedfood
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/burntmeal
@@ -251,7 +260,7 @@
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/burntmeal)
+		C.add_stress(/datum/stress_event/burntmeal)
 		C.add_nausea(100)
 
 /atom/movable/screen/alert/status_effect/debuff/burntmeal
@@ -277,12 +286,12 @@
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
 		C.add_nausea(200)
-		C.add_stress(/datum/stressevent/rotfood)
+		C.add_stress(/datum/stress_event/rotfood)
 
 /datum/status_effect/debuff/bleeding
 	id = "bleedingt1"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/bleedingt1
-	effectedstats = list("speed" = -2)
+	effectedstats = list(STATKEY_SPD = -2)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/bleedingt1
@@ -293,7 +302,7 @@
 /datum/status_effect/debuff/bleedingworse
 	id = "bleedingt2"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/bleedingt2
-	effectedstats = list("strength" = -1, "speed" = -4)
+	effectedstats = list(STATKEY_STR = -1, STATKEY_SPD = -4)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/bleedingt2
@@ -304,7 +313,7 @@
 /datum/status_effect/debuff/bleedingworst
 	id = "bleedingt3"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/bleedingt3
-	effectedstats = list("strength" = -3, "speed" = -6)
+	effectedstats = list(STATKEY_STR = -3, STATKEY_SPD = -6)
 	duration = 100
 
 /atom/movable/screen/alert/status_effect/debuff/bleedingt3
@@ -315,19 +324,24 @@
 /datum/status_effect/debuff/sleepytime
 	id = "sleepytime"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/sleepytime
-	effectedstats = list("speed" = -2, "endurance" = -2)
+	effectedstats = list(STATKEY_SPD = -2, STATKEY_END = -2)
 
 /datum/status_effect/debuff/sleepytime/on_apply()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.add_stress(/datum/stressevent/sleepytime)
+		C.add_stress(/datum/stress_event/sleepytime)
 
 /datum/status_effect/debuff/sleepytime/on_remove()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.remove_stress(/datum/stressevent/sleepytime)
+		C.remove_stress(/datum/stress_event/sleepytime)
+
+// We use this to not have triumph gain and dreaming tied to tiredness
+/datum/status_effect/debuff/dreamytime
+	id = "dreamytime"
+	alert_type = null
 
 /atom/movable/screen/alert/status_effect/debuff/netted
 	name = "Net"
@@ -338,18 +352,18 @@
 	id = "net"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/netted
 	duration = 2 MINUTES
-	effectedstats = list("speed" = -5, "endurance" = -2)
+	effectedstats = list(STATKEY_SPD = -5, STATKEY_END = -2)
 
 /datum/status_effect/debuff/netted/on_apply()
 		. = ..()
 		var/mob/living/carbon/C = owner
-		C.add_movespeed_modifier(MOVESPEED_ID_NET_SLOWDOWN, multiplicative_slowdown = 3)
+		C.add_movespeed_modifier(MOVESPEED_ID_LEGCUFF_SLOWDOWN, multiplicative_slowdown = 3)
 
 /datum/status_effect/debuff/netted/on_remove()
 	. = ..()
 	if(iscarbon(owner))
 		var/mob/living/carbon/C = owner
-		C.remove_movespeed_modifier(MOVESPEED_ID_NET_SLOWDOWN)
+		C.remove_movespeed_modifier(MOVESPEED_ID_LEGCUFF_SLOWDOWN)
 		// Already handled in uncuff()
 		/*
 		C.legcuffed = null
@@ -365,7 +379,7 @@
 /datum/status_effect/debuff/trainsleep
 	id = "trainsleep"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/trainsleep
-	effectedstats = list("strength" = -1, "speed" = -1,"endurance" = -1)
+	effectedstats = list(STATKEY_STR = -1, STATKEY_SPD = -1, STATKEY_END = -1)
 
 /atom/movable/screen/alert/status_effect/debuff/trainsleep
 	name = "Muscle Soreness"
@@ -376,7 +390,7 @@
 	id = "barbfalter"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/barbfalter
 	duration = 30 SECONDS
-	effectedstats = list("strength" = -2, "speed" = -2)
+	effectedstats = list(STATKEY_STR = -2, STATKEY_SPD = -2)
 
 /atom/movable/screen/alert/status_effect/debuff/barbfalter
 	name = "Faltering"
@@ -387,7 +401,7 @@
 	id = "revive"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/revive
 	duration = 15 MINUTES
-	effectedstats = list("strength" = -4, "speed" = -3, "endurance" = -3, "constitution" = -4)
+	effectedstats = list(STATKEY_STR = -4, STATKEY_SPD = -3, STATKEY_END = -3, STATKEY_CON = -4)
 
 /atom/movable/screen/alert/status_effect/debuff/revive
 	name = "Revival Sickness"
@@ -398,7 +412,7 @@
 	id = "viciousmockery"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/viciousmockery
 	duration = 1 MINUTES
-	effectedstats = list("strength" = -2, "speed" = -2,"endurance" = -2)
+	effectedstats = list(STATKEY_STR = -2, STATKEY_SPD = -2,STATKEY_END = -2)
 
 /atom/movable/screen/alert/status_effect/debuff/viciousmockery
 	name = "Vicious Mockery"
@@ -408,7 +422,7 @@
 /datum/status_effect/debuff/chilled
 	id = "chilled"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/chilled
-	effectedstats = list("speed" = -5, "strength" = -2, "endurance" = -2)
+	effectedstats = list(STATKEY_SPD = -5, STATKEY_STR = -2, STATKEY_END = -2)
 	duration = 15 SECONDS
 
 /atom/movable/screen/alert/status_effect/debuff/chilled
@@ -432,11 +446,6 @@
 	duration = 85
 	alert_type = null
 
-/datum/status_effect/eorapacify/on_creation(mob/living/new_owner, set_duration)
-	if(isnum(set_duration))
-		duration = set_duration
-	. = ..()
-
 /datum/status_effect/eorapacify/on_apply()
 	ADD_TRAIT(owner, TRAIT_PACIFISM, "[type]")
 	return ..()
@@ -455,3 +464,78 @@
 	name = "Eoran Wine"
 	desc = span_warning("I am intoxicated from ambromsia not meant for mortal mouths.\n")
 	icon_state = "drunk"
+
+/datum/status_effect/debuff/mesmerised
+	id = "mesmerised"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/mesmerised
+	effectedstats = list(STATKEY_STR = -2, STATKEY_LCK = -2, STATKEY_PER = -2, STATKEY_SPD = -2) //
+	duration = 30 SECONDS
+
+/atom/movable/screen/alert/status_effect/debuff/mesmerised
+	name = "Mesmerised"
+	desc = span_warning("Their beauty is otherwordly..")
+	icon_state = "acid"
+
+
+/datum/status_effect/debuff/call_to_slaughter
+	id = "call_to_slaughter"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/call_to_slaughter
+	effectedstats = list("endurance" = -2, "constitution" = -2)
+	duration = 2.5 MINUTES
+
+/atom/movable/screen/alert/status_effect/debuff/call_to_slaughter
+	name = "Call to Slaughter"
+	desc = "A putrid rotting scent fills your nose as Graggar's call for slaughter rattles you to your core.."
+	icon_state = "call_to_slaughter"
+
+/datum/status_effect/debuff/baothadruqks
+	id = "baothadruqks"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/baothadruqks
+	effectedstats = list(STATKEY_PER = -2, STATKEY_SPD = -1, STATKEY_LCK = -5)
+	duration = 20 SECONDS
+
+/atom/movable/screen/alert/status_effect/debuff/baothadruqks
+	name = "Baothan Dust"
+	desc = span_warning("Someone blew some powders at me..\n")
+	icon_state = "drunk"
+
+/datum/status_effect/debuff/lux_drained
+	id = "lux_drained"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/lux_drained
+	effectedstats = list(STATKEY_LCK = -3, STATKEY_CON = -1, STATKEY_END = -1, STATKEY_INT = -1, STATKEY_PER = -1, STATKEY_SPD = -1, STATKEY_STR = -1)
+	duration = -1
+
+/atom/movable/screen/alert/status_effect/debuff/lux_drained
+	name = "Lux Drained"
+	desc = span_danger("I can't feel my soul, WHY CAN'T I FEEL MY SOUL!\n")
+
+//charflaw variant of lux_drained, used when the flaw is selected
+/datum/status_effect/debuff/flaw_lux_taken
+	id = "lux_taken"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/flaw_lux_taken
+	effectedstats = list(STATKEY_LCK = -3, STATKEY_CON = -1, STATKEY_END = -1, STATKEY_INT = -1, STATKEY_PER = -1, STATKEY_SPD = -1, STATKEY_STR = -1)
+	duration = -1
+
+/atom/movable/screen/alert/status_effect/debuff/flaw_lux_taken
+	name = "Lux Drained"
+	desc = span_danger("Oh- \n I don't... have it anymore.\n")
+
+
+/datum/status_effect/debuff/stinky_person
+	id = "stinky_person"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/stinky_person
+	duration = -1
+
+/atom/movable/screen/alert/status_effect/debuff/stinky_person
+	name = "Stinky Person"
+	desc = "<span class='warning'>I smell HORRID.</span>\n"
+	icon_state = "stinky" //TODO add icon
+
+/datum/status_effect/debuff/stinky_person/on_apply()
+	. = ..()
+	owner.AddComponent(/datum/component/rot/stinky_person)
+
+/datum/status_effect/debuff/stinky_person/on_remove()
+	. = ..()
+	var/datum/component/stinky_component = GetComponent(/datum/component/rot/stinky_person)
+	stinky_component?.RemoveComponent()

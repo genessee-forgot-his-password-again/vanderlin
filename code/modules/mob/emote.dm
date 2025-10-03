@@ -29,10 +29,12 @@
 	var/mute_time = 0
 	if(!length(key_emotes) || custom_param)
 		if(intentional)
+			#ifdef USES_PQ
 			if(client)
 				if(get_playerquality(client.ckey) <= -10)
 					to_chat(src, "<span class='warning'>Unrecognized emote.</span>")
 					return
+				#endif
 			var/list/custom_emote = GLOB.emote_list["me"]
 			for(var/datum/emote/P in custom_emote)
 				mute_time = P.mute_time
@@ -49,29 +51,11 @@
 	else
 		next_emote = world.time + mute_time
 
-/atom/movable/proc/send_speech_emote(message, range = 7, obj/source = src, bubble_type, list/spans, datum/language/message_language = null, message_mode)
-	var/rendered = compose_message(src, message_language, message, , spans, message_mode)
-	for(var/_AM in get_hearers_in_view(range, source))
-		var/atom/movable/AM = _AM
-		AM.Hear(rendered, src, message_language, message, , spans, message_mode)
-//	if(intentional)
-//		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
-/*
-/datum/emote/flip
-	key = "flip"
-	key_third_person = "flips"
-	restraint_check = TRUE
-	mob_type_allowed_typecache = list(/mob/living, /mob/dead/observer)
-	mob_type_ignore_stat_typecache = list(/mob/dead/observer)
+/atom/movable/proc/send_speech_emote(message, range = 7, obj/source = src, bubble_type, list/spans, datum/language/message_language = null, list/message_mods = list(), original_message)
+	var/rendered = compose_message(src, message_language, message, null, spans, message_mods)
+	for(var/atom/movable/AM as anything in get_hearers_in_view(range, source))
+		AM.Hear(rendered, src, message_language, message, null, spans, message_mods, original_message)
 
-/datum/emote/living/carbon/human/flip/can_run_emote(mob/user, status_check = TRUE , intentional)
-	return FALSE
-
-/datum/emote/flip/run_emote(mob/user, params, type_override, intentional)
-	. = ..()
-	if(.)
-		user.SpinAnimation(7,1)
-*/
 /datum/emote/spin
 	key = "spin"
 	key_third_person = "spins"

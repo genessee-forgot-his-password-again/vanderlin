@@ -27,7 +27,7 @@ LINEN BINS
 	. = ..()
 	AddElement(/datum/element/bed_tuckable, 0, 0, 0)
 
-/obj/item/bedsheet/attack_self(mob/living/user)
+/obj/item/bedsheet/attack_self(mob/living/user, params)
 	if(!user.CanReach(src))		//No telekenetic grabbing.
 		return
 	if(!user.resting)
@@ -39,9 +39,9 @@ LINEN BINS
 
 /obj/item/bedsheet/proc/coverup(mob/living/sleeper)
 	layer = ABOVE_MOB_LAYER
-	plane = -2
-	pixel_x = 0
-	pixel_y = 0
+	plane = GAME_PLANE_UPPER
+	pixel_x = base_pixel_x
+	pixel_y = base_pixel_y
 	to_chat(sleeper, "<span class='notice'>I cover myself with [src].</span>")
 	var/angle = sleeper.lying_prev
 	dir = angle2dir(angle + 180) // 180 flips it to be the same direction as the mob
@@ -77,41 +77,37 @@ LINEN BINS
 	UnregisterSignal(sleeper, COMSIG_PARENT_QDELETING)
 	signal_sleeper = null
 
-/obj/item/bedsheet/rogue/cloth
+/obj/item/bedsheet/cloth
 	desc = ""
 	icon = 'icons/roguetown/misc/structure.dmi'
 	icon_state = "cloth_bedsheet"
 	item_state = "cloth_bedsheet"
-	pixel_y = 5
 
-/obj/item/bedsheet/rogue/pelt
+/obj/item/bedsheet/pelt
 	desc = ""
 	icon = 'icons/roguetown/misc/structure.dmi'
 	icon_state = "pelt_bedsheet"
 	item_state = "pelt_bedsheet"
-	pixel_y = 5
 
-/obj/item/bedsheet/rogue/wool
+/obj/item/bedsheet/wool
 	desc = ""
 	icon = 'icons/roguetown/misc/structure.dmi'
 	icon_state = "wool_bedsheet"
 	item_state = "wool_bedsheet"
-	pixel_y = 5
 
-/obj/item/bedsheet/rogue/double_pelt
+/obj/item/bedsheet/double_pelt
 	desc = ""
 	icon = 'icons/roguetown/misc/structure.dmi'
 	icon_state = "double_pelt_bedsheet"
 	item_state = "double_pelt_bedsheet"
 
-/obj/item/bedsheet/rogue/fabric
+/obj/item/bedsheet/fabric
 	desc = ""
 	icon = 'icons/roguetown/misc/structure.dmi'
 	icon_state = "fabric_bedsheet"
 	item_state = "fabric_bedsheet"
-	pixel_y = 5
 
-/obj/item/bedsheet/rogue/fabric_double
+/obj/item/bedsheet/fabric_double
 	desc = ""
 	icon = 'icons/roguetown/misc/structure.dmi'
 	icon_state = "double_fabric_bedsheet"

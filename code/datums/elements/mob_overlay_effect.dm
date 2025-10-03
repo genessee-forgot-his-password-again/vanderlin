@@ -1,5 +1,6 @@
 ///The alpha mask used on mobs submerged in liquid turfs or standing on high ground
 #define MOB_MOVING_EFFECT_MASK "mob_moving_effect_mask"
+
 ///mob_overlay_effect component. adds and removes
 /datum/element/mob_overlay_effect
 	element_flags = ELEMENT_BESPOKE | ELEMENT_DETACH
@@ -11,59 +12,74 @@
 
 /datum/element/mob_overlay_effect/Attach(datum/target, _y_offset = 0, _mask_y_offset = 0, _effect_alpha = 0)
 	. = ..()
+	if(!ismovable(target))
+		return ELEMENT_INCOMPATIBLE
 	y_offset = _y_offset
 	mask_y_offset = _mask_y_offset
 	effect_alpha = _effect_alpha
 
-	RegisterSignal(get_turf(target), COMSIG_TURF_EXITED, TYPE_PROC_REF(/datum/element/mob_overlay_effect, on_remove), override = TRUE)
-	RegisterSignal(get_turf(target), COMSIG_TURF_ENTERED, TYPE_PROC_REF(/datum/element/mob_overlay_effect, on_add), override = TRUE)
-	RegisterSignal(target, COMSIG_MOB_OVERLAY_FORCE_REMOVE, TYPE_PROC_REF(/datum/element/mob_overlay_effect, on_remove), override = TRUE)
-	RegisterSignal(target, COMSIG_MOB_OVERLAY_FORCE_UPDATE, TYPE_PROC_REF(/datum/element/mob_overlay_effect, on_add), override = TRUE)
+	RegisterSignal(get_turf(target), COMSIG_TURF_EXITED, PROC_REF(on_remove), override = TRUE)
+	RegisterSignal(get_turf(target), COMSIG_TURF_ENTERED, PROC_REF(on_add), override = TRUE)
+	RegisterSignal(target, COMSIG_MOB_OVERLAY_FORCE_REMOVE, PROC_REF(on_remove), override = TRUE)
+	RegisterSignal(target, COMSIG_MOB_OVERLAY_FORCE_UPDATE, PROC_REF(on_add), override = TRUE)
+	RegisterSignal(target, COMSIG_PARENT_QDELETING, PROC_REF(remove_all), override = TRUE)
 
-/datum/element/mob_overlay_effect/Detach(datum/source, force)
+/datum/element/mob_overlay_effect/Detach(datum/source)
 	. = ..()
-	UnregisterSignal(get_turf(source), COMSIG_TURF_EXITED)
-	UnregisterSignal(get_turf(source), COMSIG_TURF_ENTERED)
-	UnregisterSignal(source, COMSIG_MOB_OVERLAY_FORCE_REMOVE)
-	UnregisterSignal(source, COMSIG_MOB_OVERLAY_FORCE_UPDATE)
+	UnregisterSignal(get_turf(source), list(
+		COMSIG_TURF_EXITED,
+		COMSIG_TURF_ENTERED,
+		COMSIG_MOB_OVERLAY_FORCE_REMOVE,
+		COMSIG_MOB_OVERLAY_FORCE_UPDATE,
+		COMSIG_PARENT_QDELETING,
+	))
 
-/datum/element/mob_overlay_effect/proc/on_remove(datum/source, datum/target)
+/datum/element/mob_overlay_effect/proc/on_remove(datum/source, atom/movable/target)
 	SIGNAL_HANDLER
-	var/mob/mob = target
-	if(mob.get_filter(MOB_MOVING_EFFECT_MASK))
-		animate(mob.get_filter(MOB_MOVING_EFFECT_MASK), y = -32, time = 0)
-		if(ismob(mob))
-			mob.update_vision_cone()
-		for(var/mob/living/carbon/human/human in view(mob, 7))
-			human.update_vision_cone()
+
+	if(istype(target, /mob/living/simple_animal/hostile/retaliate/astral_projection))
+		return
+	target.remove_filter(MOB_MOVING_EFFECT_MASK)
 	UnregisterSignal(target, COMSIG_ITEM_PICKUP)
 
-/datum/element/mob_overlay_effect/proc/on_add(datum/source, datum/target)
+/datum/element/mob_overlay_effect/proc/remove_all(datum/source)
 	SIGNAL_HANDLER
+
+	for(var/atom/movable/AM in get_turf(source))
+		on_remove(src, AM)
+
+/datum/element/mob_overlay_effect/proc/on_add(datum/source, atom/movable/target)
+	SIGNAL_HANDLER
+
+	if(istype(target, /mob/living/simple_animal/hostile/retaliate/astral_projection))
+		return
+	for(var/obj/structure/S in get_turf(target))
+		if(S.obj_flags & BLOCK_Z_OUT_DOWN)
+			return
+
+	if(isobj(target))
+		var/obj/obj = target
+		if(obj.obj_flags & IGNORE_SINK)
+			return
+
+	if(istype(target, /obj/structure/hotspring))
+		return
+
+	if(istype(target, /mob/living/simple_animal/hostile/retaliate/gator))
+		return
+
 	var/offset = 0
-	if(istype(target, /obj/structure/flora/roguetree))
-		offset = -24
+	if(istype(target, /obj/structure/flora/tree))
+		offset -= 24
 	if(isitem(target))
 		offset += 7
-	var/mob/arrived_mob = target
-	if(arrived_mob.get_filter(MOB_MOVING_EFFECT_MASK))
-		arrived_mob.remove_filter(MOB_MOVING_EFFECT_MASK)
-		arrived_mob.add_filter(MOB_MOVING_EFFECT_MASK, 1, alpha_mask_filter(0, mask_y_offset + offset, icon('icons/effects/icon_cutter.dmi', "icon_cutter"), null, MASK_INVERSE))
-		if(isliving(arrived_mob))
-			arrived_mob.update_vision_cone()
-		for(var/mob/living/carbon/human/human in view(arrived_mob, 7))
-			human.update_vision_cone()
-	else
-		if(effect_alpha)
-			arrived_mob.add_filter(MOB_MOVING_EFFECT_MASK, 1, alpha_mask_filter(0, mask_y_offset + offset, icon('icons/effects/icon_cutter.dmi', "icon_cutter"), null, MASK_INVERSE))
-			if(isliving(arrived_mob))
-				arrived_mob.update_vision_cone()
-			for(var/mob/living/carbon/human/human in view(arrived_mob, 7))
-				human.update_vision_cone()
-		RegisterSignal(arrived_mob, COMSIG_ITEM_PICKUP, TYPE_PROC_REF(/datum/element/mob_overlay_effect, on_remove_proxy), override = TRUE)
+	if(effect_alpha)
+		target.add_filter(MOB_MOVING_EFFECT_MASK, 1, alpha_mask_filter(0, mask_y_offset + offset, icon('icons/effects/icon_cutter.dmi', "icon_cutter"), null, MASK_INVERSE))
+	RegisterSignal(target, COMSIG_ITEM_PICKUP, PROC_REF(on_remove_proxy), override = TRUE)
 
 /datum/element/mob_overlay_effect/proc/on_remove_proxy(atom/source)
 	SIGNAL_HANDLER
+
 	on_remove(src, source)
 
 #undef MOB_MOVING_EFFECT_MASK

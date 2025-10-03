@@ -1,36 +1,36 @@
 
-/mob/living/carbon/human/Stun(amount, updating = TRUE, ignore_canstun = FALSE)
-	amount = dna.species.spec_stun(src,amount)
+/mob/living/carbon/human/Stun(amount, ignore_canstun = FALSE)
+	amount = dna?.species?.spec_stun(src, amount)
 	return ..()
 
-/mob/living/carbon/human/Knockdown(amount, updating = TRUE, ignore_canstun = FALSE)
-	amount = dna.species.spec_stun(src,amount)
+/mob/living/carbon/human/Knockdown(amount, ignore_canstun = FALSE)
+	amount = dna?.species?.spec_stun(src, amount)
 	return ..()
 
-/mob/living/carbon/human/Paralyze(amount, updating = TRUE, ignore_canstun = FALSE)
-	amount = dna.species.spec_stun(src, amount)
+/mob/living/carbon/human/Paralyze(amount, ignore_canstun = FALSE)
+	amount = dna?.species?.spec_stun(src, amount)
 	return ..()
 
-/mob/living/carbon/human/Immobilize(amount, updating = TRUE, ignore_canstun = FALSE)
-	amount = dna.species.spec_stun(src, amount)
+/mob/living/carbon/human/Immobilize(amount, ignore_canstun = FALSE)
+	amount = dna?.species?.spec_stun(src, amount)
 	return ..()
 
-/mob/living/carbon/human/Unconscious(amount, updating = 1, ignore_canstun = 0)
-	amount = dna?.species?.spec_stun(src,amount)
+/mob/living/carbon/human/Unconscious(amount, ignore_canstun = FALSE)
+	amount = dna?.species?.spec_stun(src, amount)
 	return ..()
 
-/mob/living/carbon/human/Sleeping(amount, updating = 1, ignore_canstun = 0)
+/mob/living/carbon/human/Sleeping(amount)
 	return ..()
 
 /mob/living/carbon/human/cure_husk(list/sources)
 	. = ..()
 	if(.)
-		update_hair()
+		update_body()
 
 /mob/living/carbon/human/become_husk(source)
 	. = ..()
 	if(.)
-		update_hair()
+		update_body()
 
 /mob/living/carbon/human/set_drugginess(amount)
 	..()
@@ -44,3 +44,18 @@
 //			grant_language(/datum/language/beachbum)
 //		else
 //			remove_language(/datum/language/beachbum)
+
+/mob/proc/adjust_hygiene(amount)
+	return
+
+/mob/living/carbon/human/adjust_hygiene(amount)
+	..()
+	hygiene = CLAMP(hygiene+amount, 0, HYGIENE_LEVEL_CLEAN)
+	update_smell()
+
+/mob/proc/set_hygiene(amount)
+	return
+
+/mob/living/carbon/human/set_hygiene(amount)
+	hygiene	 = CLAMP(amount, 0, HYGIENE_LEVEL_CLEAN)
+	update_smell()

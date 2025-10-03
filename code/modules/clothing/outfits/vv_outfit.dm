@@ -5,43 +5,51 @@
 	var/list/stored_access
 	var/update_id_name = FALSE //If the name of the human is same as the name on the id they're wearing we'll update provided id when equipping
 
-/datum/outfit/varedit/pre_equip(mob/living/carbon/human/H, visualsOnly)
+/datum/outfit/varedit/pre_equip(mob/living/carbon/human/H, visuals_only)
 	H.delete_equipment() //Applying VV to wrong objects is not reccomended.
 	. = ..()
 
-/datum/outfit/varedit/proc/set_equipement_by_slot(slot,item_path)
+/datum/outfit/varedit/proc/set_equipment_by_slot(slot, item_path)
 	switch(slot)
-		if(SLOT_PANTS)
-			uniform = item_path
-		if(SLOT_BACK)
-			back = item_path
-		if(SLOT_ARMOR)
-			suit = item_path
-		if(SLOT_BELT)
-			belt = item_path
-		if(SLOT_GLOVES)
-			gloves = item_path
-		if(SLOT_SHOES)
+		if(ITEM_SLOT_PANTS)
+			pants = item_path
+		if(ITEM_SLOT_SHIRT)
+			shirt = item_path
+		if(ITEM_SLOT_ARMOR)
+			armor = item_path
+		if(ITEM_SLOT_SHOES)
 			shoes = item_path
-		if(SLOT_HEAD)
-			head = item_path
-		if(SLOT_WEAR_MASK)
+		if(ITEM_SLOT_GLOVES)
+			gloves = item_path
+		if(ITEM_SLOT_RING)
+			ring = item_path
+		if(ITEM_SLOT_MASK)
 			mask = item_path
-		if(SLOT_NECK)
+		if(ITEM_SLOT_MOUTH)
+			mouth = item_path
+		if(ITEM_SLOT_HEAD)
+			head = item_path
+		if(ITEM_SLOT_CLOAK)
+			cloak = item_path
+		if(ITEM_SLOT_NECK)
 			neck = item_path
-		if(SLOT_HEAD)
-			ears = item_path
-		if(SLOT_GLASSES)
-			glasses = item_path
-		if(SLOT_RING)
-			id = item_path
-		if(SLOT_S_STORE)
-			suit_store = item_path
-		if(SLOT_L_STORE)
-			l_pocket = item_path
-		if(SLOT_R_STORE)
-			r_pocket = item_path
+		if(ITEM_SLOT_HANDS)
+			gloves = item_path
+		if(ITEM_SLOT_BELT)
+			belt = item_path
+		if(ITEM_SLOT_BACK_R)
+			backr = item_path
+		if(ITEM_SLOT_BACK_L)
+			backl = item_path
+		if(ITEM_SLOT_WRISTS)
+			wrists = item_path
+		if(ITEM_SLOT_BELT_L)
+			beltl = item_path
+		if(ITEM_SLOT_BELT_R)
+			beltr = item_path
 
+/datum/outfit/varedit/proc/add_scabbard(scabbard_path)
+	LAZYADD(scabbards, scabbard_path)
 
 /proc/collect_vv(obj/item/I)
 	//Temporary/Internal stuff, do not copy these.
@@ -69,14 +77,20 @@
 
 	//Copy equipment
 	var/list/result = list()
-	var/list/slots_to_check = list(SLOT_PANTS,SLOT_BACK,SLOT_ARMOR,SLOT_BELT,SLOT_GLOVES,SLOT_SHOES,SLOT_HEAD,SLOT_WEAR_MASK,SLOT_NECK,SLOT_HEAD,SLOT_GLASSES,SLOT_RING,SLOT_WRISTS,SLOT_S_STORE,SLOT_L_STORE,SLOT_R_STORE)
+	var/list/slots_to_check = DEFAULT_SLOT_PRIORITY
 	for(var/s in slots_to_check)
 		var/obj/item/I = get_item_by_slot(s)
 		var/vedits = collect_vv(I)
 		if(vedits)
 			result["[s]"] = vedits
 		if(istype(I))
-			O.set_equipement_by_slot(s,I.type)
+			if(isscabbard(I)) // dogshit.
+				O.add_scabbard(I.type)
+				var/obj/item/thing_inside_scabbard = I.contents[length(I.contents)]
+				if(istype(thing_inside_scabbard))
+					O.set_equipment_by_slot(s, thing_inside_scabbard.type)
+			else
+				O.set_equipment_by_slot(s,I.type)
 
 	//Copy hands
 	if(held_items.len >= 2) //Not in the mood to let outfits transfer amputees
@@ -93,26 +107,13 @@
 			if(vedits)
 				result["RHAND"] = vedits
 	O.vv_values = result
-	//Copy backpack contents if exist.
-	var/obj/item/backpack = get_item_by_slot(SLOT_BACK)
-	if(istype(backpack) && SEND_SIGNAL(backpack, COMSIG_CONTAINS_STORAGE))
-		var/list/bp_stuff = list()
-		var/list/typecounts = list()
-		SEND_SIGNAL(backpack, COMSIG_TRY_STORAGE_RETURN_INVENTORY, bp_stuff, FALSE)
-		for(var/obj/item/I in bp_stuff)
-			if(typecounts[I.type])
-				typecounts[I.type] += 1
-			else
-				typecounts[I.type] = 1
-		O.backpack_contents = typecounts
-		//TODO : Copy varedits from backpack stuff too.
 	//Copy to outfit cache
 	var/outfit_name = stripped_input(usr,"Enter the outfit name")
 	O.name = outfit_name
 	GLOB.custom_outfits += O
 	to_chat(usr,"Outfit registered, use select equipment to equip it.")
 
-/datum/outfit/varedit/post_equip(mob/living/carbon/human/H, visualsOnly)
+/datum/outfit/varedit/post_equip(mob/living/carbon/human/H, visuals_only)
 	. = ..()
 	//Apply VV
 	for(var/slot in vv_values)

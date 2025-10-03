@@ -5,6 +5,10 @@
 	hud_possible = list(ANTAG_HUD)
 	has_limbs = 1
 	held_items = list(null, null)
+	num_legs = 0 //Populated on init through list/bodyparts
+	usable_legs = 0 //Populated on init through list/bodyparts
+	num_hands = 0 //Populated on init through list/bodyparts
+	usable_hands = 0 //Populated on init through list/bodyparts
 	var/list/internal_organs		= list()	//List of /obj/item/organ in the mob. They don't go in the contents for some reason I don't want to know.
 	var/list/internal_organs_slot= list() //Same as above, but stores "slot ID" - "organ" pairs for easy access.
 	var/silent = FALSE 		//Can't talk. Value goes down every life proc. //NOTE TO FUTURE CODERS: DO NOT INITIALIZE NUMERICAL VARS AS NULL OR I WILL MURDER YOU.
@@ -16,10 +20,9 @@
 	var/disgust = 0
 
 //inventory slots
-	var/obj/item/back = null
 	var/obj/item/backr = null
 	var/obj/item/backl = null
-	var/obj/item/clothing/mask/wear_mask = null
+	var/obj/item/clothing/face/wear_mask = null
 	var/obj/item/mouth = null
 	var/obj/item/clothing/neck/wear_neck = null
 	var/obj/item/tank/internal = null
@@ -28,8 +31,6 @@
 
 	var/obj/item/clothing/gloves = null //only used by humans
 	var/obj/item/clothing/shoes = null //only used by humans.
-	var/obj/item/clothing/glasses/glasses = null //only used by humans.
-	var/obj/item/clothing/ears = null //only used by humans.
 
 
 	var/datum/dna/dna = null//Carbon
@@ -38,8 +39,7 @@
 	var/failed_last_breath = 0 //This is used to determine if the mob failed a breath. If they did fail a brath, they will attempt to breathe each tick, otherwise just once per 4 ticks.
 
 	var/co2overloadtime = null
-	var/temperature_resistance = T0C+75
-	var/obj/item/reagent_containers/food/snacks/meat/slab/type_of_meat = /obj/item/reagent_containers/food/snacks/meat/slab
+	var/obj/item/reagent_containers/food/snacks/meat/steak/type_of_meat = /obj/item/reagent_containers/food/snacks/meat/steak
 
 	var/gib_type = /obj/effect/decal/cleanable/blood/gibs
 
@@ -68,7 +68,12 @@
 	var/drunkenness = 0 //Overall drunkenness - check handle_alcohol() in life.dm for effects
 
 	var/tiredness = 0
-	// How much total vitae a vampire can absorb from this mob. Once expended, you can't gain more from them.
-	var/vitae_pool = 5000
-
 	var/next_smell = 0
+
+	var/advsetup = 0
+
+	var/datum/party/current_party
+	var/list/party_hud_elements = list()
+
+	/// if they get a mana pool
+	has_initial_mana_pool = TRUE

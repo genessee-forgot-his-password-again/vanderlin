@@ -6,6 +6,11 @@
 	var/time_string = time2text(world.timeofday, format)
 	return show_ds ? "[time_string]:[world.timeofday % 10]" : time_string
 
+/proc/time_stamp_metric()
+	var/date_portion = time2text(world.timeofday, "YYYY-MM-DD")
+	var/time_portion = time2text(world.timeofday, "hh:mm:ss")
+	return "[date_portion]T[time_portion]"
+
 /proc/gameTimestamp(format = "hh:mm:ss", wtime=null)
 	if(!wtime)
 		wtime = world.time
@@ -28,63 +33,29 @@ GLOBAL_VAR_INIT(dayspassed, FALSE)
 	var/oldtod = GLOB.tod
 	if(time >= SSnightshift.nightshift_start_time || time <= SSnightshift.nightshift_dawn_start)
 		GLOB.tod = "night"
-//		testing("set [tod]")
 	if(time > SSnightshift.nightshift_dawn_start && time <= SSnightshift.nightshift_day_start)
 		GLOB.tod = "dawn"
-//		testing("set [tod]")
 	if(time > SSnightshift.nightshift_day_start && time <= SSnightshift.nightshift_dusk_start)
 		GLOB.tod = "day"
-//		testing("set [tod]")
 	if(time > SSnightshift.nightshift_dusk_start && time <= SSnightshift.nightshift_start_time)
 		GLOB.tod = "dusk"
-//		testing("set [tod]")
 	if(GLOB.todoverride)
 		GLOB.tod = GLOB.todoverride
 	if((GLOB.tod != oldtod) && !GLOB.todoverride && (GLOB.dayspassed>1)) //weather check on tod changes
-		if(!GLOB.forecast)
-			switch(GLOB.tod)
-				if("dawn")
-					if(prob(25))
-						GLOB.forecast = "rain"
-				if("day")
-					if(prob(5))
-						GLOB.forecast = "rain"
-				if("dusk")
-					if(prob(33))
-						GLOB.forecast = "rain"
-				if("night")
-					if(prob(40))
-						GLOB.forecast = "rain"
-			if(GLOB.forecast == "rain")
-				var/foundnd
-				if(SSParticleWeather?.runningWeather?.target_trait == PARTICLEWEATHER_RAIN)
-					foundnd = TRUE
-				if(!foundnd)
-					SSParticleWeather?.run_weather(pick(/datum/particle_weather/rain_gentle, /datum/particle_weather/rain_storm))
-		else
-			switch(GLOB.forecast) //end the weather now
-				if("rain")
-					if(GLOB.tod == "day")
-						GLOB.forecast = "rainbow"
-					else
-						GLOB.forecast = null
-				if("rainbow")
-					GLOB.forecast = null
+		SSParticleWeather.check_forecast(GLOB.tod)
 
 	if(GLOB.tod != oldtod)
 		if(GLOB.tod == "dawn")
 			GLOB.dayspassed++
 			if(GLOB.dayspassed == 8)
 				GLOB.dayspassed = 1
+			SStreasury.distribute_estate_incomes()
 		for(var/mob/living/player in GLOB.mob_list)
 			if(player.stat != DEAD && player.client)
 				player.do_time_change()
 
 	if(GLOB.tod)
 		return GLOB.tod
-	else
-		testing("COULDNT FIND TOD [GLOB.tod] .. [time]")
-		return null
 
 /mob/living/proc/do_time_change()
 	if(!mind)
@@ -113,10 +84,8 @@ GLOBAL_VAR_INIT(dayspassed, FALSE)
 		mind.areas_entered += text_to_show
 		var/atom/movable/screen/area_text/T = new()
 		client.screen += T
-		T.maptext = {"<span style='vertical-align:top; text-align:center;
-					color: #7c5b10; font-size: 150%;
-					text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
-					font-family: "Nosfer", "Pterra";'>[text_to_show]</span>"}
+		T.maptext = MAPTEXT_CENTER({"<span style='vertical-align:top;color: #7c5b10; font-size: 150%;
+					text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;'>[text_to_show]</span>"})
 		T.maptext_width = 205
 		T.maptext_height = 209
 		T.maptext_x = 12

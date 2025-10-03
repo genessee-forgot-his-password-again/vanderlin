@@ -25,6 +25,8 @@
 	surgery_flags = SURGERY_BLOODY | SURGERY_INCISED | SURGERY_CLAMPED
 	skill_min = SKILL_LEVEL_APPRENTICE
 	skill_median = SKILL_LEVEL_APPRENTICE
+	success_sound = 'sound/surgery/retractor2.ogg'
+	failure_sound = 'sound/surgery/organ2.ogg'
 	/// How much brute damage we heal per completion
 	var/brutehealing = 0
 	/// How much burn damage we heal per completion
@@ -64,7 +66,7 @@
 	var/umsg = "You succeed in fixing some of [target]'s wounds" //no period, add initial space to "addons"
 	var/tmsg = "[user] fixes some of [target]'s wounds" //see above
 	var/healing_multiplier = 1
-	switch(user.mind?.get_skill_level(skill_used))
+	switch(user.get_skill_level(skill_used))
 		if(SKILL_LEVEL_JOURNEYMAN)
 			healing_multiplier = 1.1
 		if(SKILL_LEVEL_EXPERT)
@@ -87,7 +89,7 @@
 		urhealedamt_burn *= 0.55
 		umsg += " as best as you can while they have clothing on"
 		tmsg += " as best as they can while [target] has clothing on"
-	target.heal_bodypart_damage(urhealedamt_brute,urhealedamt_burn)
+	target.heal_bodypart_damage(urhealedamt_brute,urhealedamt_burn, required_status = BODYPART_ORGANIC)
 	display_results(user, target, "<span class='notice'>[umsg].</span>",
 		"[tmsg].",
 		"[tmsg].")
@@ -103,7 +105,7 @@
 		urdamageamt_brute += round((target.getBruteLoss()/(missinghpbonus*2)),0.1)
 		urdamageamt_burn += round((target.getFireLoss()/(missinghpbonus*2)),0.1)
 
-	target.take_bodypart_damage(urdamageamt_brute, urdamageamt_burn)
+	target.take_bodypart_damage(urdamageamt_brute, urdamageamt_burn, required_status = BODYPART_ORGANIC)
 	return TRUE
 
 /********************BRUTE STEPS********************/

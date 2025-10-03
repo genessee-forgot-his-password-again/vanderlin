@@ -10,14 +10,16 @@ GLOBAL_LIST_INIT_TYPED(blood_types, /datum/blood_type, init_subtypes_w_path_keys
 	/// The short-hand name of the blood type
 	var/name = "?"
 	///this is the color of our blood
-	var/color = LIGHT_COLOR_LIGHT_CYAN
+	var/color = COLOR_BLOOD
 	/// What blood types can this type receive from
 	/// Itself is always included in this list
 	var/list/compatible_types = list()
 	/// What reagent is represented by this blood type?
 	var/datum/reagent/reagent_type = /datum/reagent/blood
 	/// What chem is used to restore this blood type (outside of itself, of course)?
-	var/datum/reagent/restoration_chem = /datum/reagent/iron
+	var/datum/reagent/restoration_chem
+	///do we contain Lux?
+	var/contains_lux = FALSE
 
 /datum/blood_type/New()
 	. = ..()
@@ -38,10 +40,9 @@ GLOBAL_LIST_INIT_TYPED(blood_types, /datum/blood_type, init_subtypes_w_path_keys
 /datum/blood_type/proc/set_up_blood(obj/effect/decal/cleanable/blood/blood, new_splat = FALSE)
 	return
 
-
-
 /// A base type for all blood used by humans (NOT humanoids), for organization's sake
 /datum/blood_type/human
+	contains_lux = TRUE
 
 /datum/blood_type/human/get_blood_data(mob/living/carbon/sampled_from)
 	if(!istype(sampled_from) || isnull(sampled_from.dna))
@@ -72,6 +73,73 @@ GLOBAL_LIST_INIT_TYPED(blood_types, /datum/blood_type, init_subtypes_w_path_keys
 	compatible_types = list(
 		/datum/blood_type/human/o_minus,
 	)
+
+/datum/blood_type/human/tiefling
+	name = "Tiefling"
+	compatible_types = list(
+		/datum/blood_type/human/o_minus,
+	)
+	reagent_type = /datum/reagent/blood/tiefling
+	contains_lux = TRUE
+
+/datum/blood_type/human/kobold
+	name = "Kobold"
+	compatible_types = list(
+		/datum/blood_type/human/o_minus,
+	)
+	reagent_type = /datum/reagent/blood
+	contains_lux = FALSE
+
+/datum/blood_type/human/rakshari
+	name = "Rakshari"
+	compatible_types = list(
+		/datum/blood_type/human/o_minus,
+	)
+	reagent_type = /datum/reagent/blood
+	contains_lux = FALSE
+
+/datum/blood_type/human/demihuman
+	name = "Hollow-Kin"
+	compatible_types = list(
+		/datum/blood_type/human/o_minus,
+	)
+	reagent_type = /datum/reagent/blood
+	contains_lux = FALSE
+
+/datum/blood_type/human/horc
+	name = "Half-Orc"
+	compatible_types = list(
+		/datum/blood_type/human/o_minus,
+	)
+	reagent_type = /datum/reagent/blood
+	contains_lux = TRUE
+
+/datum/blood_type/human/delf
+	name = "Dark Elf"
+	compatible_types = list(
+		/datum/blood_type/human/o_minus,
+	)
+	reagent_type = /datum/reagent/blood
+	contains_lux = TRUE
+
+/datum/blood_type/human/cursed_elf
+	name = "Cursed Elf Blood"
+	compatible_types = list(
+		/datum/blood_type/human/o_minus,
+	)
+	reagent_type = /datum/reagent/blood
+	contains_lux = TRUE
+
+/datum/blood_type/human/triton
+	name = "Triton"
+	compatible_types = list(
+		/datum/blood_type/human/o_minus,
+	)
+	reagent_type = /datum/reagent/blood
+	contains_lux = TRUE
+
+/datum/blood_type/human/medicator
+	name = "Medicator"
 
 /datum/blood_type/human/a_plus
 	name = "A+"

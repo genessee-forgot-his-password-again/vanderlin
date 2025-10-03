@@ -39,6 +39,14 @@
 	config_entry_value = 1
 	integer = FALSE
 
+/datum/config_entry/number/damage_multiplier/fire // Damage multiplier to base tick damage of fire
+	config_entry_value = 1.5
+	integer = FALSE
+
+/datum/config_entry/number/per_tick/max_fire_damage // Max amount of tick damage for being on fire (Doesn't account for the base line) -- Found in fire_burning.dm, line 39. MAX is calculated as such: (2 * damage_multiplier/fire) + CLAMP(fire timer, 0, per_tick/max_fire_damage) -> Currently 28 damage.
+	config_entry_value = 25
+	integer = TRUE
+
 /datum/config_entry/number/minimal_access_threshold	//If the number of players is larger than this threshold, minimal access will be turned on.
 	min_val = 0
 
@@ -141,7 +149,7 @@
 
 /datum/config_entry/flag/show_game_type_odds	//if set this allows players to see the odds of each roundtype on the get revision screen
 
-/datum/config_entry/keyed_list/roundstart_races	//races you can play as from the get go.
+/datum/config_entry/keyed_list/roundstart_races	//species you can play as from the get go.
 	key_mode = KEY_MODE_TEXT
 	value_mode = VALUE_MODE_FLAG
 
@@ -275,10 +283,12 @@
 /datum/config_entry/number/max_law_len
 	config_entry_value = 1024
 
+/// TO BE DELETED
 /datum/config_entry/number/overflow_cap
 	config_entry_value = -1
 	min_val = -1
 
+/// TO BE DELETED
 /datum/config_entry/string/overflow_job
 	config_entry_value = "None"
 
@@ -343,3 +353,32 @@
 	min_val = 0
 
 /datum/config_entry/flag/dynamic_config_enabled
+
+/datum/config_entry/flag/cache_assets
+	default = TRUE
+
+/datum/config_entry/flag/smart_cache_assets
+	default = TRUE
+
+/datum/config_entry/flag/save_spritesheets
+	default = FALSE
+
+/datum/config_entry/flag/ruler_required
+	config_entry_value = TRUE
+	default = TRUE
+
+/datum/config_entry/flag/starvation_death
+	default = FALSE
+
+/datum/config_entry/number/starvation_damage_per_tick
+	config_entry_value = 0.1
+	min_val = 0.1
+	integer = FALSE
+
+/datum/config_entry/flag/dehydration_death
+	default = FALSE
+
+/datum/config_entry/number/dehydration_damage_per_tick
+	config_entry_value = 0.1
+	min_val = 0.1
+	integer = FALSE

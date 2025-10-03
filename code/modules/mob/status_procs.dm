@@ -84,14 +84,11 @@
 /mob/proc/update_eye_blur()
 	if(!client)
 		return
-	var/atom/movable/screen/plane_master/floor/OT = locate(/atom/movable/screen/plane_master/floor) in client.screen
-	var/atom/movable/screen/plane_master/game_world/GW = locate(/atom/movable/screen/plane_master/game_world) in client.screen
-	GW.backdrop(src)
-	OT.backdrop(src)
-	GW = locate(/atom/movable/screen/plane_master/game_world_fov_hidden) in client.screen
-	GW.backdrop(src)
-	GW = locate(/atom/movable/screen/plane_master/game_world_above) in client.screen
-	GW.backdrop(src)
+	var/atom/movable/plane_master_controller/game_plane_master_controller = hud_used.plane_master_controllers[PLANE_MASTERS_GAME]
+	if(eye_blurry)
+		game_plane_master_controller.add_filter("eye_blur", 1, gauss_blur_filter(clamp(eye_blurry * 0.1, 0.6, 3)))
+	else
+		game_plane_master_controller.remove_filter("eye_blur")
 
 ///Adjust the drugginess of a mob
 /mob/proc/adjust_drugginess(amount)
@@ -110,6 +107,6 @@
 	return
 
 ///Adjust the body temperature of a mob, with min/max settings
-/mob/proc/adjust_bodytemperature(amount,min_temp=0,max_temp=INFINITY)
+/mob/proc/adjust_bodytemperature(amount,min_temp=BODYTEMP_MIN_TEMPERATURE,max_temp=BODYTEMP_MAX_TEMPERATURE)
 	if(bodytemperature >= min_temp && bodytemperature <= max_temp)
 		bodytemperature = CLAMP(bodytemperature + amount,min_temp,max_temp)

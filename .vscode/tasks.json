@@ -1,0 +1,116 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "dreammaker",
+            "dme": "vanderlin.dme",
+            "problemMatcher": ["$dreammaker"],
+            "group": "build",
+            "label": "dm: build - vanderlin.dme"
+        },
+
+        {
+            "type": "process",
+            "command": "tools/build/build",
+            "args": ["-DLOWMEMORYMODE"],
+            "windows": {
+                "command": ".\\tools\\build\\build.bat",
+                "args": ["-DLOWMEMORYMODE"]
+            },
+            "options": {
+                "env": {
+                    "DM_EXE": "${config:dreammaker.byondPath}"
+                }
+            },
+            "problemMatcher": [
+                "$dreammaker",
+                "$tsc",
+                "$eslint-stylish"
+            ],
+            "group": {
+                "kind": "build"
+            },
+            "dependsOn": "dm: reparse",
+            "label": "Build All (low memory mode)"
+        },
+
+        {
+            "type": "process",
+            "command": "tools/build/build",
+            "args": ["-DLOWMEMORYMODE", "-DNO_DUNGEON"],
+            "windows": {
+                "command": ".\\tools\\build\\build.bat",
+                "args": ["-DLOWMEMORYMODE", "-DNO_DUNGEON"]
+            },
+            "options": {
+                "env": {
+                    "DM_EXE": "${config:dreammaker.byondPath}"
+                }
+            },
+            "problemMatcher": [
+                "$dreammaker",
+                "$tsc",
+                "$eslint-stylish"
+            ],
+            "group": {
+                "kind": "build"
+            },
+            "dependsOn": "dm: reparse",
+            "label": "Build All (low memory mode) no dungeons"
+        },
+        {
+            "type": "process",
+            "command": "tools/build/build",
+            "args": ["-DLOWMEMORYMODE", "-DNO_DUNGEON", "-DABSOLUTE_MINIMUM_MODE"],
+            "windows": {
+                "command": ".\\tools\\build\\build.bat",
+                "args": ["-DLOWMEMORYMODE", "-DNO_DUNGEON", "-DABSOLUTE_MINIMUM_MODE"]
+            },
+            "options": {
+                "env": {
+                    "DM_EXE": "${config:dreammaker.byondPath}"
+                }
+            },
+            "problemMatcher": [
+                "$dreammaker",
+                "$tsc",
+                "$eslint-stylish"
+            ],
+            "group": {
+                "kind": "build"
+            },
+            "dependsOn": "dm: reparse",
+            "label": "Build All (ABSOLUTE MINIMUM)"
+        },
+        {
+            "type": "process",
+            "command": "tools/build/build",
+            "args": ["-DUNIT_TESTS"],
+            "windows": {
+                "command": ".\\tools\\build\\build.bat",
+                "args": ["-DUNIT_TESTS"]
+            },
+            "options": {
+                "env": {
+                    "DM_EXE": "${config:dreammaker.byondPath}"
+                }
+            },
+            "problemMatcher": [
+                "$dreammaker",
+                "$tsc",
+                "$eslint-stylish"
+            ],
+            "group": {
+                "kind": "build"
+            },
+            "dependsOn": "dm: reparse",
+            "label": "Build All (unit tests)"
+        },
+
+        {
+            "command": "${command:dreammaker.reparse}",
+            "group": "build",
+            "label": "dm: reparse"
+        }
+    ]
+}

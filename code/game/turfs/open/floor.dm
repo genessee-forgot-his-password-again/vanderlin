@@ -3,13 +3,16 @@
 	//- you should use istype() if you want to find out whether a floor has a certain type
 	//- floor_tile is now a path, and not a tile obj
 	name = "floor"
+	desc = ""
 	icon = 'icons/turf/floors.dmi'
 	baseturfs = /turf/open/transparent/openspace
-
 	footstep = FOOTSTEP_FLOOR
 	barefootstep = FOOTSTEP_HARD_BAREFOOT
 	clawfootstep = FOOTSTEP_HARD_CLAW
 	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
+	attacked_sound = list('sound/combat/hits/onwood/woodimpact (1).ogg','sound/combat/hits/onwood/woodimpact (2).ogg')
+
+	smoothing_groups = SMOOTH_GROUP_OPEN_FLOOR
 
 	var/icon_regular_floor = "floor" //used to remember what icon the tile should have by default
 	var/icon_plating = "plating"
@@ -20,10 +23,10 @@
 	var/list/broken_states
 	var/list/burnt_states
 
-	tiled_dirt = TRUE
+	spread_chance = 0.85
+	burn_power = 22.5
 
 /turf/open/floor/Initialize(mapload)
-
 	if (!broken_states)
 		broken_states = typelist("broken_states", list("damaged1", "damaged2", "damaged3", "damaged4", "damaged5"))
 	else
@@ -98,19 +101,10 @@
 	return
 
 /turf/open/floor/proc/break_tile()
-	if(broken)
-		return
-	icon_state = pick(broken_states)
-	broken = 1
+	return
 
 /turf/open/floor/burn_tile()
-	if(broken || burnt)
-		return
-	if(burnt_states.len)
-		icon_state = pick(burnt_states)
-	else
-		icon_state = pick(broken_states)
-	burnt = 1
+	return
 
 /turf/open/floor/proc/make_plating()
 	return ScrapeAway(flags = CHANGETURF_INHERIT_AIR)
@@ -125,7 +119,7 @@
 	var/turf/open/floor/W = ..()
 	W.icon_regular_floor = old_icon
 	W.setDir(old_dir)
-	W.update_icon()
+	W.update_appearance()
 	return W
 
 /turf/open/floor/attackby(obj/item/C, mob/user, params)

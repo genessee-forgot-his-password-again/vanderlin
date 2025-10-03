@@ -25,9 +25,10 @@
 	if(!is_dead(target))
 		finish_action(controller, FALSE)
 	basic_mob.visible_message(span_danger("[basic_mob] starts to rip apart [target]!"))
-	if(do_after(basic_mob, 10 SECONDS, target = target, extra_checks = CALLBACK(src, PROC_REF(is_dead), target)))
+	if(do_after(basic_mob, 10 SECONDS, target, extra_checks = CALLBACK(src, PROC_REF(is_dead), target)))
 		if(!is_dead(target))
 			finish_action(controller, FALSE)
+		add_abstract_elastic_data(ELASCAT_COMBAT, ELASDATA_EATEN_BODIES, 1)
 		if(iscarbon(target))
 			var/mob/living/carbon/C = target
 			var/obj/item/bodypart/limb
@@ -51,9 +52,9 @@
 			if(basic_mob.attack_sound)
 				playsound(basic_mob, pick(basic_mob.attack_sound), 100, TRUE, -1)
 			target.gib()
-			if(istype(basic_mob, /mob/living/simple_animal/hostile/retaliate/rogue))
-				var/mob/living/simple_animal/hostile/retaliate/rogue/mob = basic_mob
-				mob.food = mob.food_max // yummy
+			if(istype(basic_mob, /mob/living/simple_animal/hostile/retaliate))
+				var/mob/living/simple_animal/hostile/retaliate/mob = basic_mob
+				SEND_SIGNAL(mob, COMSIG_MOB_FILL_HUNGER)
 			finish_action(controller, TRUE)
 	finish_action(controller, FALSE)
 
@@ -67,8 +68,9 @@
 	. = ..()
 	if(!succeeded)
 		controller.clear_blackboard_key(target_key)
-		if(controller.pawn.icon_state != "Trollso")
-			controller.pawn.icon_state = "Trollso"
+		if(istype(controller.pawn, /mob/living/simple_animal/hostile/retaliate/troll))
+			var/mob/living/simple_animal/hostile/retaliate/troll/mob = controller.pawn
+			mob.hide()
 
 /datum/ai_behavior/eat_dead_body/mimic/finish_action(datum/ai_controller/controller, succeeded, target_key, targetting_datum_key, hiding_location_key)
 	. = ..()

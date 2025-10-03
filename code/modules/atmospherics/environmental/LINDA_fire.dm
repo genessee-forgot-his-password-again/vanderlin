@@ -10,6 +10,9 @@
 
 
 /turf/open/hotspot_expose(added, maxstacks, soh)
+	if(liquids && liquids.liquid_group && !liquids.fire_state)
+		liquids.liquid_group.ignite_turf(src)
+
 	return
 
 //This is the icon for fire on turfs, also helps for nurturing small fires until they are full tile
@@ -24,17 +27,17 @@
 	blend_mode = BLEND_ADD
 
 	var/volume = 125
-	var/temperature = 100+T0C
+	var/temperature = 1000+T0C
 	var/just_spawned = TRUE
 	var/bypassing = FALSE
 	var/visual_update_tick = 0
-	var/life = 20
+	var/life = 35
 	var/firelevel = 1 //RTD new firehotspot mechanics
 
-//obj/effect/hotspot/extinguish() handled in other_reagents
-//	if(isturf(loc))
-//		new /obj/effect/temp_visual/small_smoke(src.loc)
-//	qdel(src)
+/obj/effect/hotspot/extinguish()
+	if(isturf(loc))
+		new /obj/effect/temp_visual/small_smoke(src.loc)
+	qdel(src)
 
 /obj/effect/hotspot/Initialize(mapload, starting_volume, starting_temperature)
 	. = ..()
@@ -46,6 +49,19 @@
 	perform_exposure()
 	setDir(pick(GLOB.cardinals))
 	air_update_turf()
+	GLOB.weather_act_upon_list |= src
+	GLOB.active_fires |= src
+
+/obj/effect/hotspot/Destroy()
+	. = ..()
+	GLOB.weather_act_upon_list -= src
+	GLOB.active_fires -= src
+
+/obj/effect/hotspot/weather_act_on(weather_trait, severity)
+	if(weather_trait != PARTICLEWEATHER_RAIN)
+		return
+	life -= 2 * (severity / 5)
+
 
 /obj/effect/hotspot/proc/perform_exposure()
 
@@ -55,10 +71,9 @@
 
 	location.active_hotspot = src
 
-	for(var/A in location)
-		var/atom/AT = A
+	for(var/atom/AT as anything in location)
 		if(!QDELETED(AT) && AT != src) // It's possible that the item is deleted in temperature_expose
-			AT.fire_act(3, 20)
+			AT.fire_act(1, 20)
 	return
 
 /obj/effect/hotspot/proc/gauss_lerp(x, x1, x2)
@@ -125,12 +140,9 @@
 		just_spawned = FALSE
 		return
 
-	var/turf/open/location = loc
-	if(!istype(location))
+	if(!isturf(loc))
 		qdel(src)
 		return
-
-	icon_state = "[rand(1,3)]"
 
 	life--
 
@@ -157,11 +169,86 @@
 	..()
 	if(isliving(AM))
 		var/mob/living/L = AM
-		L.fire_act(3, 20)
+		L.fire_act(1, 20)
 
 /obj/effect/dummy/lighting_obj/moblight/fire
 	name = "fire"
 	light_color = LIGHT_COLOR_FIRE
 	light_outer_range =  LIGHT_RANGE_FIRE
+
+/obj/effect/hotspot/proc/handle_automatic_spread()
+	///maybe add sound probably not
+
+	for(var/obj/object in loc)
+		if(QDELETED(object) || isnull(object))
+			continue
+		var/can_break = TRUE
+		if((object.resistance_flags & INDESTRUCTIBLE) || (object.resistance_flags & FIRE_PROOF))
+			can_break = FALSE
+		if(!can_break)
+			continue
+		object.fire_act(temperature * firelevel * 0.1)
+
+	var/burn_power = 0
+	var/modifier = 1
+	if(SSParticleWeather.runningWeather?.target_trait == PARTICLEWEATHER_RAIN) //this does apply to indoor turfs but w/e
+		var/turf/floor= get_turf(src)
+		if(!floor?.outdoor_effect?.weatherproof)
+			modifier = 0.5
+	if(isturf(get_turf(src)))
+		var/turf/floor= get_turf(src)
+		floor.burn_power = max(0, floor.burn_power - (1 * firelevel))
+		if(floor.burn_power == 0)
+			extinguish()
+		burn_power += floor.burn_power
+		if(prob(floor.spread_chance * modifier))
+			change_firelevel(min(3, firelevel+1))
+
+		if(burn_power)
+			for(var/turf/ranged_floor in range(1, src))
+				var/falling = FALSE
+				if(isopenspace(ranged_floor))
+					falling = TRUE
+					var/sanity = 0
+					while(isopenspace(ranged_floor) && sanity < 10)
+						sanity++
+						ranged_floor = GET_TURF_BELOW(ranged_floor)
+
+				if(ranged_floor == src || (!ranged_floor.burn_power && !falling))
+					continue
+				var/obj/effect/hotspot/located_fire = locate() in ranged_floor
+				if(prob(ranged_floor.spread_chance * modifier) && !located_fire)
+					if(ranged_floor.liquids)
+						ranged_floor.fire_act(temperature * firelevel)
+						continue
+					new /obj/effect/hotspot(ranged_floor, volume, temperature)
+
+					for(var/obj/structure/stairs/stair in ranged_floor)
+
+						var/turf/spreader_level = GET_TURF_ABOVE(get_step(ranged_floor, stair.dir))
+						for(var/obj/structure/stairs/upper_stair in spreader_level)
+							new /obj/effect/hotspot(spreader_level, volume, temperature)
+							break
+
+						spreader_level = GET_TURF_BELOW(get_step(ranged_floor, REVERSE_DIR(stair.dir)))
+						for(var/obj/structure/stairs/lower_stair in spreader_level)
+							new /obj/effect/hotspot(spreader_level, volume, temperature)
+							break
+
+					for(var/obj/structure/ladder/ladder in ranged_floor)
+						var/turf/spreader_level = GET_TURF_ABOVE(ranged_floor)
+						for(var/obj/structure/ladder/upper_stair in spreader_level)
+							new /obj/effect/hotspot(spreader_level, volume, temperature)
+							break
+
+						spreader_level = GET_TURF_BELOW(ranged_floor)
+						for(var/obj/structure/ladder/lower_stair in spreader_level)
+							new /obj/effect/hotspot(spreader_level, volume, temperature)
+							break
+
+
+/obj/effect/hotspot/proc/change_firelevel(level = 1)
+	firelevel = level
+	icon_state = "[firelevel]"
 
 #undef INSUFFICIENT

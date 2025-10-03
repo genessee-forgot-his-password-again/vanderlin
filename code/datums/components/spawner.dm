@@ -1,13 +1,11 @@
 /datum/component/spawner
-	var/mob_types = list(/mob/living/simple_animal/hostile/rogue/werewolf)
+	var/mob_types = list(/mob/living/simple_animal/hostile/werewolf)
 	var/spawn_time = 300 //30 seconds default
 	var/list/spawned_mobs = list()
 	var/spawn_delay = 0
 	var/max_mobs = 5
 	var/spawn_text = "emerges from"
 	var/list/faction = list("mining")
-
-
 
 /datum/component/spawner/Initialize(_mob_types, _spawn_time, _faction, _spawn_text, _max_mobs)
 	if(_spawn_time)

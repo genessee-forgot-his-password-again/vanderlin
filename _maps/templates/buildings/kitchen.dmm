@@ -1,0 +1,164 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"m" = (
+/obj/effect/foodspot,
+/turf/open/floor/herringbone,
+/area/template_noop)
+"p" = (
+/obj/structure/chair/stool,
+/obj/effect/foodspot,
+/turf/open/floor/herringbone,
+/area/template_noop)
+"t" = (
+/obj/effect/building_node/kitchen,
+/turf/closed/wall/mineral/underbrick,
+/area/template_noop)
+"u" = (
+/obj/structure/lootable_structure/fish_barrel{
+	pixel_y = 13;
+	pixel_x = 7
+	},
+/obj/structure/lootable_structure/grain_barrel{
+	pixel_x = -7;
+	pixel_y = 9
+	},
+/obj/structure/lootable_structure/powder_sack{
+	pixel_y = 4;
+	pixel_x = 4
+	},
+/obj/machinery/light/fueled/wallfire/candle/skull,
+/turf/open/floor/herringbone,
+/area/template_noop)
+"w" = (
+/obj/structure/table/wood/plain_alt,
+/turf/open/floor/herringbone,
+/area/template_noop)
+"C" = (
+/obj/structure/fermentation_keg/random/water{
+	pixel_x = -4;
+	pixel_y = 9
+	},
+/obj/structure/fermentation_keg/random/water{
+	pixel_x = 8;
+	pixel_y = -5
+	},
+/turf/open/floor/herringbone,
+/area/template_noop)
+"D" = (
+/obj/effect/decal/cleanable/blood/gibs,
+/obj/structure/meathook,
+/turf/open/floor/herringbone,
+/area/template_noop)
+"O" = (
+/turf/open/floor/herringbone,
+/area/template_noop)
+"P" = (
+/obj/structure/fermentation_keg/distiller,
+/turf/open/floor/herringbone,
+/area/template_noop)
+"T" = (
+/turf/closed/wall/mineral/underbrick,
+/area/template_noop)
+"V" = (
+/obj/machinery/light/fueled/wallfire/candle/skull/l,
+/turf/open/floor/herringbone,
+/area/template_noop)
+"Y" = (
+/obj/machinery/light/fueled/hearth,
+/obj/item/reagent_containers/glass/bucket/pot/copper,
+/obj/structure/rack/shelf,
+/turf/open/floor/herringbone,
+/area/template_noop)
+"Z" = (
+/obj/structure/fermentation_keg/random/beer{
+	pixel_x = -6;
+	pixel_y = 14
+	},
+/obj/structure/fermentation_keg/random/beer{
+	pixel_x = 9;
+	pixel_y = 2
+	},
+/obj/machinery/light/fueled/wallfire/candle/skull,
+/turf/open/floor/herringbone,
+/area/template_noop)
+
+(1,1,1) = {"
+T
+w
+w
+T
+u
+O
+O
+"}
+(2,1,1) = {"
+T
+Z
+O
+w
+p
+O
+O
+"}
+(3,1,1) = {"
+T
+Y
+O
+w
+m
+O
+O
+"}
+(4,1,1) = {"
+T
+P
+O
+w
+p
+O
+O
+"}
+(5,1,1) = {"
+T
+T
+O
+t
+O
+O
+O
+"}
+(6,1,1) = {"
+D
+V
+O
+p
+m
+p
+O
+"}
+(7,1,1) = {"
+O
+O
+O
+w
+w
+w
+O
+"}
+(8,1,1) = {"
+O
+O
+O
+w
+w
+w
+O
+"}
+(9,1,1) = {"
+C
+O
+O
+p
+m
+p
+O
+"}

@@ -1,45 +1,38 @@
-
-/mob/living/carbon/human
-	var/datum/charflaw/charflaw
-
 /mob/proc/sate_addiction()
 	return
 
 /mob/living/carbon/human/sate_addiction()
 	if(istype(charflaw, /datum/charflaw/addiction))
 		var/datum/charflaw/addiction/A = charflaw
-//		remove_stress(list(/datum/stressevent/vice1,/datum/stressevent/vice2,/datum/stressevent/vice3))
+		remove_stress(list(/datum/stress_event/vice1,/datum/stress_event/vice2,/datum/stress_event/vice3))
 		if(!A.sated)
 			to_chat(src, span_blue(A.sated_text))
 		A.sated = TRUE
-		A.time = initial(A.time) //reset roundstart sate offset to standard
-		A.next_sate = world.time + A.time
-		remove_stress(/datum/stressevent/vice)
+		A.next_sate = world.time + A.time + rand(-1 MINUTES, 1 MINUTES)
+		// remove_stress(/datum/stress_event/vice)
 		if(A.debuff)
 			remove_status_effect(A.debuff)
 
 /datum/charflaw/addiction
+	abstract_type = /datum/charflaw/addiction
 	var/next_sate = 0
 	var/sated = TRUE
 	var/time = 5 MINUTES
-//	var/debuff = /datum/status_effect/debuff/addiction
 	var/debuff = /datum/status_effect/debuff/addiction
 	var/needsate_text
 	var/sated_text = "That's much better..."
 	var/unsate_time
 
-
 /datum/charflaw/addiction/New()
 	..()
-	time = rand(6 MINUTES, 30 MINUTES)
-	next_sate = world.time + time
+	next_sate = world.time + rand(10 MINUTES, 20 MINUTES)
 
 /datum/charflaw/addiction/flaw_on_life(mob/user)
 	if(!ishuman(user))
 		return
-	if(user.mind.antag_datums)
-		for(var/datum/antagonist/D in user.mind.antag_datums)
-			if(istype(D, /datum/antagonist/vampirelord) || istype(D, /datum/antagonist/werewolf) || istype(D, /datum/antagonist/skeleton) || istype(D, /datum/antagonist/zombie))
+	if(user.mind?.antag_datums)
+		for(var/datum/antagonist/D in user.mind?.antag_datums)
+			if(istype(D, /datum/antagonist/vampire) || istype(D, /datum/antagonist/werewolf) || istype(D, /datum/antagonist/skeleton) || istype(D, /datum/antagonist/zombie))
 				return
 	var/mob/living/carbon/human/H = user
 	var/oldsated = sated
@@ -56,11 +49,17 @@
 
 		switch(world.time - unsate_time)
 			if(0 to 5 MINUTES)
-				V.add_stress(/datum/stressevent/vice1)
+				V.add_stress(/datum/stress_event/vice1)
+				V.remove_stress(/datum/stress_event/vice2)
+				V.remove_stress(/datum/stress_event/vice3)
 			if(5 MINUTES to 15 MINUTES)
-				V.add_stress(/datum/stressevent/vice2)
+				V.add_stress(/datum/stress_event/vice2)
+				V.remove_stress(/datum/stress_event/vice1)
+				V.remove_stress(/datum/stress_event/vice3)
 			if(15 MINUTES to INFINITY)
-				V.add_stress(/datum/stressevent/vice3)
+				V.add_stress(/datum/stress_event/vice3)
+				V.remove_stress(/datum/stress_event/vice1)
+				V.remove_stress(/datum/stress_event/vice2)
 		if(debuff)
 			H.apply_status_effect(debuff)
 
@@ -69,7 +68,7 @@
 /datum/status_effect/debuff/addiction
 	id = "addiction"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/addiction
-	effectedstats = list("endurance" = -1,"fortune" = -1)
+	effectedstats = list(STATKEY_END = -1, STATKEY_LCK = -1)
 	duration = 100
 
 
@@ -103,19 +102,12 @@
 	time = 30 MINUTES
 	needsate_text = "I need to STEAL something! I'll die if I don't!"
 
-/// PAIN FREEK
-
-/datum/charflaw/addiction/masochist
-	name = "Pain Freek"
-	desc = "They call me a freek, but it just feels so good..."
-	time = 25 MINUTES
-	needsate_text = "I need to feel good... punch me in the face!"
-
 /// LOVES SEEING VISCERA OR SOME SHIT
 
 /datum/charflaw/addiction/maniac // this will probably NOT be used as an actual flaw
 	name = "Maniac"
 	desc = "The worms call me the maniac... I just like seeing limbs fly and blood drip, is there something so BAD about that?"
+	random_exempt = TRUE
 	time = 40 MINUTES // we dont wanna contribute to fragging
 	needsate_text = "Where's all the blood?"
 

@@ -3,23 +3,23 @@
 /turf/closed/wall
 	name = ""
 	desc = ""
-	icon = 'icons/turf/walls/wall.dmi'
+	icon = 'icons/turf/walls.dmi'
 	icon_state = "wall"
 	explosion_block = 1
 
-	baseturfs = list(/turf/open/floor/rogue/dirt/road)
+	baseturfs = list(/turf/open/floor/dirt/road)
+
+	smoothing_groups = SMOOTH_GROUP_CLOSED_WALL
 
 	var/hardness = 40 //lower numbers are harder. Used to determine the probability of a hulk smashing through.
 	var/slicing_duration = 100  //default time taken to slice the wall
 	var/sheet_type = null
 	var/sheet_amount = 2
 
-	canSmoothWith = list(
-	/turf/closed/wall)
-	smooth = SMOOTH_TRUE
-
 	var/list/dent_decals
 
+/turf/closed/wall/get_explosion_resistance()
+	return (atom_integrity) / 15
 
 /turf/closed/wall/handle_ricochet(obj/projectile/P)			//A huge pile of shitcode!
 	var/turf/p_turf = get_turf(P)
@@ -32,9 +32,10 @@
 	P.setAngle(new_angle_s)
 	return TRUE
 
-/turf/closed/wall/turf_destruction()
-	visible_message("<span class='notice'>\The [src] crumbles!</span>")
-	dismantle_wall(1,0)
+/turf/closed/wall/atom_destruction(damage_flag)
+	. = ..()
+	visible_message(span_notice("\The [src] crumbles!"))
+	dismantle_wall(TRUE, FALSE)
 
 /turf/closed/wall/proc/dismantle_wall(devastated=0, explode=0)
 	playsound(src, 'sound/blank.ogg', 100, TRUE)
@@ -114,9 +115,8 @@
 		return
 
 	// Are you trying to break your instrument? Go ahead!
-	if(istype(W, /obj/item/rogue/instrument))
-		if(T.attacked_by(src, user))
-			user.do_attack_animation(src)
+	if(istype(W, /obj/item/instrument))
+		user.do_attack_animation(src, used_item = W, item_animation_override = ATTACK_ANIMATION_BONK)
 		visible_message("<span class='warning'>[user] slams \the [W] against \the [src]!</span>",
 						"<span class='warning'>I slam \the [W] against \the [src]!</span>",null ,COMBAT_MESSAGE_RANGE)
 		W.take_damage(10, BRUTE, "blunt")

@@ -50,7 +50,7 @@
 
 			var/female = FALSE
 
-			if(istype(obj_path, /obj/item/clothing/cloak) || istype(obj_path, /obj/item/clothing/shoes) || istype(obj_path, /obj/item/clothing/gloves) || istype(obj_path, /obj/item/clothing/under) ||istype(obj_path, /obj/item/clothing/suit))
+			if(istype(obj_path, /obj/item/clothing/cloak) || istype(obj_path, /obj/item/clothing/shoes) || istype(obj_path, /obj/item/clothing/gloves) || istype(obj_path, /obj/item/clothing/pants) ||istype(obj_path, /obj/item/clothing/shirt))
 				female = TRUE
 
 			var/match_message
@@ -62,7 +62,7 @@
 			var/failed = FALSE
 			if(worn_icon) //easiest to check since we override everything. this automatically includes downstream support.
 				if(!(icon_state in icon_states(worn_icon, 1)))
-					Fail("[item_path] using invalid ["icon_state"], \"[icon_state]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
+					TEST_FAIL("[item_path] using invalid ["icon_state"], \"[icon_state]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
 					failed = TRUE
 
 			if(female)
@@ -74,7 +74,7 @@
 
 				if(worn_icon) //easiest to check since we override everything. this automatically includes downstream support.
 					if(!(icon_state_f in icon_states(worn_icon, 1)))
-						Fail("[item_path] using invalid female ["icon_state"], \"[icon_state_f]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
+						TEST_FAIL("[item_path] using invalid female ["icon_state"], \"[icon_state_f]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
 						failed = TRUE
 
 				var/icon_state_f_boob = "[icon_state]_f_boob"
@@ -85,14 +85,14 @@
 
 				if(worn_icon) //easiest to check since we override everything. this automatically includes downstream support.
 					if(!(icon_state_f_boob in icon_states(worn_icon, 1)))
-						Fail("[item_path] using invalid female boob ["icon_state"] , \"[icon_state_f_boob]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
+						TEST_FAIL("[item_path] using invalid female boob ["icon_state"] , \"[icon_state_f_boob]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
 						failed = TRUE
 
 			for(var/datum/species/species  as anything in typesof(/datum/species))
 				if(!initial(species.custom_clothes))
 					continue
 
-				if(istype(obj_path, /obj/item/clothing/cloak) || istype(obj_path, /obj/item/clothing/shoes) || istype(obj_path, /obj/item/clothing/gloves) || istype(obj_path, /obj/item/clothing/under) ||istype(obj_path, /obj/item/clothing/suit))
+				if(istype(obj_path, /obj/item/clothing/cloak) || istype(obj_path, /obj/item/clothing/shoes) || istype(obj_path, /obj/item/clothing/gloves) || istype(obj_path, /obj/item/clothing/pants) ||istype(obj_path, /obj/item/clothing/shirt))
 					var/species_icon_state = "[icon_state]_[initial(species.id)]"
 
 					if(species_icon_state in possible_icon_states)
@@ -101,7 +101,7 @@
 
 					if(worn_icon) //easiest to check since we override everything. this automatically includes downstream support.
 						if(!(species_icon_state in icon_states(worn_icon, 1)))
-							Fail("[item_path] using invalid ["icon_state"] for [initial(species.id)], \"[species_icon_state]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
+							TEST_FAIL("[item_path] using invalid ["icon_state"] for [initial(species.id)], \"[species_icon_state]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
 							failed = TRUE
 
 					if(female)
@@ -113,7 +113,7 @@
 
 						if(worn_icon) //easiest to check since we override everything. this automatically includes downstream support.
 							if(!(species_icon_state_f in icon_states(worn_icon, 1)))
-								Fail("[item_path] using invalid female ["icon_state"] for [initial(species.id)], \"[species_icon_state_f]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
+								TEST_FAIL("[item_path] using invalid female ["icon_state"] for [initial(species.id)], \"[species_icon_state_f]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
 								failed = TRUE
 
 						var/species_icon_state_f_boob = "[icon_state]_f_[initial(species.id)]_boob"
@@ -124,11 +124,11 @@
 
 						if(worn_icon) //easiest to check since we override everything. this automatically includes downstream support.
 							if(!(species_icon_state_f_boob in icon_states(worn_icon, 1)))
-								Fail("[item_path] using invalid female boob ["icon_state"] for [initial(species.id)], \"[species_icon_state_f_boob]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
+								TEST_FAIL("[item_path] using invalid female boob ["icon_state"] for [initial(species.id)], \"[species_icon_state_f_boob]\" in mob_overlay_icon override file, '[worn_icon]'[match_message]")
 								failed = TRUE
 
 			if(failed)
 				continue
 
-			Fail("Missing icon_state for [obj_path] in '[icon]'.\n\ticon_state = \"[icon_state]\"[match_message]")
+			TEST_FAIL("Missing icon_state for [obj_path] in '[icon]'.\n\ticon_state = \"[icon_state]\"[match_message]")
 

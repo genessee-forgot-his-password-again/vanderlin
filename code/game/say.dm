@@ -26,24 +26,26 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	spans |= speech_span
 	if(!language)
 		language = get_default_language()
-	send_speech(message, 7, src, , spans, message_language=language)
+	send_speech(message, 7, src, null, spans, message_language = language)
 
-/atom/movable/proc/Hear(message, atom/movable/speaker, message_language, raw_message, radio_freq, list/spans, message_mode)
+/atom/movable/proc/Hear(message, atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, list/message_mods = list(), original_message)
 	SEND_SIGNAL(src, COMSIG_MOVABLE_HEAR, args)
 
 /atom/movable/proc/can_speak()
 	return TRUE
 
-/atom/movable/proc/send_speech(message, range = 7, obj/source = src, bubble_type, list/spans, datum/language/message_language = null, message_mode)
-	var/rendered = compose_message(src, message_language, message, , spans, message_mode)
-	for(var/_AM in get_hearers_in_view(range, source))
-		var/atom/movable/AM = _AM
-		AM.Hear(rendered, src, message_language, message, , spans, message_mode)
+/atom/movable/proc/send_speech(message, range = 7, obj/source = src, bubble_type, list/spans, datum/language/message_language = null, list/message_mods = list(), original_message)
+	var/rendered = compose_message(src, message_language, message, , spans, message_mods)
+	for(var/atom/movable/hearing_movable as anything in get_hearers_in_view(range, source))
+		if(!hearing_movable) // theoretically this should use as anything because it shouldnt be able to get nulls but there are reports that it does.
+			stack_trace("somehow theres a null returned from get_hearers_in_view() in send_speech!")
+			continue
+		hearing_movable.Hear(rendered, src, message_language, message, , spans, message_mods, original_message)
 
-/atom/movable/proc/compose_message(atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, message_mode, face_name = FALSE)
+/atom/movable/proc/compose_message(atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, list/message_mods = list(), face_name = FALSE)
 	//This proc uses text() because it is faster than appending strings. Thanks BYOND.
 	//Basic span
-	var/spanpart1 = "<span class='[radio_freq ? get_radio_span(radio_freq) : "say"]' target-ref='[REF(speaker)]' visible-flags='[get_admin_flags()]' data-options='[get_message_flags()]'>"
+	var/spanpart1 = "<span class='[radio_freq ? get_radio_span(radio_freq) : "say"]'>"
 	//Start name span.
 	var/spanpart2 = "<span class='name'>"
 	//Radio freq/name display
@@ -65,8 +67,10 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	var/endspanpart = "</span></span>"
 
 	//Message
-	var/messagepart = " <span class='message'>[lang_treat(speaker, message_language, raw_message, spans, message_mode)]</span></span>"
+	var/messagepart = "[lang_treat(speaker, message_language, raw_message, spans, message_mods)]"
+	messagepart = " <span class='message'>[messagepart]</span></span>"
 
+	//Arrow
 	var/arrowpart = ""
 
 	if(istype(src,/mob/living))
@@ -94,11 +98,12 @@ GLOBAL_LIST_INIT(freqtospan, list(
 				arrowpart += " ⇈"
 			if(speakturf.z < sourceturf.z)
 				arrowpart += " ⇊"
-			if(istype(speaker, /mob/living))
-				var/mob/living/L = speaker
-				namepart = "Unknown [(L.gender == FEMALE) ? "Woman" : "Man"]"
-			else
-				namepart = "Unknown"
+			if(!HAS_TRAIT(src, TRAIT_KEENEARS))
+				if(istype(speaker, /mob/living))
+					var/mob/living/L = speaker
+					namepart = "Unknown [(L.gender == FEMALE) ? "Woman" : "Man"]"
+				else
+					namepart = "Unknown"
 			spanpart1 = "<span class='smallyell'>"
 
 	var/languageicon = ""
@@ -114,10 +119,12 @@ GLOBAL_LIST_INIT(freqtospan, list(
 /atom/movable/proc/compose_job(atom/movable/speaker, message_langs, raw_message, radio_freq)
 	return ""
 
-/atom/movable/proc/say_mod(input, message_mode)
-	var/ending = copytext(input, length(input))
-	if(copytext(input, length(input) - 1) == "!!")
+/atom/movable/proc/say_mod(input, list/message_mods = list())
+	var/ending = copytext_char(input, -1)
+	if(copytext_char(input, -2) == "!!")
 		return verb_yell
+	else if(message_mods[MODE_SING])
+		return verb_sing
 	else if(ending == "?")
 		return verb_ask
 	else if(ending == "!")
@@ -125,42 +132,47 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	else
 		return verb_say
 
-/atom/movable/proc/say_quote(input, list/spans=list(speech_span), message_mode)
+/atom/movable/proc/say_quote(input, list/spans=list(speech_span), list/message_mods = list())
 	if(!input)
 		input = "..."
+
+	var/say_mod
+
+	var/mob/living/living_speaker = src
+	if(istype(living_speaker) && living_speaker.cmode)
+		say_mod = "—"
+	else
+		say_mod = say_mod(input, message_mods)
+		say_mod = "[say_mod]," //acknowledge the comma
 
 	if(copytext(input, length(input) - 1) == "!!")
 		spans |= SPAN_YELL
 
-	var/spanned = attach_spans(input, spans)
-	if(isliving(src))
-		var/mob/living/L = src
-		if(L.cmode)
-			return "— \"[spanned]\""
-	return "[say_mod(input, message_mode)], \"[spanned]\""
+	input = parsemarkdown_basic(input, limited = TRUE, barebones = TRUE)
+	/* all inputs should be fully figured out past this point */
 
-/atom/movable/proc/quoteless_say_quote(input, list/spans = list(speech_span), message_mode)
+	var/processed_input = attach_spans(input, spans)
+
+	var/processed_say_mod = attach_spans(say_mod, spans) // port custom emotes one day?
+
+	return "[processed_say_mod] \"[processed_input]\""
+
+/atom/movable/proc/quoteless_say_quote(input, list/spans = list(speech_span), list/message_mods = list()) //what the fuck.
+	input = parsemarkdown_basic(input, limited = TRUE, barebones = TRUE)
 	var/pos = findtext(input, "*")
-	return pos? copytext(input, pos + 1) : input
+	return pos ? copytext(input, pos + 1) : input
 
 /atom/movable/proc/check_language_hear(language)
 	return FALSE
 
-/atom/movable/proc/lang_treat(atom/movable/speaker, datum/language/language, raw_message, list/spans, message_mode, no_quote = FALSE)
+/atom/movable/proc/lang_treat(atom/movable/speaker, datum/language/language, raw_message, list/spans, list/message_mods = list(), no_quote = FALSE)
+	var/atom/movable/source = speaker.GetSource() || speaker //is the speaker virtual
 	if(has_language(language) || check_language_hear(language))
-		var/atom/movable/AM = speaker.GetSource()
-		if(AM) //Basically means "if the speaker is virtual"
-			return no_quote ? AM.quoteless_say_quote(raw_message, spans, message_mode) : AM.say_quote(raw_message, spans, message_mode)
-		else
-			return no_quote ? speaker.quoteless_say_quote(raw_message, spans, message_mode) : speaker.say_quote(raw_message, spans, message_mode)
+		return no_quote ? source.quoteless_say_quote(raw_message, spans, message_mods) : source.say_quote(raw_message, spans, message_mods)
 	else if(language)
-		var/atom/movable/AM = speaker.GetSource()
 		var/datum/language/D = GLOB.language_datum_instances[language]
-		raw_message = D.scramble(raw_message)
-		if(AM)
-			return no_quote ? AM.quoteless_say_quote(raw_message, spans, message_mode) : AM.say_quote(raw_message, spans, message_mode)
-		else
-			return no_quote ? speaker.quoteless_say_quote(raw_message, spans, message_mode) : speaker.say_quote(raw_message, spans, message_mode)
+		raw_message = D.scramble_sentence(raw_message, get_partially_understood_languages())
+		return no_quote ? source.quoteless_say_quote(raw_message, spans, message_mods) : source.say_quote(raw_message, spans, message_mods)
 	else
 		return "makes a strange sound."
 
@@ -188,12 +200,14 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	return output
 
 /proc/say_test(text)
-	var/ending = copytext(text, length(text))
-	if (ending == "?")
-		return "1"
-	if (ending == "!")
-		return "2"
-	return "0"
+	. = "0"
+	var/ending = copytext_char(text, -1)
+	if(copytext_char(text, -2) == "!!")
+		. = "3"
+	else if(ending == "!")
+		. = "2"
+	else if(ending == "?")
+		. = "1"
 
 /atom/movable/proc/GetVoice()
 	return "[src]"	//Returns the atom's name, prepended with 'The' if it's not a proper noun

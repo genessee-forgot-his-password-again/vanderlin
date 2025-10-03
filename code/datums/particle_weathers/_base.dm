@@ -66,9 +66,6 @@
 	/// description of weather
 	var/desc = "Heavy gusts of wind blanket the area, periodically knocking down anyone caught in the open."
 
-	//messages to send at different severities
-	var/list/weather_messages = list()
-
 	// Sounds to play at different severities - order from lowest to highest
 	var/list/weather_sounds = list()
 	var/list/indoor_weather_sounds = list()
@@ -123,13 +120,14 @@
 	//assoc list of mob=looping_sound
 	var/list/currentSounds = list()
 
-	//assoc list of mob=timestamp -> Next time we can send a message
-	var/list/messagedMobs = list()
-
 	var/last_message = ""
 
 	var/blend_type
 	var/filter_type
+	var/secondary_filter_type
+	var/forecast_tag
+
+	var/temperature_modification = 0
 
 	var/datum/weather_effect/weather_special_effect
 
@@ -143,10 +141,11 @@
 	return
 
 /datum/particle_weather/Destroy()
-	for(var/S in currentSounds)
-		var/datum/looping_sound/looping_sound = currentSounds[S]
-		looping_sound.stop()
-		qdel(looping_sound)
+	for(var/mob/living/M as anything in currentSounds)
+		var/datum/looping_sound/looping_sound = currentSounds[M]
+		if(istype(looping_sound))
+			looping_sound.stop()
+			qdel(looping_sound)
 	return ..()
 
 /**
@@ -164,7 +163,7 @@
 	addtimer(CALLBACK(src, PROC_REF(wind_down)), weather_duration)
 
 	if(particleEffectType)
-		SSParticleWeather.SetparticleEffect(new particleEffectType, blend_type, filter_type);
+		SSParticleWeather.SetparticleEffect(new particleEffectType, blend_type, filter_type, secondary_filter_type);
 
 	if(weather_special_effect)
 		SSParticleWeather.weather_special_effect = new weather_special_effect(src)
@@ -188,10 +187,6 @@
 
 	if(SSParticleWeather.particleEffect)
 		SSParticleWeather.particleEffect.animateSeverity(severityMod())
-
-	//Send new severity message if the message has changed
-	if(last_message != scale_range_pick(minSeverity, maxSeverity, severity, weather_messages))
-		messagedMobs = list()
 
 	//Tick on
 	if(severityStepsTaken < severitySteps)
@@ -224,6 +219,9 @@
  */
 /datum/particle_weather/proc/end()
 	running = FALSE
+	for(var/mob/living/M as anything in currentSounds)
+		if(M.client)
+			stop_weather_sound_effect(M)
 	SSParticleWeather.stopWeather()
 
 
@@ -234,10 +232,10 @@
 	var/turf/mob_turf = get_turf(mob_to_check)
 
 	if(!mob_turf)
-		return
+		return FALSE
 
 	if(!mob_turf.outdoor_effect || mob_turf.outdoor_effect.weatherproof)
-		return
+		return FALSE
 
 	return TRUE
 
@@ -267,11 +265,8 @@
 		weather_sound_effect(L)
 		if(can_weather_effect(L))
 			weather_act(L)
-			if(!messagedMobs[L] || world.time > messagedMobs[L])
-				weather_message(L) //Try not to spam
 	else
 		stop_weather_sound_effect(L)
-		messagedMobs[L] = 0 //resend a message next time they go outside
 
 //Overload with weather effects
 /datum/particle_weather/proc/weather_act(mob/living/L)
@@ -286,7 +281,7 @@
 		L.weather = FALSE
 
 
-//Not using looping_sounds properly. somebody smart should fix this
+//Not using looping_sounds properly. somebody smart should fix this //actually this kind of works, just done a bit backwards
 /datum/particle_weather/proc/weather_sound_effect(mob/living/L)
 	var/datum/looping_sound/currentSound = currentSounds[L]
 	if(currentSound)
@@ -308,14 +303,10 @@
 /datum/particle_weather/proc/stop_weather_sound_effect(mob/living/L)
 	var/datum/looping_sound/currentSound = currentSounds[L]
 	if(currentSound)
+		currentSounds[L] = null
 		currentSound.stop()
+		qdel(currentSound)
 
-
-/datum/particle_weather/proc/weather_message(mob/living/L)
-	messagedMobs[L] = world.time + 30 SECONDS //Chunky delay - this spams otherwise - Severity changes and going indoors resets this timer
-	last_message = scale_range_pick(minSeverity, maxSeverity, severity, weather_messages)
-	if(last_message)
-		to_chat(L, last_message)
 
 /datum/particle_weather/proc/can_weather_act_obj(obj/obj_to_check)
 	var/turf/obj_turf = get_turf(obj_to_check)
@@ -340,8 +331,20 @@
 	if(!holder)
 		return
 
-	var/weather_type = input("Choose a weather", "Weather")  as null|anything in sortList(subtypesof(/datum/particle_weather), /proc/cmp_typepaths_asc)
+	var/list/selection = list("End Current Weather")
+
+	selection += sortList(subtypesof(/datum/particle_weather))
+
+	var/weather_type = browser_input_list(src, "Choose a weather", "Weather", selection)
+
 	if(!weather_type)
+		return
+
+	if(weather_type == "End Current Weather")
+		log_admin("[key_name(usr)] Ended weather of type [SSParticleWeather.get_current_weather()].")
+		message_admins("[key_name_admin(usr)] Ended weather of type [SSParticleWeather.get_current_weather()].")
+		SSParticleWeather.end_current_weather()
+		SSblackbox.record_feedback("tally", "admin_verb", 1, "End Particle Weather")
 		return
 
 	SSParticleWeather.run_weather(weather_type, TRUE)
@@ -349,3 +352,12 @@
 	message_admins("[key_name_admin(usr)] started weather of type [weather_type].")
 	log_admin("[key_name(usr)] started weather of type [weather_type].")
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Run Particle Weather")
+
+
+/datum/weather_effect
+	var/name = "effect"
+	var/probability = 0
+	var/datum/particle_weather/initiator_ref
+
+/datum/weather_effect/proc/effect_affect(turf/target_turf)
+	return FALSE

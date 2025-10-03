@@ -1,6 +1,6 @@
 /obj/item/canvas
 	name = "canvas"
-	desc = "A perfect place to paint"
+	desc = "A perfect place to capture Psydonia through art."
 
 	icon = 'icons/paint_supplies/canvas_32.dmi'
 	icon_state = "canvas"
@@ -49,36 +49,38 @@
 	RegisterSignal(src, COMSIG_MOVABLE_TURF_ENTERED, PROC_REF(remove_showers))
 
 /obj/item/canvas/Destroy()
-	. = ..()
-	for(var/mob/mob in showers)
+	for(var/mob/mob as anything in showers)
 		remove_shower(mob)
+	QDEL_NULL(used_canvas)
+	return ..()
 
 /obj/item/canvas/attack_hand(mob/user)
 	. = ..()
-	if(user.cmode)
-		if(anchored)
-			to_chat(user, "You start unmounting [src].")
-			if(!do_after(user, 3 SECONDS, target = src))
-				return
-			anchored = FALSE
-			to_chat(user, "You unmount [src].")
+	if(anchored)
+		to_chat(user, "I start unmounting [src]...")
+		if(!do_after(user, 3 SECONDS, src))
+			return
+		anchored = FALSE
+		to_chat(user, "I unmount [src].")
+		user.put_in_hands(src)
 
-/obj/item/canvas/attack_right(mob/user)
+/obj/item/canvas/attack_hand_secondary(mob/user, params)
 	. = ..()
-	if(user.get_active_held_item())
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(user in showers)
-		return
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	user?.client.screen += used_canvas
 	showers |= user
 	RegisterSignal(user, COMSIG_MOVABLE_TURF_ENTERED, PROC_REF(remove_shower))
+	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/item/canvas/attackby(obj/item/I, mob/living/user, params)
 	. = ..()
 	if(istype(I, /obj/item/natural/feather))
-		author = input("Who's the author of this painting?")
+		author = browser_input_text(user, "Who's the author of this painting?", "NAME YOURSELF", max_length = MAX_NAME_LEN)
 		author_ckey = user.ckey
-		title = input("What's the title of this painting.")
+		title = browser_input_text(user, "What's the title of this painting?", "NAME YOUR MASTERPIECE", max_length = MAX_CHARTER_LEN)
 		if(title)
 			name = title
 		if(author)
@@ -98,17 +100,19 @@
 	for(var/mob/mob in showers)
 		remove_shower(mob)
 
-/obj/item/canvas/attack_turf(turf/T, mob/living/user)
-	. = ..()
-	to_chat(user, "You start mounting [src] to [T].")
-	if(!do_after(user, 3 SECONDS, target = T))
+/obj/item/canvas/attack_atom(atom/attacked_atom, mob/living/user)
+	if(!isclosedturf(attacked_atom))
+		return ..()
+
+	. = TRUE
+	to_chat(user, "I start mounting [src] to [attacked_atom]...")
+	if(!do_after(user, 3 SECONDS, attacked_atom))
 		return
 	user.dropItemToGround(src)
-	forceMove(T)
-	pixel_x = 0
-	pixel_y = 0
+	forceMove(attacked_atom)
+	pixel_x = base_pixel_x
+	pixel_y = base_pixel_y
 	anchored = TRUE
-	to_chat(user, "You mount [src] to [T]")
 
 /obj/item/canvas/proc/remove_shower(mob/source)
 	showers -= source
@@ -165,6 +169,10 @@
 	icon = draw
 	underlays += base
 
+/atom/movable/screen/canvas/Destroy()
+	host = null
+	return ..()
+
 /atom/movable/screen/canvas/Click(location, control, params)
 	. = ..()
 	if(host.item_flags & IN_STORAGE)
@@ -175,15 +183,15 @@
 	var/current_color = brush.current_color
 	if(!current_color)
 		return
-	var/list/param_list = params2list(params)
 
-	var/x = text2num(param_list["icon-x"])
-	var/y = text2num(param_list["icon-y"])
+	var/list/modifiers = params2list(params)
+	var/x = text2num(LAZYACCESS(modifiers, ICON_X))
+	var/y = text2num(LAZYACCESS(modifiers, ICON_Y))
 
 	y = min(FLOOR(y / host.canvas_divider_y, 1), host.canvas_size_y-1)
 	x = min(FLOOR(x / host.canvas_divider_x, 1), host.canvas_size_x-1)
 
-	if(param_list["right"])
+	if(LAZYACCESS(modifiers, RIGHT_CLICK))
 		var/original_color = base_icon.GetPixel(x, y)
 		current_color = original_color
 		modified_areas -= "[x][y]"
