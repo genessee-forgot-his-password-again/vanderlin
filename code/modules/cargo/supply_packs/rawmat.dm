@@ -158,7 +158,7 @@
 	name = "Copper Ore (1)"
 	cost = 10
 	contains = list(
-		/obj/item/rogueore/copper
+		/obj/item/ore/copper
 	)
 
 /datum/supply_pack/rawmats/copper_barone
@@ -172,7 +172,7 @@
 	name = "Tin Ore (1)"
 	cost = 15
 	contains = list(
-		/obj/item/rogueore/tin,
+		/obj/item/ore/tin,
 	)
 
 /datum/supply_pack/rawmats/tin_barone
@@ -193,7 +193,7 @@
 	name = "Iron Ore (1)"
 	cost = 20
 	contains = list(
-		/obj/item/rogueore/iron
+		/obj/item/ore/iron
 	)
 
 /datum/supply_pack/rawmats/iron_barone
@@ -214,7 +214,7 @@
 	name = "Silver Ore (1)"
 	cost = 50
 	contains = list(
-		/obj/item/rogueore/silver
+		/obj/item/ore/silver
 	)
 
 /datum/supply_pack/rawmats/silver_barone
@@ -228,7 +228,7 @@
 	name = "Gold Ore (1)"
 	cost = 80
 	contains = list(
-		/obj/item/rogueore/gold
+		/obj/item/ore/gold
 	)
 
 /datum/supply_pack/rawmats/gold_barone
@@ -242,7 +242,7 @@
 	name = "Coal (1)"
 	cost = 8
 	contains = list(
-		/obj/item/rogueore/coal
+		/obj/item/ore/coal
 	)
 
 /datum/supply_pack/rawmats/fiberone
@@ -284,7 +284,7 @@
 	name = "Fertillizing Ash (1)"
 	cost = 3
 	contains = list(
-		/obj/item/ash
+		/obj/item/fertilizer/ash
 	)
 
 /datum/supply_pack/rawmats/sinewone
