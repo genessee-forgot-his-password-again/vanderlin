@@ -1959,6 +1959,7 @@
 #include "code\modules\cargo\supply_packs\_pack.dm"
 #include "code\modules\cargo\supply_packs\apparel.dm"
 #include "code\modules\cargo\supply_packs\armor.dm"
+#include "code\modules\cargo\supply_packs\cheat.dm"
 #include "code\modules\cargo\supply_packs\drinks.dm"
 #include "code\modules\cargo\supply_packs\food.dm"
 #include "code\modules\cargo\supply_packs\instruments.dm"

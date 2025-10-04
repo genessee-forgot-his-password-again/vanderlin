@@ -85,3 +85,43 @@
 	name = "Valmora Blue Wine"
 	cost = 305
 	contains = /obj/item/reagent_containers/glass/bottle/elfblue
+
+/datum/supply_pack/food/drinks/healthpotsmall
+	name = "Phial of Life"
+	cost = 9
+	contains = /obj/item/reagent_containers/glass/bottle/vial/healthpot
+
+/datum/supply_pack/food/drinks/stronghealthpotsmall
+	name = "Phial of Bountiful Life"
+	cost = 18
+	contains = /obj/item/reagent_containers/glass/bottle/vial/stronghealthpot
+
+/datum/supply_pack/food/drinks/healthpot
+	name = "Bottle of Life"
+	cost = 14
+	contains = /obj/item/reagent_containers/glass/bottle/healthpot
+
+/datum/supply_pack/food/drinks/stronghealthpot
+	name = "Bottle of Bountiful Life"
+	cost = 28
+	contains = /obj/item/reagent_containers/glass/bottle/stronghealthpot
+
+/datum/supply_pack/food/drinks/manapot
+	name = "Bottle of Magick"
+	cost = 14
+	contains = /obj/item/reagent_containers/glass/bottle/manapot
+
+/datum/supply_pack/food/drinks/strongmanapot
+	name = "Bottle of Bountiful Magick"
+	cost = 28
+	contains = /obj/item/reagent_containers/glass/bottle/strongmanapot
+
+/datum/supply_pack/food/drinks/antidote
+	name = "Phial of Antitoxin"
+	cost = 9
+	contains = /obj/item/reagent_containers/glass/bottle/vial/antidote
+
+/datum/supply_pack/food/drinks/diseasecure
+	name = "Bottle of Plague's End"
+	cost = 28
+	contains = /obj/item/reagent_containers/glass/bottle/diseasecure
