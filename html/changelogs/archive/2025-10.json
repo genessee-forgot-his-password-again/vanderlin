@@ -90,5 +90,15 @@
                 "rscadd": "Added half-drow, drow, half-orcs, and tieflings to Rejected Royal Wretch"
             }
         ]
+    },
+    "2025-10-04": {
+        "wgtjunior743": [
+            {
+                "bugfix": "Minotaur sometimes attacking as a corpse."
+            },
+            {
+                "rscadd": "Minotaur axe variant now drops a double head greataxe upon death."
+            }
+        ]
     }
 }
