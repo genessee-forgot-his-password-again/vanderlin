@@ -34,10 +34,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 5
 	H.base_intelligence = 3
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axesmaces, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE)
 
 	belt = /obj/item/storage/belt/leather/rope
 	shirt = /obj/item/clothing/shirt/undershirt/colored/red
@@ -73,10 +73,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 8
 	H.base_intelligence = 4
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axesmaces, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
 
 	gloves = /obj/item/clothing/gloves/leather
 	pants = /obj/item/clothing/pants/tights/colored/black
@@ -115,10 +115,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 10
 	H.base_intelligence = 4
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 3, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axesmaces, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 
 	shirt = /obj/item/clothing/shirt/undershirt/colored/red
 	gloves = /obj/item/clothing/gloves/chain/iron
@@ -161,10 +161,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 11
 	H.base_intelligence = 5
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/axesmaces, 4, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axesmaces, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
 
 	if(prob(75))
 		shirt = /obj/item/clothing/armor/chainmail
@@ -206,10 +206,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 5
 	H.base_intelligence = 3
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE)
 
 	belt = /obj/item/storage/belt/leather/rope
 	shirt = /obj/item/clothing/shirt/undershirt/colored/red
@@ -245,10 +245,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 8
 	H.base_intelligence = 4
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
 
 	gloves = /obj/item/clothing/gloves/leather
 	pants = /obj/item/clothing/pants/tights/colored/black
@@ -285,10 +285,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 10
 	H.base_intelligence = 4
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 
 	shirt = /obj/item/clothing/shirt/undershirt/colored/red
 	gloves = /obj/item/clothing/gloves/chain/iron
@@ -329,10 +329,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 11
 	H.base_intelligence = 5
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
 
 	if(prob(75))
 		shirt = /obj/item/clothing/armor/chainmail
@@ -372,10 +372,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 5
 	H.base_intelligence = 3
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE)
 
 	belt = /obj/item/storage/belt/leather/rope
 	shirt = /obj/item/clothing/shirt/undershirt/colored/red
@@ -407,10 +407,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 8
 	H.base_intelligence = 4
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
 
 	gloves = /obj/item/clothing/gloves/leather
 	pants = /obj/item/clothing/pants/tights/colored/black
@@ -449,10 +449,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 10
 	H.base_intelligence = 4
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
 
 	shirt = /obj/item/clothing/shirt/undershirt/colored/red
 	gloves = /obj/item/clothing/gloves/chain/iron
@@ -495,10 +495,10 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	H.base_endurance = 11
 	H.base_intelligence = 5
 
-	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-	H.mind?.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
 
 	if(prob(75))
 		shirt = /obj/item/clothing/armor/chainmail
