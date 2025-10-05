@@ -29,7 +29,6 @@
 	attacked_atom = /obj/item/rope
 	starting_atom= /obj/item/organ/ears
 	output = /obj/item/clothing/neck/menears
-	subtypes_allowed = TRUE
 	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/earnecklace/create_blacklisted_paths()
@@ -213,7 +212,6 @@
 	attacked_atom = /obj/item/grown/log/tree/small
 	starting_atom = /obj/item/weapon/knife
 	output = /obj/item/gun/ballistic/revolver/grenadelauncher/blowgun
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/candle
 	name = "candle"
@@ -270,7 +268,6 @@
 	attacked_atom = /obj/item/natural/stone
 	output = /obj/item/reagent_containers/glass/mortar
 	craftdiff = 0
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/pestle
 	name = "pestle"
@@ -282,8 +279,6 @@
 	attacked_atom = /obj/item/natural/stone
 	output = /obj/item/pestle
 	craftdiff = 0
-	skillcraft = /datum/skill/craft/masonry
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/stone_tongs
 	name = "stone tongs"
@@ -348,7 +343,6 @@
 	)
 	attacked_atom = /obj/item/grown/log/tree/stick
 	starting_atom = /obj/item/weapon/knife
-	subtypes_allowed = TRUE
 	allow_inverse_start = FALSE
 	output = /obj/item/weapon/whip/cane
 	craftdiff = 0
@@ -366,7 +360,6 @@
 	allow_inverse_start = FALSE
 	output = /obj/item/kitchen/spoon
 	craft_time = 3 SECONDS
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/fork
 	name = "wooden fork"
@@ -381,7 +374,6 @@
 	allow_inverse_start = FALSE
 	output = /obj/item/kitchen/fork
 	craft_time = 3 SECONDS
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/rollingpin
 	name = "wooden rollingpin"
@@ -396,7 +388,6 @@
 	allow_inverse_start = FALSE
 	output = /obj/item/kitchen/rollingpin
 	craft_time = 5 SECONDS
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/woodbowl
 	name = "wooden bowl"
@@ -427,7 +418,6 @@
 	output = /obj/item/reagent_containers/glass/cup/wooden/crafted
 	output_amount = 3
 	craft_time = 5 SECONDS
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/woodtray
 	name = "wooden tray"
@@ -443,7 +433,6 @@
 	output = /obj/item/plate/tray
 	output_amount = 2
 	craft_time = 5 SECONDS
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/woodplatter
 	name = "wooden platter"
@@ -459,7 +448,6 @@
 	output = /obj/item/plate
 	output_amount = 2
 	craft_time = 5 SECONDS
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/woodspade
 	name = "wooden spade"
@@ -484,7 +472,6 @@
 	starting_atom = /obj/item/weapon/knife
 	allow_inverse_start = FALSE
 	output = /obj/item/clothing/face/cigarette/pipe/crafted
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/broom
 	name = "broom"
@@ -521,7 +508,6 @@
 	allow_inverse_start = FALSE
 	output = /obj/item/bottle_kit
 	craft_time = 5 SECONDS
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/bottle_kit/create_blacklisted_paths()
 	blacklisted_paths = subtypesof(/obj/item/paper)
@@ -539,7 +525,6 @@
 	attacked_atom = /obj/item/grown/log/tree/small
 	starting_atom = /obj/item/weapon/hammer
 	allow_inverse_start = FALSE
-	subtypes_allowed = TRUE
 	output = /obj/item/weapon/flail/towner
 	output_amount = 2
 	craftdiff = 2
@@ -557,7 +542,6 @@
 	attacked_atom = /obj/item/weapon/flail/towner
 	starting_atom = /obj/item/weapon/hammer
 	allow_inverse_start = FALSE
-	subtypes_allowed = TRUE
 	output = /obj/item/weapon/flail/militia
 	craftdiff = 3
 	craft_time = 5 SECONDS
@@ -575,7 +559,6 @@
 	attacked_atom = /obj/item/grown/log/tree/small
 	starting_atom = /obj/item/weapon/hammer
 	allow_inverse_start = FALSE
-	subtypes_allowed = TRUE
 	output = /obj/item/weapon/thresher
 	craftdiff = 1
 	craft_time = 5 SECONDS
@@ -596,7 +579,6 @@
 	attacked_atom =/obj/item/weapon/thresher
 	starting_atom = /obj/item/weapon/hammer
 	allow_inverse_start = FALSE
-	subtypes_allowed = TRUE
 	output = /obj/item/weapon/thresher/military
 	craftdiff = 3
 	craft_time = 5 SECONDS
@@ -613,9 +595,7 @@
 	attacked_atom = /obj/item/weapon/mace/woodclub
 	starting_atom = /obj/item/weapon/hammer
 	allow_inverse_start = FALSE
-	subtypes_allowed = TRUE
 	output = /obj/item/weapon/mace/cudgel/carpenter
-	subtypes_allowed = TRUE
 	craftdiff = 3
 	craft_time = 5 SECONDS
 
@@ -628,7 +608,6 @@
 	starting_atom = /obj/item/natural/fibers
 	attacked_atom = /obj/item/paper
 	output = /obj/item/paper/scroll
-	subtypes_allowed = TRUE
 	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/scroll/create_blacklisted_paths()
@@ -644,7 +623,6 @@
 	)
 	attacked_atom = /obj/item/natural/wood/plank
 	starting_atom = /obj/item/weapon/knife
-	subtypes_allowed = TRUE
 	allow_inverse_start = FALSE
 	output = /obj/item/gear/wood/basic
 	craftdiff = 3
@@ -689,7 +667,6 @@
 	)
 	starting_atom = /obj/item/reagent_containers/food/snacks/produce/fruit/jacksberry
 	attacked_atom = /obj/item/natural/cloth
-	subtypes_allowed = TRUE
 
 /datum/repeatable_crafting_recipe/crafting/bloodbait
 	name = "blood bait"
@@ -700,8 +677,8 @@
 	)
 	starting_atom = /obj/item/reagent_containers/food/snacks/meat
 	attacked_atom = /obj/item/natural/cloth
-	subtypes_allowed = TRUE
 
+//carveable glass? Sure why not
 /datum/repeatable_crafting_recipe/crafting/alchemical_vial
 	name = "Alchemical Vial"
 	output = /obj/item/reagent_containers/glass/alchemical
@@ -709,27 +686,165 @@
 		/obj/item/natural/glass = 1,
 	)
 	tool_usage = list(
-		/obj/item/weapon/knife = list("starts to carve out a rune", "start to carve a rune")
+		/obj/item/weapon/knife = list("starts to carve the glass", "start to carve the glass")
 	)
 
 	attacked_atom = /obj/item/natural/glass
 	starting_atom = /obj/item/weapon/knife
-	subtypes_allowed = TRUE // so you can use any subtype of knife
-	output_amount = 3
+	output_amount = 2
 	craftdiff = 3
 
 /datum/repeatable_crafting_recipe/crafting/alchemical_bottle
-	name = "Alchemical Bottle"
+	name = "Glass Bottle"
 	output = /obj/item/reagent_containers/glass/bottle
 	requirements = list(
 		/obj/item/natural/glass = 1,
 	)
 	tool_usage = list(
-		/obj/item/weapon/knife = list("starts to carve out a rune", "start to carve a rune")
+		/obj/item/weapon/knife = list("starts to carve the glass", "start to carve the glass")
 	)
 
 	attacked_atom = /obj/item/natural/glass
 	starting_atom = /obj/item/weapon/knife
-	subtypes_allowed = TRUE // so you can use any subtype of knife
-	output_amount = 1
 	craftdiff = 3
+
+/datum/repeatable_crafting_recipe/crafting/zigbox
+	name = "Empty Zig Box"
+	output = /obj/item/storage/fancy/cigarettes/zig/empty
+	requirements = list(
+		/obj/item/paper = 1,
+	)
+	tool_usage = list(
+		/obj/item/needle = list("starts to sew the parchment", "start to sew the parchment")
+	)
+
+	attacked_atom = /obj/item/paper
+	starting_atom = /obj/item/needle
+	craftdiff = 0
+
+/datum/repeatable_crafting_recipe/crafting/instrument_flute
+	name = "Flute"
+	output = /obj/item/instrument/flute
+	requirements = list(
+		/obj/item/grown/log/tree/stick = 3,
+		/obj/item/natural/fibers = 2
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+
+	attacked_atom = /obj/item/grown/log/tree/stick
+	starting_atom = /obj/item/weapon/knife
+
+/datum/repeatable_crafting_recipe/crafting/instrument_harp
+	name = "Lyre"
+	output = /obj/item/instrument/harp
+	requirements = list(
+		/obj/item/grown/log/tree/small = 1,
+		/obj/item/natural/fibers = 6
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+
+	attacked_atom = /obj/item/grown/log/tree/small
+	starting_atom = /obj/item/weapon/knife
+
+/datum/repeatable_crafting_recipe/crafting/instrument_lute
+	name = "Lute"
+	output = /obj/item/instrument/lute
+	requirements = list(
+		/obj/item/grown/log/tree/small = 1,
+		/obj/item/grown/log/tree/stick = 1,
+		/obj/item/natural/fibers = 5
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+
+	attacked_atom = /obj/item/grown/log/tree/small
+	starting_atom = /obj/item/weapon/knife
+
+/datum/repeatable_crafting_recipe/crafting/instrument_guitar
+	name = "Guitar"
+	output = /obj/item/instrument/guitar
+	requirements = list(
+		/obj/item/instrument/lute = 1
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+
+	attacked_atom = /obj/item/instrument/lute
+	starting_atom = /obj/item/weapon/knife
+
+/datum/repeatable_crafting_recipe/crafting/instrument_accord
+	name = "Accordion"
+	output = /obj/item/instrument/accord
+	requirements = list(
+		/obj/item/grown/log/tree/small = 1,
+		/obj/item/natural/hide/cured = 1,
+		/obj/item/ingot/iron = 1,
+		/obj/item/alch/bone = 1
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+
+	attacked_atom = /obj/item/grown/log/tree/small
+	starting_atom = /obj/item/weapon/knife
+
+/datum/repeatable_crafting_recipe/crafting/instrument_drum
+	name = "Drum"
+	output = /obj/item/instrument/drum
+	requirements = list(
+		/obj/item/grown/log/tree/small = 1,
+		/obj/item/natural/hide/cured = 2
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+
+	attacked_atom = /obj/item/grown/log/tree/small
+	starting_atom = /obj/item/weapon/knife
+
+/datum/repeatable_crafting_recipe/crafting/instrument_hurdygurdy
+	name = "Hurdy-Gurdy"
+	output = /obj/item/instrument/hurdygurdy
+	requirements = list(
+		/obj/item/grown/log/tree/small = 2,
+		/obj/item/natural/fibers = 6
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+
+	attacked_atom = /obj/item/grown/log/tree/stick
+	starting_atom = /obj/item/weapon/knife
+
+/datum/repeatable_crafting_recipe/crafting/instrument_viola
+	name = "Viola"
+	output = /obj/item/instrument/viola
+	requirements = list(
+		/obj/item/grown/log/tree/small = 1,
+		/obj/item/grown/log/tree/stick = 2,
+		/obj/item/natural/fibers = 4
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+	attacked_atom = /obj/item/grown/log/tree/small
+	starting_atom = /obj/item/weapon/knife
+
+/datum/repeatable_crafting_recipe/crafting/instrument_vocals
+	name = "Vocalist's Talisman"
+	output = /obj/item/instrument/vocals
+	requirements = list(
+		/obj/item/natural/cloth = 2,
+		/obj/item/natural/fibers = 3
+	)
+	tool_usage = list(
+		/obj/item/weapon/knife = list(span_notice("starts to whittle"), span_notice("start to whittle"), 'sound/items/wood_sharpen.ogg'),
+	)
+	attacked_atom = /obj/item/natural/cloth
+	starting_atom = /obj/item/weapon/knife

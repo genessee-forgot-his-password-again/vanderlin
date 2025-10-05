@@ -5445,9 +5445,9 @@
 /turf/open/transparent/openspace,
 /area/rogue/outdoors/town)
 "dlr" = (
-/obj/structure/fake_machine/mail,
 /obj/structure/bed/hay,
 /obj/item/bedsheet/cloth,
+/obj/machinery/light/fueled/wallfire/candle,
 /turf/open/floor/wood,
 /area/rogue/indoors/town/garrison/lieutenant)
 "dlx" = (
@@ -7376,6 +7376,7 @@
 /area/rogue/indoors/town/manor/knight/knight1)
 "eoo" = (
 /obj/structure/toilet,
+/obj/machinery/light/fueled/wallfire/candle,
 /turf/open/floor/blocks,
 /area/rogue/indoors/town/garrison)
 "eoB" = (
@@ -8942,7 +8943,8 @@
 	pixel_x = 6;
 	pixel_y = 3
 	},
-/obj/machinery/light/fueled/wallfire/candle,
+/obj/structure/fake_machine/mail,
+/obj/machinery/light/fueled/wallfire/candle/r,
 /turf/open/floor/wood,
 /area/rogue/indoors/town/garrison/lieutenant)
 "fiq" = (
@@ -18753,7 +18755,7 @@
 /area/rogue/under/cave)
 "lmU" = (
 /obj/effect/decal/cleanable/dirt/dust,
-/obj/machinery/light/fueled/torchholder/c,
+/obj/machinery/light/fueled/wallfire/candle,
 /turf/open/floor/ruinedwood/spiral,
 /area/rogue/indoors/town/garrison/lieutenant)
 "lng" = (
@@ -19173,6 +19175,7 @@
 /obj/effect/decal/cleanable/dirt/dust,
 /obj/effect/decal/cleanable/dirt/cobweb,
 /obj/structure/fake_machine/scomm,
+/obj/machinery/light/fueled/wallfire/candle/l,
 /turf/open/floor/ruinedwood/spiral,
 /area/rogue/indoors/town/garrison)
 "lDu" = (
@@ -23375,6 +23378,12 @@
 "ogO" = (
 /turf/open/lava/acid,
 /area/rogue/under/town/basement)
+"ogU" = (
+/obj/structure/chair/stool/crafted,
+/obj/effect/decal/cleanable/dirt/dust,
+/obj/machinery/light/fueled/wallfire/candle/l,
+/turf/open/floor/ruinedwood/spiral,
+/area/rogue/indoors/town/garrison)
 "ogW" = (
 /obj/structure/minecart_rail{
 	dir = 4
@@ -28720,6 +28729,12 @@
 	},
 /turf/closed/wall/mineral/decorstone,
 /area/rogue/indoors/town/manor/lord_appt)
+"rDv" = (
+/obj/machinery/light/fueled/torchholder{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/rogue/indoors/town/garrison)
 "rDw" = (
 /obj/structure/flora/grass/bush_meagre,
 /obj/structure/fluff/railing/wood{
@@ -30775,9 +30790,7 @@
 /area/rogue/indoors/town/orphanage)
 "sOQ" = (
 /obj/effect/decal/cleanable/dirt/dust,
-/obj/machinery/light/fueled/torchholder{
-	dir = 8
-	},
+/obj/machinery/light/fueled/wallfire/candle/r,
 /turf/open/floor/ruinedwood/spiral,
 /area/rogue/indoors/town/garrison)
 "sOR" = (
@@ -35573,9 +35586,7 @@
 /area/rogue/under/cavewet)
 "vOh" = (
 /obj/effect/decal/cleanable/dirt/dust,
-/obj/machinery/light/fueled/torchholder{
-	dir = 8
-	},
+/obj/machinery/light/fueled/wallfire/candle/r,
 /turf/open/floor/ruinedwood/spiral,
 /area/rogue/indoors/town/garrison/lieutenant)
 "vPf" = (
@@ -38475,6 +38486,12 @@
 	},
 /turf/open/floor/herringbone,
 /area/rogue/indoors/town)
+"xEp" = (
+/obj/machinery/light/fueled/wallfire/candle{
+	pixel_y = -32
+	},
+/turf/open/floor/wood,
+/area/rogue/indoors/town/garrison/lieutenant)
 "xEN" = (
 /obj/effect/landmark/start/armorsmith,
 /obj/structure/bed/wool,
@@ -39223,6 +39240,7 @@
 /obj/structure/chair/wood/alt/chair_noble/red{
 	dir = 4
 	},
+/obj/machinery/light/fueled/wallfire/candle/l,
 /turf/open/floor/ruinedwood/spiral,
 /area/rogue/indoors/town/garrison/lieutenant)
 "yaa" = (
@@ -144436,7 +144454,7 @@ lqr
 hAQ
 cUD
 gnN
-ltu
+rDv
 iWK
 lBA
 bkg
@@ -145043,7 +145061,7 @@ xJk
 lDh
 urr
 ssw
-kmc
+ogU
 wVG
 vgJ
 vgJ
@@ -146048,7 +146066,7 @@ vgJ
 vgJ
 lEc
 dlr
-xSr
+xEp
 lEc
 lmU
 tCY

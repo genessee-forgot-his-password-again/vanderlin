@@ -62,7 +62,8 @@
 		honorary = "Dame"
 	H.real_name = "[honorary] [prev_real_name]"
 	H.name = "[honorary] [prev_name]"
-
+	if(alert("Do you wish to be recognized as a non-foreigner?", "", "Yes", "No") == "Yes")
+		REMOVE_TRAIT(H, TRAIT_FOREIGNER, TRAIT_GENERIC)
 	var/static/list/selectableweapon = list( \
 		"Flail" = /obj/item/weapon/flail/sflail, \
 		"Halberd" = /obj/item/weapon/polearm/halberd, \
@@ -105,9 +106,8 @@
 		"Bastion Helmet" = /obj/item/clothing/head/helmet/heavy/necked,
 		"Royal Knight Helmet" = /obj/item/clothing/head/helmet/visored/royalknight,
 		"Knight Helmet"	= /obj/item/clothing/head/helmet/visored/knight,
-		"Decoared Knight Helmet" = /obj/item/clothing/head/helmet/heavy/decorated/knight,
+		"Decorated Knight Helmet" = /obj/item/clothing/head/helmet/heavy/decorated/knight,
 		"Visored Sallet" = /obj/item/clothing/head/helmet/visored/sallet,
-		"Spangenhelm" = /obj/item/clothing/head/helmet/heavy/viking,
 		"Decored Golden Helmet" = /obj/item/clothing/head/helmet/heavy/decorated/golden,
 		"None" = /obj/item/clothing/head/roguehood/colored/uncolored,
 	)

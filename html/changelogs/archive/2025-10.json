@@ -78,11 +78,20 @@
         "Wouju": [
             {
                 "balance": "Mantrap crafting recipe, the non-anvil one, makes a makeshift mantrap instead of an old one"
+            },
+            {
+                "map": "City garrison has more light sources"
             }
         ],
         "wgtjunior743": [
             {
                 "rscadd": "Peeks, if you examine someone while you are sneaking there will be no visible message but the target may notice you looking at them based on your sneak skill vs theirs PER and abit of luck."
+            },
+            {
+                "bugfix": "Minotaur sometimes attacking as a corpse."
+            },
+            {
+                "rscadd": "Minotaur axe variant now drops a double head greataxe upon death."
             }
         ],
         "Magiy-Anne": [
@@ -92,12 +101,62 @@
         ]
     },
     "2025-10-04": {
+        "CheffieGithub": [
+            {
+                "bugfix": "Fixed loadout patreon rank checks"
+            }
+        ],
+        "RelentlessDouche": [
+            {
+                "balance": "Readjusted Ruffian"
+            }
+        ],
         "wgtjunior743": [
             {
-                "bugfix": "Minotaur sometimes attacking as a corpse."
+                "admin": "Yielding now logs for admins."
+            }
+        ],
+        "snowyseshi": [
+            {
+                "code_imp": "make restricted roles less strict for vampire and lich"
+            }
+        ],
+        "SarmentiCampbell": [
+            {
+                "balance": "Youngling/Old Maniac/lich have now the same stats as their adult counterpart."
             },
             {
-                "rscadd": "Minotaur axe variant now drops a double head greataxe upon death."
+                "rscadd": "Give Ability to remove Foreigner from Disgraced Knight, Rejected Royal"
+            },
+            {
+                "rscadd": "Poisons bombs are now craftable."
+            },
+            {
+                "balance": "Noble Scabbard now has silver Enchant."
+            },
+            {
+                "balance": "Summon Rous, Conjure Puffer and Conjure Poison Bomb should no longer give you Arcane Skill"
+            }
+        ],
+        "Arkatos": [
+            {
+                "rscadd": "God's chosen received an ability to view their tasks at any time via new button."
+            },
+            {
+                "rscadd": "God's chosen tasks have new, varied rewards."
+            }
+        ],
+        "Ambrose997": [
+            {
+                "balance": "nerfed hedge mage's physical stats down to the same level as normal mages."
+            }
+        ],
+        "Bloo4420": [
+            {
+                "rscadd": "More filled_overlay sprites for peddlers"
+            },
+            {
+                "bugfix": "Innkeep and Steward peddler now hold keys that can actually be used"
             }
         ]
     }

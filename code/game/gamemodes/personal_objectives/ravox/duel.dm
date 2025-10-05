@@ -1,16 +1,19 @@
-/datum/objective/ravox_duel
+/datum/objective/personal/ravox_duel
 	name = "Honor Duels"
-	triumph_count = 2
+	category = "Ravox's Chosen"
+	triumph_count = 3
+	immediate_effects = list("Gained an ability to challenge others")
+	rewards = list("3 Triumphs", "Ravox grows stronger")
 	var/duels_won = 0
 	var/duels_required = 1
 
-/datum/objective/ravox_duel/on_creation()
+/datum/objective/personal/ravox_duel/on_creation()
 	. = ..()
 	var/datum/action/innate/ravox_challenge/challenge = new(src)
 	challenge.Grant(owner.current)
 	update_explanation_text()
 
-/datum/objective/ravox_duel/proc/on_duel_won()
+/datum/objective/personal/ravox_duel/proc/on_duel_won()
 	duels_won++
 	if(duels_won >= duels_required && !completed)
 		to_chat(owner.current, span_greentext("You have proven your worth in combat! Ravox is pleased!"))
@@ -19,7 +22,7 @@
 		adjust_storyteller_influence(RAVOX, duels_required * 20)
 		escalate_objective()
 
-/datum/objective/ravox_duel/update_explanation_text()
+/datum/objective/personal/ravox_duel/update_explanation_text()
 	explanation_text = "Win [duels_required] duel\s with honor against other warriors to prove your might!"
 
 /datum/action/innate/ravox_challenge
@@ -120,7 +123,7 @@
 	to_chat(winner, span_green("You have won the duel of honor!"))
 
 	if(objective)
-		var/datum/objective/ravox_duel/ravox = objective.resolve()
+		var/datum/objective/personal/ravox_duel/ravox = objective.resolve()
 		if(ravox?.owner == winner)
 			ravox.on_duel_won()
 

@@ -543,6 +543,17 @@
 
 // BARDIC BUFFS BELOW
 
+/datum/status_effect/buff/bardic_inspiration
+	id = "bardic_inspiration"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/bardic_inspiration
+	duration = 45 SECONDS
+	effectedstats = list(STATKEY_END = 2, STATKEY_SPD = 1, STATKEY_LCK = 1)
+
+/atom/movable/screen/alert/status_effect/buff/bardic_inspiration
+	name = "Bardic Inspiration"
+	desc = span_nicegreen("Stirring words fill me with courage!")
+	icon_state = "stressvgood"
+
 /datum/status_effect/bardicbuff
 	var/name
 	id = "bardbuff"

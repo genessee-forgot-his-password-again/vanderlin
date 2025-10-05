@@ -1177,6 +1177,7 @@
 		playsound(src, 'sound/misc/surrender.ogg', 100, FALSE, -1)
 		toggle_cmode()
 		sleep(150)
+		log_attack("[key_name(src)] has yielded!")
 	surrendering = 0
 
 

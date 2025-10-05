@@ -38,6 +38,22 @@
 	craft_time = 1 SECONDS
 	subtypes_allowed = TRUE
 
+/datum/repeatable_crafting_recipe/bomb/poisonbomb
+	name = "poison bomb"
+
+	requirements = list(
+		/obj/item/smokebomb = 1,
+		/obj/item/alch/herb/atropa = 1,
+		/obj/item/alch/herb/paris = 1,
+	)
+
+	starting_atom = /obj/item/alch/herb/atropa
+	attacked_atom = /obj/item/smokebomb
+	output = /obj/item/smokebomb/poison_bomb
+	craft_time = 1 SECONDS
+	craftdiff = 1
+	subtypes_allowed = TRUE
+
 /datum/repeatable_crafting_recipe/bomb/pipe_bomb
 	name = "homemade pipe bomb"
 

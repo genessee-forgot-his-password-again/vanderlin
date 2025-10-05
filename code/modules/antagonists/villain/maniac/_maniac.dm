@@ -118,6 +118,7 @@ GLOBAL_VAR_INIT(maniac_highlander, 0) // THERE CAN ONLY BE ONE!
 			dreamer.verbs += /mob/living/carbon/human/proc/toggle_maniac_music
 			dreamer.verbs += /mob/living/carbon/human/proc/set_custom_music
 			var/obj/item/organ/heart/heart = dreamer.getorganslot(ORGAN_SLOT_HEART)
+			dreamer.remove_stat_modifier("innate_age")
 			if(heart) // clear any inscryptions, in case of being made maniac midround
 				heart.inscryptions = list()
 				heart.inscryption_keys = list()
@@ -207,7 +208,7 @@ GLOBAL_VAR_INIT(maniac_highlander, 0) // THERE CAN ONLY BE ONE!
 	if(trey)
 		spawnturf = get_turf(trey)
 	if(spawnturf)
-		var/mob/living/carbon/human/trey_liam = new /mob/living/carbon/human/species/human/northern(spawnturf)
+		var/mob/living/carbon/human/trey_liam = new /mob/living/carbon/human/species/human/space(spawnturf)
 		trey_liam.fully_replace_character_name(trey_liam.name, "Trey Liam")
 		trey_liam.gender = MALE
 		trey_liam.skin_tone = "ffe0d1"
