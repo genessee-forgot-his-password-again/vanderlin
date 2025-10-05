@@ -46,6 +46,7 @@
 	background_track_night = 'sound/music/area/sleeping.ogg'
 
 /area/rogue/indoors/genzone
+	name = "Sanctum Sanctorum"
 	icon_state = "shelter"
 
 /area/rogue/outdoors/mountains
