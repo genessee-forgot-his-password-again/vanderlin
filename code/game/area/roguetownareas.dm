@@ -45,6 +45,9 @@
 	background_track_dusk = 'sound/music/area/septimus.ogg'
 	background_track_night = 'sound/music/area/sleeping.ogg'
 
+/area/rogue/indoors/genzone
+	icon_state = "shelter"
+
 /area/rogue/outdoors/mountains
 	name = "mountains"
 	icon_state = "mountains"
