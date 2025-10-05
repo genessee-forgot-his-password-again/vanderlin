@@ -4125,6 +4125,7 @@
 /area/rogue/indoors/lich)
 "xZ" = (
 /obj/structure/closet/crate/crafted_closet/inn,
+/obj/item/weapon/knife/dagger/steel,
 /turf/open/floor/ruinedwood/turned,
 /area/rogue/indoors/genzone)
 "ya" = (

@@ -172,6 +172,11 @@
 	cost = 0
 	contains = /obj/item/reagent_containers/food/snacks/bread
 
+/datum/supply_pack/cheat/food/raisinbread
+	name = "Loaf of Raisin Bread"
+	cost = 0
+	contains = /obj/item/reagent_containers/food/snacks/bread/raisin
+
 /datum/supply_pack/cheat/food/cheese
 	name = "Cheese Wheel"
 	cost = 0
@@ -181,6 +186,16 @@
 	name = "Salami Stick"
 	cost = 0
 	contains = /obj/item/reagent_containers/food/snacks/meat/salami
+
+/datum/supply_pack/cheat/food/steak
+	name = "Steak"
+	cost = 0
+	contains = /obj/item/reagent_containers/food/snacks/cooked/frysteak
+
+/datum/supply_pack/cheat/food/meatpie
+	name = "Meat Pie"
+	cost = 0
+	contains = /obj/item/reagent_containers/food/snacks/pie/cooked/meat/meat/good
 
 /datum/supply_pack/cheat/food/beer
 	name = "Bottle of Beer"
