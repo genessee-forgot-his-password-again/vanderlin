@@ -2,48 +2,19 @@ GLOBAL_LIST_INIT(bandit_quotes, world.file2list("strings/rt/banditlines.txt"))
 GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"))
 
 /mob/living/carbon/human/species/human/northern/npc/bandit
-	aggressive=1
-	mode = AI_IDLE
+	ai_controller = /datum/ai_controller/human_npc
+	faction = list(FACTION_MATTHIOS)
 	ambushable = FALSE
-	faction = list("bandits", "station")
+	dodgetime = 30
 	flee_in_pain = TRUE
 	possible_rmb_intents = list()
-	wander = TRUE
 
-/mob/living/carbon/human/species/human/northern/npc/bandit/retaliate(mob/living/L)
-	var/newtarg = target
-	.=..()
-	if(target)
-		aggressive=1
-		wander = TRUE
-		if(target != newtarg)
-			say(pick(GLOB.bandit_aggro))
-			linepoint(target)
+	wander = FALSE
 
 /mob/living/carbon/human/species/human/northern/npc/bandit/Initialize()
 	. = ..()
-	set_species(/datum/species/human/northern)
-	addtimer(CALLBACK(src, PROC_REF(after_creation)), 1 SECONDS)
-
-/mob/living/carbon/human/species/human/northern/npc/bandit/npc_idle()
-	if(m_intent == MOVE_INTENT_SNEAK)
-		return
-	if(world.time < next_idle)
-		return
-	next_idle = world.time + rand(30, 70)
-	if((mobility_flags & MOBILITY_MOVE) && isturf(loc) && wander)
-		if(prob(20))
-			var/turf/T = get_step(loc,pick(GLOB.cardinals))
-			if(!istype(T, /turf/open/transparent/openspace))
-				Move(T)
-		else
-			face_atom(get_step(src,pick(GLOB.cardinals)))
-	if(!wander && prob(10))
-		face_atom(get_step(src,pick(GLOB.cardinals)))
-	if(prob(3))
-		say(pick(GLOB.bandit_quotes))
-	if(prob(3))
-		emote(pick("laugh","burp","yawn","grumble","mumble","blink_r","clap"))
+	AddComponent(/datum/component/ai_aggro_system)
+	AddComponent(/datum/component/combat_noise, list("aggro" = 2))
 
 // Bandit Thug - Blunt lvl1
 
@@ -57,11 +28,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/blunt_one/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 8
-	H.TOTALSPD = 6
-	H.TOTALCON = 8
-	H.TOTALEND = 5
-	H.TOTALINT = 3
+	H.base_strength = 8
+	H.base_speed = 6
+	H.base_constitution = 8
+	H.base_endurance = 5
+	H.base_intelligence = 3
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -96,11 +67,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/blunt_two/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 10
-	H.TOTALSPD = 8
-	H.TOTALCON = 10
-	H.TOTALEND = 8
-	H.TOTALINT = 4
+	H.base_strength = 10
+	H.base_speed = 8
+	H.base_constitution = 10
+	H.base_endurance = 8
+	H.base_intelligence = 4
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -138,11 +109,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/blunt_three/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 11
-	H.TOTALSPD = 8
-	H.TOTALCON = 11
-	H.TOTALEND = 10
-	H.TOTALINT = 4
+	H.base_strength = 11
+	H.base_speed = 8
+	H.base_constitution = 11
+	H.base_endurance = 10
+	H.base_intelligence = 4
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -184,11 +155,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/blunt_four/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 12
-	H.TOTALSPD = 9
-	H.TOTALCON = 12
-	H.TOTALEND = 11
-	H.TOTALINT = 5
+	H.base_strength = 12
+	H.base_speed = 9
+	H.base_constitution = 12
+	H.base_endurance = 11
+	H.base_intelligence = 5
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
@@ -229,11 +200,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/polearm_one/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 8
-	H.TOTALSPD = 6
-	H.TOTALCON = 8
-	H.TOTALEND = 5
-	H.TOTALINT = 3
+	H.base_strength = 8
+	H.base_speed = 6
+	H.base_constitution = 8
+	H.base_endurance = 5
+	H.base_intelligence = 3
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -268,11 +239,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/polearm_two/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 10
-	H.TOTALSPD = 8
-	H.TOTALCON = 10
-	H.TOTALEND = 8
-	H.TOTALINT = 4
+	H.base_strength = 10
+	H.base_speed = 8
+	H.base_constitution = 10
+	H.base_endurance = 8
+	H.base_intelligence = 4
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -308,11 +279,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/polearm_three/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 11
-	H.TOTALSPD = 8
-	H.TOTALCON = 11
-	H.TOTALEND = 10
-	H.TOTALINT = 4
+	H.base_strength = 11
+	H.base_speed = 8
+	H.base_constitution = 11
+	H.base_endurance = 10
+	H.base_intelligence = 4
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -352,11 +323,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/polearm_four/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 12
-	H.TOTALSPD = 9
-	H.TOTALCON = 12
-	H.TOTALEND = 11
-	H.TOTALINT = 5
+	H.base_strength = 12
+	H.base_speed = 9
+	H.base_constitution = 12
+	H.base_endurance = 11
+	H.base_intelligence = 5
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
@@ -395,11 +366,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/blade_one/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 8
-	H.TOTALSPD = 6
-	H.TOTALCON = 8
-	H.TOTALEND = 5
-	H.TOTALINT = 3
+	H.base_strength = 8
+	H.base_speed = 6
+	H.base_constitution = 8
+	H.base_endurance = 5
+	H.base_intelligence = 3
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -430,11 +401,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/blade_two/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 10
-	H.TOTALSPD = 8
-	H.TOTALCON = 10
-	H.TOTALEND = 8
-	H.TOTALINT = 4
+	H.base_strength = 10
+	H.base_speed = 8
+	H.base_constitution = 10
+	H.base_endurance = 8
+	H.base_intelligence = 4
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -472,11 +443,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/blade_three/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 11
-	H.TOTALSPD = 8
-	H.TOTALCON = 11
-	H.TOTALEND = 10
-	H.TOTALINT = 4
+	H.base_strength = 11
+	H.base_speed = 8
+	H.base_constitution = 11
+	H.base_endurance = 10
+	H.base_intelligence = 4
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
@@ -518,11 +489,11 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 /datum/outfit/job/npc/bandit/blade_four/pre_equip(mob/living/carbon/human/H)
 	..()
 
-	H.TOTALSTR = 12
-	H.TOTALSPD = 9
-	H.TOTALCON = 12
-	H.TOTALEND = 11
-	H.TOTALINT = 5
+	H.base_strength = 12
+	H.base_speed = 9
+	H.base_constitution = 12
+	H.base_endurance = 11
+	H.base_intelligence = 5
 
 	H.mind?.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
 	H.mind?.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
