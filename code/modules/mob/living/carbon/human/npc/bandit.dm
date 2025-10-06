@@ -15,6 +15,7 @@ GLOBAL_LIST_INIT(bandit_aggro, world.file2list("strings/rt/banditaggrolines.txt"
 	. = ..()
 	AddComponent(/datum/component/ai_aggro_system)
 	AddComponent(/datum/component/combat_noise, list("aggro" = 2))
+	addtimer(CALLBACK(src, PROC_REF(after_creation)), 1 SECONDS)
 
 // Bandit Thug - Blunt lvl1
 

@@ -362,6 +362,37 @@
 			playsound(src, 'sound/items/write.ogg', 100, FALSE)
 			return
 
+/obj/item/banknote
+	name = "null mammon banknote"
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one inlaid with the goop and is worth no mammons -- wait, what?"
+	icon_state = "banknote-1"
+	icon = 'icons/roguetown/items/misc.dmi'
+	w_class = WEIGHT_CLASS_TINY
+	dropshrink = 0.5
+	firefuel = 30 SECONDS
+	sellprice = 0
+	throwforce = 0
+	slot_flags = ITEM_SLOT_HIP|ITEM_SLOT_MOUTH
+
+/obj/item/banknote/one
+	name = "1 mammon banknote"
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with bronze and is worth a single mammon."
+	icon_state = "banknote-1"
+
+/obj/item/banknote/ten
+	name = "10 mammon banknote"
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with silver and is worth ten mammons."
+	icon_state = "banknote-10"
+
+/obj/item/banknote/onehundred
+	name = "100 mammon banknote"
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with gold and is worth one hundred mammons."
+	icon_state = "banknote-100"
+
+/obj/item/banknote/onethousand
+	name = "1000 mammon banknote"
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with gemeralds and is worth one thousand mammons."
+	icon_state = "banknote-1000"
 
 /obj/item/paper/scroll/frumentarii/roundstart/Initialize()
 	. = ..()
