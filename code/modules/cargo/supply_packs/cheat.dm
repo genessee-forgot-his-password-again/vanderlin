@@ -197,6 +197,11 @@
 	cost = 0
 	contains = /obj/item/reagent_containers/food/snacks/pie/cooked/meat/meat/good
 
+/datum/supply_pack/cheat/food/applepie
+	name = "Apple Pie"
+	cost = 0
+	contains = /obj/item/reagent_containers/food/snacks/pie/cooked/apple/good
+
 /datum/supply_pack/cheat/food/beer
 	name = "Bottle of Beer"
 	cost = 0
