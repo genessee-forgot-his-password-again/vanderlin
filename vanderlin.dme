@@ -1018,6 +1018,7 @@
 #include "code\datums\helper_datums\events.dm"
 #include "code\datums\helper_datums\getrev.dm"
 #include "code\datums\helper_datums\icon_snapshot.dm"
+#include "code\datums\helper_datums\stack_end_detector.dm"
 #include "code\datums\helper_datums\teleport.dm"
 #include "code\datums\hover_data\gnome_hover.dm"
 #include "code\datums\keybinding\_defines.dm"
