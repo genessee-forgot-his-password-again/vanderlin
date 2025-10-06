@@ -105,6 +105,7 @@
 	dropshrink = 0.8
 	coverage = 60
 	max_integrity = INTEGRITY_STANDARD - 25
+	sellprice = 5
 
 /obj/item/weapon/shield/wood/choose_design(proc_value, mob/user)
 	. = proc_value
@@ -171,6 +172,7 @@
 	max_integrity = INTEGRITY_STRONG
 	melting_material = /datum/material/iron
 	melt_amount = 75
+	sellprice = 15
 
 /obj/item/weapon/shield/tower/spidershield
 	name = "spider shield"
@@ -299,6 +301,7 @@
 	max_integrity = INTEGRITY_STRONG - 50
 	melting_material = /datum/material/iron
 	melt_amount = 75
+	sellprice = 15
 
 /obj/item/weapon/shield/tower/buckleriron/getonmobprop(tag)
 	. = ..()
@@ -322,6 +325,7 @@
 	attacked_sound = list('sound/combat/parry/shield/towershield (1).ogg','sound/combat/parry/shield/towershield (2).ogg','sound/combat/parry/shield/towershield (3).ogg')
 	parrysound = list('sound/combat/parry/shield/towershield (1).ogg','sound/combat/parry/shield/towershield (2).ogg','sound/combat/parry/shield/towershield (3).ogg')
 	max_integrity = INTEGRITY_STANDARD
+	sellprice = 15
 
 /obj/item/weapon/shield/heater/choose_design(proc_value, mob/user)
 	. = proc_value

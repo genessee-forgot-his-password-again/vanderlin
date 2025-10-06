@@ -11,6 +11,7 @@
 	armor = ARMOR_PADDED_GOOD
 	body_parts_covered = CHEST|GROIN|ARMS|LEGS|VITALS
 	max_integrity = INTEGRITY_POOR
+	sellprice = 30
 
 /obj/item/clothing/armor/plate/orc/warlord
 	name = "warlord armor"
@@ -18,6 +19,7 @@
 	icon_state = "warlord_armor"
 	item_state = "warlord_armor"
 	armor = ARMOR_PLATE_BAD
+	sellprice = 80
 
 /obj/item/clothing/armor/chainmail/iron/orc
 	name = "crude maille"
@@ -31,6 +33,7 @@
 	body_parts_covered = CHEST|GROIN|ARMS|LEGS|VITALS
 	prevent_crits = ALL_EXCEPT_BLUNT
 	max_integrity = INTEGRITY_POOR
+	sellprice = 20
 
 /obj/item/clothing/head/helmet/orc
 	name = "Orc Marauder Helmet"
@@ -43,7 +46,7 @@
 	prevent_crits = list(BCLASS_CUT, BCLASS_CHOP, BCLASS_BLUNT)
 	blocksound = PLATEHIT
 	max_integrity = 100
-	sellprice = 5
+	sellprice = 10
 
 /obj/item/clothing/head/helmet/orc/warlord
 	name = "Orc Warlord Helmet"
@@ -65,6 +68,7 @@
 	anvilrepair = null
 	sewrepair = TRUE
 	blocksound = SOFTHIT
+	sellprice = 5
 
 /obj/item/clothing/armor/leather/hide/orc
 	name = "orc loincloth"
@@ -74,7 +78,7 @@
 	allowed_race = list(SPEC_ID_ORC)
 	armor = list("blunt" = 30, "slash" = 30, "stab" = 30,  "piercing" = 0, "fire" = 0, "acid" = 0)
 	body_parts_covered = CHEST|GROIN
-	sellprice = 0
+	sellprice = 1
 
 ///obj/item/clothing/armor/leather/hide/orc
 

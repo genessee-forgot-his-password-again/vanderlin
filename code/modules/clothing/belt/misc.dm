@@ -105,6 +105,7 @@
 	icon_state = "rope"
 	item_state = "rope"
 	color = "#b9a286"
+	sellprice = 2
 	salvage_result = /obj/item/rope
 	component_type = /datum/component/storage/concrete/grid/belt/cloth
 
@@ -141,6 +142,7 @@
 	icon = 'icons/roguetown/clothing/storage.dmi'
 	mob_overlay_icon = null
 	icon_state = "pouch"
+	sellprice = 3
 	slot_flags = ITEM_SLOT_HIP|ITEM_SLOT_NECK
 	w_class = WEIGHT_CLASS_NORMAL
 	attack_verb = list("whips", "lashes")

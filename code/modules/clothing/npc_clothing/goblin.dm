@@ -10,7 +10,7 @@
 	anvilrepair = /datum/skill/craft/armorsmithing
 	max_integrity = 60
 	armor_class = AC_LIGHT // Otherwise they get knocked down TOO easily!!!
-	sellprice = 0
+	sellprice = 20
 
 /obj/item/clothing/armor/leather/goblin
 	name = "goblin leather armor"
@@ -22,7 +22,7 @@
 	armor_class = AC_LIGHT
 	max_integrity = 60
 	allowed_race = list(SPEC_ID_GOBLIN)
-	sellprice = 0
+	sellprice = 5
 	smeltresult = /obj/item/fertilizer/ash
 
 /obj/item/clothing/armor/leather/hide/goblin
@@ -33,7 +33,7 @@
 	allowed_race = list(SPEC_ID_GOBLIN)
 	armor = list("blunt" = 30, "slash" = 30, "stab" = 30,  "piercing" = 0, "fire" = 0, "acid" = 0)
 	body_parts_covered = CHEST|GROIN
-	sellprice = 0
+	sellprice = 1
 	smeltresult = /obj/item/fertilizer/ash
 
 /obj/item/clothing/head/helmet/leather/goblin
@@ -44,7 +44,7 @@
 	armor = list("blunt" = 30, "slash" = 30, "stab" = 30,  "piercing" = 0, "fire" = 0, "acid" = 0)
 	body_parts_covered = HEAD|EARS|HAIR|EYES
 	allowed_race = list(SPEC_ID_GOBLIN)
-	sellprice = 0
+	sellprice = 3
 	smeltresult = /obj/item/fertilizer/ash
 
 /obj/item/clothing/head/helmet/goblin
@@ -56,4 +56,4 @@
 	allowed_race = list(SPEC_ID_GOBLIN)
 	armor = list("blunt" = 80, "slash" = 80, "stab" = 80,  "piercing" = 0, "fire" = 0, "acid" = 0)
 	body_parts_covered = HEAD|EARS|HAIR|EYES
-	sellprice = 0
+	sellprice = 10
