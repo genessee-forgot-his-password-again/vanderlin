@@ -61,3 +61,23 @@
 	name = "Talkstone"
 	cost = 300
 	contains = /obj/item/clothing/neck/talkstone
+
+/datum/supply_pack/luxury/banknoteone
+	name = "Banknote (1M)"
+	cost = 1
+	contains = /obj/item/banknote/one
+
+/datum/supply_pack/luxury/banknoteten
+	name = "Banknote (10M)"
+	cost = 10
+	contains = /obj/item/banknote/ten
+
+/datum/supply_pack/luxury/banknotehundred
+	name = "Banknote (100M)"
+	cost = 100
+	contains = /obj/item/banknote/onehundred
+
+/datum/supply_pack/luxury/banknotethousand
+	name = "Banknote (1000M)"
+	cost = 1000
+	contains = /obj/item/banknote/onethousand

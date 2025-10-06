@@ -378,21 +378,25 @@
 	name = "1 mammon banknote"
 	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with bronze and is worth a single mammon."
 	icon_state = "banknote-1"
+	sellprice = 1
 
 /obj/item/banknote/ten
 	name = "10 mammon banknote"
 	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with silver and is worth ten mammons."
 	icon_state = "banknote-10"
+	sellprice = 10
 
 /obj/item/banknote/onehundred
 	name = "100 mammon banknote"
 	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with gold and is worth one hundred mammons."
 	icon_state = "banknote-100"
+	sellprice = 100
 
 /obj/item/banknote/onethousand
 	name = "1000 mammon banknote"
 	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with gemeralds and is worth one thousand mammons."
 	icon_state = "banknote-1000"
+	sellprice = 1000
 
 /obj/item/paper/scroll/frumentarii/roundstart/Initialize()
 	. = ..()
