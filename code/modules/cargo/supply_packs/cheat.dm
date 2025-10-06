@@ -3,6 +3,26 @@
 	crate_name = "merchant guild's crate"
 	crate_type = /obj/structure/closet/crate/chest/merchant
 
+/datum/supply_pack/copper/banknoteone
+	name = "Banknote (1M)"
+	cost = 0
+	contains = /obj/item/banknote/one
+
+/datum/supply_pack/copper/banknoteten
+	name = "Banknote (10M)"
+	cost = 0
+	contains = /obj/item/banknote/ten
+
+/datum/supply_pack/copper/banknotehundred
+	name = "Banknote (100M)"
+	cost = 0
+	contains = /obj/item/banknote/onehundred
+
+/datum/supply_pack/copper/banknotethousand
+	name = "Banknote (1000M)"
+	cost = 0
+	contains = /obj/item/banknote/onethousand
+
 /datum/supply_pack/cheat/copper
 	name = "Copper Coins"
 	cost = 0
@@ -188,9 +208,14 @@
 	contains = /obj/item/reagent_containers/food/snacks/meat/salami
 
 /datum/supply_pack/cheat/food/steak
-	name = "Steak"
+	name = "Fried Beef"
 	cost = 0
 	contains = /obj/item/reagent_containers/food/snacks/cooked/frysteak
+
+/datum/supply_pack/cheat/food/bird
+	name = "Fried Bird"
+	cost = 0
+	contains = /obj/item/reagent_containers/food/snacks/cooked/frybird
 
 /datum/supply_pack/cheat/food/meatpie
 	name = "Meat Pie"

@@ -123,7 +123,6 @@
 	)
 /datum/supply_pack/rawmats/riddle_of_steel
 	name = "Riddle of Steel"
-	group = "Special Materials"
 	cost = 600
 	contains = list(
 		/obj/item/riddleofsteel
