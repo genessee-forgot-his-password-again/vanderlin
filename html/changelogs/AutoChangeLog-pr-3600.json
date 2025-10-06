@@ -1,0 +1,1 @@
+{"author":"Wouju","delete-after":true,"changes":[{"rscadd":"Leeches and worms are grindable in a mortar"},{"rscadd":"examining any item that has a precursor will tell you what essence it gives (with enough alchemy skill of course)"},{"rscdel":"Removed grind recipe for organs, grinding them gives their reagents instead"}]}
