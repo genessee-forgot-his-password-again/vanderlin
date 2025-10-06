@@ -8,55 +8,68 @@
 /obj/item/alch/viscera
 	name = "viscera"
 	icon_state = "viscera"
+	sellprice = 1
 
 /obj/item/alch/waterdust
 	name = "water essentia"
 	icon_state = "water_runedust"
+	sellprice = 20
 
 /obj/item/alch/seeddust
 	name = "seed dust"
 	icon_state = "seeddust"
+	sellprice = 1
 
 /obj/item/alch/runedust
 	name = "raw essentia"
 	icon_state = "runedust"
+	sellprice = 20
 
 /obj/item/alch/coaldust
 	name = "coal dust"
 	icon_state = "coaldust"
+	sellprice = 2
 
 /obj/item/alch/silverdust
 	name = "silver dust"
 	icon_state = "silverdust"
+	sellprice = 5
 
 /obj/item/alch/magicdust
 	name = "pure essentia"
 	icon_state = "magic_runedust"
+	sellprice = 20
 
 /obj/item/alch/firedust
 	name = "fire essentia"
 	icon_state = "fire_runedust"
+	sellprice = 20
 
 /obj/item/alch/sinew
 	name = "sinew"
 	icon_state = "sinew"
 	dropshrink = 0.9
+	sellprice = 1
 
 /obj/item/alch/irondust
 	name = "iron dust"
 	icon_state = "irondust"
+	sellprice = 5
 
 /obj/item/alch/airdust
 	name = "air essentia"
 	icon_state = "air_runedust"
+	sellprice = 20
 
 /obj/item/alch/swampdust
 	name = "swampweed dust"
 	icon_state = "swampdust"
+	sellprice = 2
 
 /obj/item/alch/tobaccodust
 	name = "westleach dust"
 	icon_state = "tobaccodust"
+	sellprice = 3
 
 /obj/item/alch/earthdust
 	name = "earth essentia"
@@ -73,6 +86,8 @@
 	grid_height = 32
 	grid_width = 32
 
+	sellprice = 2
+
 	attunement_values = list(
 		/datum/attunement/death = 0.05,
 		/datum/attunement/life = -0.1,
@@ -87,22 +102,27 @@
 	throwforce = 5
 	w_class = WEIGHT_CLASS_NORMAL
 
+	sellprice = 15
+
 	grid_width = 64
 	grid_height = 64
 
 /obj/item/alch/golddust
 	name = "gold dust"
 	icon_state = "golddust"
+	sellprice = 20
 
 /obj/item/alch/feaudust
 	name = "feau dust"
 	desc = "Combining gold and iron results in this powder with unique alchemical properties."
 	icon_state = "feaudust"
+	sellprice = 15
 
 /obj/item/alch/ozium
 	name = "alchemical ozium"
 	desc = "Alchemical processing has left it unfit for consumption."
 	icon_state = "darkredpowder"
+	sellprice = 10
 
 /obj/item/alch/transisdust
 	name = "transis dust"
@@ -110,6 +130,9 @@
 	icon_state = "transisdust"
 
 //BEGIN THE HERBS
+
+/obj/item/alch/herb
+	sellprice = 1
 
 /obj/item/alch/herb/atropa
 	name = "atropa"
