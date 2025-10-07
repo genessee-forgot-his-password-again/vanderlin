@@ -623,3 +623,8 @@
 	desc = "<span class='boldwarning'>It's uncomfortable, and I can't take it off!</span>\n" //torture yay!
 	stress_change = 50
 	timer = 1000 MINUTES
+
+/datum/stress_event/dead_bird
+	timer = 5 MINUTES
+	stress_change = 3
+	desc = span_red("My precious bird won't answer my call...")

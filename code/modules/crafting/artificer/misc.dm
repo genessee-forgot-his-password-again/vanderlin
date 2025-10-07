@@ -264,6 +264,14 @@
 	hammers_per_item = 4
 	craftdiff = 5
 
+/datum/artificer_recipe/contraptions/dwarven_music_box
+	name = "Dwarven Music Box (+2 Bronze) (+2 Cogs) (+1 Amethyst)"
+	required_item = /obj/item/ingot/bronze
+	created_item = /obj/item/dmusicbox
+	additional_items = list(/obj/item/gear/metal = 2, /obj/item/ingot/bronze = 2, /obj/item/gem/amethyst = 1)
+	hammers_per_item = 10
+	craftdiff = 6
+
 // --------- Ammo -----------
 
 /datum/artificer_recipe/ammo

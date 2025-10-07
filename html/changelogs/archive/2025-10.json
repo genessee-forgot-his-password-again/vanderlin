@@ -190,5 +190,94 @@
                 "rscadd": "Adds Bardic Inspiration, usable by bards and related classes."
             }
         ]
+    },
+    "2025-10-07": {
+        "Wouju": [
+            {
+                "rscadd": "Leeches and worms are grindable in a mortar"
+            },
+            {
+                "rscadd": "examining any item that has a precursor will tell you what essence it gives (with enough alchemy skill of course)"
+            },
+            {
+                "rscdel": "Removed grind recipe for organs, grinding them gives their reagents instead"
+            },
+            {
+                "rscadd": "dwarven music box is craftable by artificers"
+            }
+        ],
+        "wgtjunior743": [
+            {
+                "bugfix": "Migrants not being foreigners"
+            },
+            {
+                "bugfix": "Adv classes who showed their title having all the same name."
+            },
+            {
+                "rscadd": "Vote Continue time scales of the amount of ppl who voted Continue or End round."
+            },
+            {
+                "rscadd": "INITIAL_ROUND_TIMER now decides when the first vote of the round happens"
+            }
+        ],
+        "Snack-Max": [
+            {
+                "rscadd": "Added four new hairstyles, Lakkari Bun, Lakkari Cut, Sand Crop and Dunes"
+            }
+        ],
+        "DirectorNoot": [
+            {
+                "rscadd": "Added 'control undead' spell to necromancer's starting spells"
+            }
+        ],
+        "DrSirKnight": [
+            {
+                "rscadd": "Added a way for nobles to contact admins for IC things by sending letters"
+            },
+            {
+                "admin": "Added a way to send paper letters to people"
+            }
+        ],
+        "TooFewSecrets": [
+            {
+                "balance": "Baothan clerics are better at crafting drugs and will not recklessly shout their goddess's name when handing out magic drugs."
+            }
+        ],
+        "CheffieGithub": [
+            {
+                "bugfix": "Advclass and migrants get loadout items"
+            },
+            {
+                "bugfix": "Not every conjured item has infinite refreshes"
+            }
+        ],
+        "Beryyseimith": [
+            {
+                "rscadd": "creating a noose now uses build delay instead of a skill-check."
+            }
+        ],
+        "Raptorian1": [
+            {
+                "map": "Updated rosewood."
+            },
+            {
+                "map": "large sections of the map to shrink it down to a more manageable size."
+            },
+            {
+                "map": "Shrinked the lower floor of the inn."
+            },
+            {
+                "rscadd": "Adds the sword display, paper and quills and another set of keys to the inn."
+            },
+            {
+                "rscdel": "The bathrooms and bath from the inn."
+            },
+            {
+                "rscadd": "Cannon to the fort"
+            },
+            {
+                "rscadd": "A secret to the apothecary"
+            }
+        ]
     }
 }

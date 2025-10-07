@@ -454,7 +454,7 @@
 	required_materials = list(
 		/obj/item/rope = 1
 	)
-	craftdiff = 1
+	build_time = 4 SECONDS
 	requires_ceiling = TRUE
 
 /datum/blueprint_recipe/carpentry/apiary

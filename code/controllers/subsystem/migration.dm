@@ -283,6 +283,7 @@ SUBSYSTEM_DEF(migrants)
 	new_player.transfer_character()
 
 	SSjob.EquipRank(character, migrant_job, character.client)
+	apply_loadouts(character, character.client)
 	SSticker.minds += character.mind
 
 	GLOB.joined_player_list += character.ckey
