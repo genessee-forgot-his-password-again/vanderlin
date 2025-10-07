@@ -23,6 +23,7 @@
 		/datum/action/cooldown/spell/undirected/list_target/convert_role/templar,
 		/datum/action/cooldown/spell/undirected/list_target/convert_role/acolyte,
 		/datum/action/cooldown/spell/undirected/list_target/convert_role/churchling,
+		/datum/action/cooldown/spell/undirected/call_bird/priest,
 	)
 
 /datum/outfit/priest/pre_equip(mob/living/carbon/human/H)
@@ -75,7 +76,6 @@
 		var/datum/devotion/devotion = new holder()
 		devotion.make_priest()
 		devotion.grant_to(H)
-
 	H.update_icons()
 
 /datum/job/priest/demoted //just used to change the priest title

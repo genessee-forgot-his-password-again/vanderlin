@@ -29,6 +29,6 @@ map daftmarsh
 endmap
 
 map whitepalacepass
-	maxplayers 90
+	maxplayers 0
 	votable
 endmap

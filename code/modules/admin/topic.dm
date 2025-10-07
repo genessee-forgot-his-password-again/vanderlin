@@ -1495,6 +1495,12 @@
 		popup.set_content(popup_window_data)
 		popup.open()
 
+	else if(href_list["adminbirdletter"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/mob/M = locate(href_list["adminbirdletter"])
+		usr.client.send_bird_letter(M)
+
 /datum/admins/proc/HandleCMode()
 	if(!check_rights(R_ADMIN))
 		return

@@ -140,6 +140,7 @@ SUBSYSTEM_DEF(role_class_handler)
 			picked_class.title_override = old.title
 
 	SSjob.EquipRank(H, picked_class, H.client)
+	apply_loadouts(H, H.client)
 
 // A dum helper to adjust the class amount, we could do it elsewhere but this will also inform any relevant class handlers open.
 /datum/controller/subsystem/role_class_handler/proc/adjust_class_amount(datum/job/advclass/target_datum, amount)
