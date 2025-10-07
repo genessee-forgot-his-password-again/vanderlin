@@ -2611,6 +2611,7 @@
 #include "code\modules\jobs\job_types\persistence\farmer.dm"
 #include "code\modules\jobs\job_types\persistence\miner.dm"
 #include "code\modules\jobs\job_types\persistence\persistence.dm"
+#include "code\modules\jobs\job_types\persistence\settler.dm"
 #include "code\modules\jobs\job_types\persistence\stonemason.dm"
 #include "code\modules\jobs\job_types\persistence\woodsman.dm"
 #include "code\modules\jobs\job_types\serfs\alchemist.dm"

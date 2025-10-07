@@ -1,5 +1,5 @@
 /datum/job/persistence/blacksmith
-	title = "Blacksmith"
+	title = "Smithworker"
 	tutorial = "You are a blacksmith, somewhat skilled in the creation of arms and armor in a forge. Ensure the town isn't defenseless."
 	department_flag = SERFS
 	job_flags = (JOB_ANNOUNCE_ARRIVAL | JOB_SHOW_IN_CREDITS | JOB_EQUIP_RANK | JOB_NEW_PLAYER_JOINABLE)
@@ -45,7 +45,7 @@
 	belt = pick(/obj/item/storage/belt/leather, /obj/item/storage/belt/leather/rope)
 	cloak = /obj/item/clothing/cloak/apron/brown
 
-	beltl = /obj/item/weapon/hammer/iron
+	beltl = /obj/item/weapon/hammer/wood
 	beltr = /obj/item/weapon/tongs/stone
 	backl = /obj/item/storage/backpack/satchel
 	backpack_contents = list(/obj/item/recipe_book/blacksmithing = 1, /obj/item/weapon/knife/villager = 1, /obj/item/weapon/chisel/iron = 1)
