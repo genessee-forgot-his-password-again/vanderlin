@@ -16,10 +16,12 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	volume = 25
 	obj_flags = CAN_BE_HIT
-	sellprice = 1
+	sellprice = 7
 	drinksounds = list('sound/items/drink_cup (1).ogg','sound/items/drink_cup (2).ogg','sound/items/drink_cup (3).ogg','sound/items/drink_cup (4).ogg','sound/items/drink_cup (5).ogg')
 	fillsounds = list('sound/items/fillcup.ogg')
 	gripped_intents = list(INTENT_POUR)
+	melting_material = /datum/material/iron
+	melt_amount = 25
 
 /obj/item/reagent_containers/glass/cup/Initialize(mapload, vol)
 	. = ..()
@@ -33,12 +35,13 @@
 	grid_height = 32
 	drop_sound = 'sound/foley/dropsound/wooden_drop.ogg'
 	metalizer_result = /obj/item/reagent_containers/glass/cup
+	sellprice = 1
 
 /obj/item/reagent_containers/glass/cup/steel
 	name = "goblet"
 	desc = "A steel goblet that bears a few dents from previous scuffles."
 	icon_state = "cup_steel"
-	sellprice = 10
+	sellprice = 12
 
 /obj/item/reagent_containers/glass/cup/silver
 	name = "silver goblet"
@@ -71,6 +74,7 @@
 	icon = 'icons/obj/handmade/cup.dmi'
 	icon_state = "world"
 	dropshrink = 1
+	sellprice = 1
 
 /obj/item/reagent_containers/glass/cup/clay/set_material_information()
 	. = ..()
@@ -82,6 +86,7 @@
 	icon = 'icons/obj/handmade/cup_fancy.dmi'
 	icon_state = "world"
 	dropshrink = 1
+	sellprice = 10
 
 /obj/item/reagent_containers/glass/cup/fancy_clay/set_material_information()
 	. = ..()
@@ -93,6 +98,7 @@
 	icon = 'icons/obj/handmade/mug.dmi'
 	icon_state = "world"
 	dropshrink = 1
+	sellprice = 1
 
 /obj/item/reagent_containers/glass/cup/clay_mug/set_material_information()
 	. = ..()
@@ -140,8 +146,10 @@
 	sellprice = VALUE_COMMON_GOODS * 1.5
 	volume = 9
 	grid_height = 32
+	sellprice = 15
 
 /obj/item/reagent_containers/glass/cup/glassware/wineglass
 	name = "wine glass"
 	desc = "A fancy wine glass- the few scratches that are upon it tell grand tales of lies and betrayal. It tends to break easily..."
 	icon_state = "clear_wineglass1"
+	sellprice = 25

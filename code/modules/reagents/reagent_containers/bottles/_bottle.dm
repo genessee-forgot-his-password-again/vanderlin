@@ -21,6 +21,7 @@ GLOBAL_LIST_INIT(wisdoms, world.file2list("strings/rt/wisdoms.txt"))
 	experimental_onhip = TRUE
 	can_label_container = TRUE
 	label_prefix = "bottle of "
+	sellprice = 5
 	var/closed = TRUE
 	/// Do not change desc when opened or closed
 	var/fancy = FALSE
@@ -209,6 +210,7 @@ GLOBAL_LIST_INIT(wisdoms, world.file2list("strings/rt/wisdoms.txt"))
 	fillsounds = list('sound/items/fillcup.ogg')
 	poursounds = list('sound/items/fillbottle.ogg')
 	label_prefix = "vial of "
+	sellprice = 3
 
 /obj/item/reagent_containers/glass/bottle/vial/Initialize()
 	. = ..()

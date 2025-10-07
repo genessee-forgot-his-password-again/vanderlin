@@ -5,6 +5,7 @@
 	desc = "A disgusting, blood-sucking parasite."
 	icon = 'icons/roguetown/items/surgery.dmi'
 	icon_state = "leech"
+	sellprice = 1
 	baitpenalty = 0
 	isbait = TRUE
 	fishloot = list(/obj/item/reagent_containers/food/snacks/fish/carp = 5,

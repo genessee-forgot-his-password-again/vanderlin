@@ -276,6 +276,7 @@
 	extinguish_prob = 10
 	melting_material = /datum/material/iron
 	melt_amount = 75
+	sellprice = 20
 
 /obj/item/flashlight/flare/torch/lantern/afterattack(atom/movable/A, mob/user, proximity)
 	. = ..()
@@ -315,6 +316,7 @@
 	extinguish_prob = 0
 	melting_material = /datum/material/bronze
 	melt_amount = 75
+	sellprice = 50
 
 /obj/item/flashlight/flare/torch/lantern/copper
 	name = "copper lamptern"
@@ -331,6 +333,7 @@
 	extinguish_prob = 15
 	melting_material = /datum/material/copper
 	melt_amount = 75
+	sellprice = 10
 
 /obj/item/flashlight/flare/torch/lantern/copper/getonmobprop(tag)
 	. = ..()

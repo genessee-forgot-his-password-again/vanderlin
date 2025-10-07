@@ -320,7 +320,7 @@
 	max_blade_int = 70
 	max_integrity = INTEGRITY_POOR
 	minstr = 7
-	melting_material = null
+	melting_material = /datum/material/copper
 	melt_amount = 75
 	dropshrink = 0.9
 	sellprice = 15
