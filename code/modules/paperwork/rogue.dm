@@ -376,15 +376,27 @@
 
 /obj/item/banknote/one
 	name = "1 mammon banknote"
-	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with bronze and is worth a single mammon."
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with string and is worth a single mammon."
 	icon_state = "banknote-1"
 	sellprice = 1
 
+/obj/item/banknote/five
+	name = "5 mammon banknote"
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with bronze and is worth five mammons."
+	icon_state = "banknote-5"
+	sellprice = 5
+
 /obj/item/banknote/ten
 	name = "10 mammon banknote"
-	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with silver and is worth ten mammons."
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with iron and is worth ten mammons."
 	icon_state = "banknote-10"
 	sellprice = 10
+
+/obj/item/banknote/fifty
+	name = "50 mammon banknote"
+	desc = "A piece of paper which can be exchanged at a Merchant for a predetermined amount of mammons. This one is sealed with silver and is worth fifty mammons."
+	icon_state = "banknote-50"
+	sellprice = 50
 
 /obj/item/banknote/onehundred
 	name = "100 mammon banknote"
