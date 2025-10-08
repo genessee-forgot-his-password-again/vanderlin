@@ -60,7 +60,7 @@
 			H.adjust_skillrank(/datum/skill/misc/music, 2, TRUE)
 		if(/datum/patron/divine/noc)
 			head = /obj/item/clothing/head/roguehood/nochood
-			neck = /obj/item/clothing/neck/psycross/noc
+			neck = /obj/item/clothing/neck/psycross/silver/noc
 			wrists = /obj/item/clothing/wrists/nocwrappings
 			shoes = /obj/item/clothing/shoes/sandals
 			armor = /obj/item/clothing/shirt/robe/noc

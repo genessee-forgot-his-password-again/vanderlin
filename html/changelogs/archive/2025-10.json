@@ -279,5 +279,22 @@
                 "rscadd": "A secret to the apothecary"
             }
         ]
+    },
+    "2025-10-08": {
+        "Wouju": [
+            {
+                "bugfix": "fixed runtime error on examining items without a precursor"
+            }
+        ],
+        "flleeppyy": [
+            {
+                "rscdel": "Remove Stickybans"
+            }
+        ],
+        "wgtjunior743": [
+            {
+                "bugfix": "Handpie uses the right mince type"
+            }
+        ]
     }
 }

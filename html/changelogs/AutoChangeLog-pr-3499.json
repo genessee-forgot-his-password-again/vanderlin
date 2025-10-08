@@ -1,0 +1,1 @@
+{"author":"Dorodomki","delete-after":true,"changes":[{"balance":"rebalanced pilgrims"},{"rscadd":"Added more clothing rolls for pilgrims, the peasant pilgrim gets 6 tools on spawn\\n:cl:\\n## Pre-Merge Checklist\\n- [x] You tested this on a local server.\\n- [x] This code did not runtime during testing.\\n- [x] You documented all of your changes."}]}

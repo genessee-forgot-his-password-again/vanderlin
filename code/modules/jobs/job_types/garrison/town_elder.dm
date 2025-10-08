@@ -259,7 +259,7 @@
 			ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
 			H.virginity = FALSE
 		if(/datum/patron/divine/noc)
-			neck = /obj/item/clothing/neck/psycross/noc
+			neck = /obj/item/clothing/neck/psycross/silver/noc
 			H.cmode_music = 'sound/music/cmode/adventurer/CombatMonk.ogg'
 			var/language = pickweight(list("Dwarvish" = 1, "Elvish" = 1, "Hellspeak" = 1, "Zaladin" = 1, "Orcish" = 1,))
 			switch(language)
@@ -424,7 +424,7 @@
 	beltl = /obj/item/flashlight/flare/torch/lantern
 	backl = /obj/item/storage/backpack/satchel
 	wrists = /obj/item/clothing/wrists/nocwrappings
-	neck = /obj/item/clothing/neck/psycross/noc
+	neck = /obj/item/clothing/neck/psycross/silver/noc
 	backpack_contents = list(/obj/item/storage/belt/pouch/coins/poor = 1, /obj/item/needle = 1 )
 
 	if(H.patron != /datum/patron/divine/noc)

@@ -233,6 +233,8 @@
 
 	if(has_status_effect(/datum/status_effect/debuff/lux_drained) || has_status_effect(/datum/status_effect/debuff/flaw_lux_taken))//accounts for luxless flaw
 		return LUX_DRAINED
+	if(has_status_effect(/datum/status_effect/buff/received_lux))
+		return LUX_HAS_LUX
 
 	return blood.contains_lux
 

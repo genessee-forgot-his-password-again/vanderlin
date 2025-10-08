@@ -52,7 +52,10 @@
 			"[user] extracts lux from [target]'s innards.",
 			"[user] extracts lux from [target]'s innards.")
 		new /obj/item/reagent_containers/lux(target.loc)
-		target.apply_status_effect(/datum/status_effect/debuff/lux_drained)
+		if(target.has_status_effect(/datum/status_effect/buff/received_lux))
+			target.remove_status_effect(/datum/status_effect/buff/received_lux)
+		else
+			target.apply_status_effect(/datum/status_effect/debuff/lux_drained)
 		SEND_SIGNAL(user, COMSIG_LUX_EXTRACTED, target)
 		record_featured_stat(FEATURED_STATS_CRIMINALS, user)
 		record_round_statistic(STATS_LUX_HARVESTED)

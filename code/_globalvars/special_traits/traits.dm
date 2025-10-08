@@ -612,7 +612,7 @@
 			weapon = /obj/item/weapon/sword/long/exe/astrata
 			character.cmode_music = 'sound/music/cmode/church/CombatAstrata.ogg'
 		if(/datum/patron/divine/noc)
-			psycross = /obj/item/clothing/neck/psycross/noc
+			psycross = /obj/item/clothing/neck/psycross/silver/noc
 			helmet = /obj/item/clothing/head/helmet/heavy/necked/noc
 			cloak = /obj/item/clothing/cloak/stabard/templar/noc
 			weapon = /obj/item/weapon/sword/sabre/noc
