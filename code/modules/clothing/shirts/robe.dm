@@ -1,5 +1,5 @@
 /obj/item/clothing/shirt/robe
-	slot_flags = ITEM_SLOT_ARMOR
+	slot_flags = ITEM_SLOT_SHIRT|ITEM_SLOT_ARMOR
 	name = "robe"
 	desc = "A common robe, worn mostly by religious adepts."
 	body_parts_covered = CHEST|GROIN|ARMS|LEGS|VITALS
@@ -52,6 +52,7 @@
 	name = "sun robe"
 	desc = "The cloth of a follower of Astrata."
 	icon_state = "astratarobe"
+
 	sleeved = null
 
 /obj/item/clothing/shirt/robe/noc

@@ -18864,15 +18864,15 @@
 	pixel_x = -6;
 	pixel_y = 11
 	},
-/obj/item/clothing/neck/psycross/noc{
+/obj/item/clothing/neck/psycross/silver/noc{
 	pixel_x = -2;
 	pixel_y = -4
 	},
-/obj/item/clothing/neck/psycross/noc{
+/obj/item/clothing/neck/psycross/silver/noc{
 	pixel_x = 7;
 	pixel_y = 5
 	},
-/obj/item/clothing/neck/psycross/noc{
+/obj/item/clothing/neck/psycross/silver/noc{
 	pixel_x = -10;
 	pixel_y = 9
 	},

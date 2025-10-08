@@ -649,3 +649,14 @@
 /obj/item/weapon/knife/throwingknife/psydon/Initialize(mapload)
 	. = ..()
 	enchant(/datum/enchantment/silver)
+
+/obj/item/weapon/knife/throwingknife/rous
+	name = "rous kunai"
+	desc = "A typical knife used by rous assassins. Quite effective when thrown."
+	icon_state = "rouskunai"
+	throw_speed = 4
+	wdefense = 3
+	max_integrity = INTEGRITY_POOR
+	embedding = list("embedded_pain_multiplier" = 4, "embed_chance" = 30, "embedded_fall_chance" = 15)
+	sellprice = 5
+	melt_amount = 50
