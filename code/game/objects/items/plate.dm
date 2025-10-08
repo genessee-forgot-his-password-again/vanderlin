@@ -15,6 +15,7 @@
 	var/placement_offset = -15
 	grid_width = 32
 	grid_height = 32
+	sellprice = 1
 
 /obj/item/plate/attackby(obj/item/I, mob/user, params)
 	if(item_flags & IN_STORAGE)
@@ -132,6 +133,7 @@
 	icon_state = "platter_copper"
 	resistance_flags = FIRE_PROOF
 	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 6
 
 /obj/item/plate/pewter
 	name = "pewter platter"
@@ -139,6 +141,7 @@
 	icon_state = "platter_tin"
 	resistance_flags = FIRE_PROOF
 	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 3
 
 /obj/item/plate/silver
 	name = "silver platter"
