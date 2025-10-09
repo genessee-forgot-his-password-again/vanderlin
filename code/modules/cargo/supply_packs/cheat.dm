@@ -3,22 +3,32 @@
 	crate_name = "merchant guild's crate"
 	crate_type = /obj/structure/closet/crate/chest/merchant
 
-/datum/supply_pack/copper/banknoteone
+/datum/supply_pack/cheat/banknoteone
 	name = "Banknote (1M)"
 	cost = 0
 	contains = /obj/item/banknote/one
 
-/datum/supply_pack/copper/banknoteten
+/datum/supply_pack/cheat/banknotefive
+	name = "Banknote (5M)"
+	cost = 0
+	contains = /obj/item/banknote/five
+
+/datum/supply_pack/cheat/banknoteten
 	name = "Banknote (10M)"
 	cost = 0
 	contains = /obj/item/banknote/ten
 
-/datum/supply_pack/copper/banknotehundred
+/datum/supply_pack/cheat/banknotefifty
+	name = "Banknote (50M)"
+	cost = 0
+	contains = /obj/item/banknote/fifty
+
+/datum/supply_pack/cheat/banknotehundred
 	name = "Banknote (100M)"
 	cost = 0
 	contains = /obj/item/banknote/onehundred
 
-/datum/supply_pack/copper/banknotethousand
+/datum/supply_pack/cheat/banknotethousand
 	name = "Banknote (1000M)"
 	cost = 0
 	contains = /obj/item/banknote/onethousand
