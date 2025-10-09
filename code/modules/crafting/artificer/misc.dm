@@ -155,6 +155,14 @@
 	hammers_per_item = 7
 	craftdiff = 4
 
+/datum/artificer_recipe/weapons/airgun
+	name = "Airgun (+2 Cured Leather) (+3 Bronze) (+4 Metal Gear)"
+	required_item = /obj/item/ingot/steel
+	created_item = /obj/item/gun/ballistic/revolver/grenadelauncher/airgun
+	additional_items = list(/obj/item/natural/hide/cured = 2, /obj/item/ingot/bronze = 3, /obj/item/gear/metal = 4)
+	hammers_per_item = 10
+	craftdiff = 5
+
 // --------- ARMOR -----------
 
 //should be armour not armor fight me, but most of the codebase uses american english so its armor

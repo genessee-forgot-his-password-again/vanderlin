@@ -79,6 +79,7 @@
 		return
 	var/datum/antagonist/new_antag = new /datum/antagonist/purishep()
 	H.mind?.add_antag_datum(new_antag)
+	H.add_spell(/datum/action/cooldown/spell/undirected/call_bird/inquisitor)
 	H.set_patron(/datum/patron/psydon)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC) //his gear is medium, he needs this to dodge well
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)

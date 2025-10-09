@@ -2887,6 +2887,10 @@
 /turf/open/floor/ruinedwood/spiral,
 /area/rogue/indoors/town/magician)
 "bDB" = (
+/obj/structure/closet/crate/chest/gold,
+/obj/item/key/vault,
+/obj/effect/mapping_helpers/access/locker,
+/obj/effect/mapping_helpers/access/keyset/manor/vault,
 /obj/structure/fluff/walldeco/painting{
 	pixel_y = 32
 	},

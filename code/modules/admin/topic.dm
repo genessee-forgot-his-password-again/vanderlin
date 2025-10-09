@@ -691,6 +691,33 @@
 
 		src.manage_free_slots()
 
+	else if(href_list["enablejob"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/Enable = href_list["enablejob"]
+		for(var/datum/job/job in SSjob.joinable_occupations)
+			if(job.title == Enable)
+				job.enabled = TRUE
+				job.total_positions = initial(job.total_positions)
+				job.spawn_positions = initial(job.spawn_positions)
+				break
+
+		src.manage_free_slots()
+
+	else if(href_list["disablejob"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/Disable = href_list["disablejob"]
+		for(var/datum/job/job in SSjob.joinable_occupations)
+			if(job.title == Disable)
+				job.enabled = FALSE
+				job.total_positions = 0
+				job.spawn_positions = 0
+				break
+		src.manage_free_slots()
+
 
 	else if(href_list["adminsmite"])
 		if(!check_rights(R_ADMIN|R_FUN))

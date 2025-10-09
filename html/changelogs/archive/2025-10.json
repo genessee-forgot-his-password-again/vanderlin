@@ -296,5 +296,65 @@
                 "bugfix": "Handpie uses the right mince type"
             }
         ]
+    },
+    "2025-10-09": {
+        "DirectorNoot": [
+            {
+                "rscadd": "add control undead spell to lich"
+            },
+            {
+                "bugfix": "Fixed that spell, previously did nothing"
+            }
+        ],
+        "Dorodomki": [
+            {
+                "balance": "rebalanced pilgrims"
+            },
+            {
+                "rscadd": "Added more clothing rolls for pilgrims, the peasant pilgrim gets 6 tools on spawn\\n:cl:\\n## Pre-Merge Checklist\\n- [x] You tested this on a local server.\\n- [x] This code did not runtime during testing.\\n- [x] You documented all of your changes."
+            },
+            {
+                "rscadd": "Added missing sprites for templar tabard"
+            },
+            {
+                "rscadd": "Robes can now go in the shirt slot\\n:cl:\\n## Pre-Merge Checklist\\n- [x] You tested this on a local server.\\n- [x] This code did not runtime during testing.\\n- [x] You documented all of your changes."
+            }
+        ],
+        "wgtjunior743": [
+            {
+                "bugfix": "The game prioritizing your armor slot even if your shirt slot armor is better when taking damage"
+            },
+            {
+                "bugfix": "Triumph Buy \\\"Pick Any Class\\\" now works properly"
+            }
+        ],
+        "Wouju": [
+            {
+                "balance": "You can pray to Psydon (and The Ten with their respective amulet) if you have a psycross/amulet in your active hand, neck or wrists"
+            },
+            {
+                "bugfix": "Noc amulet is now made of silver as it shouldve been"
+            },
+            {
+                "rscadd": "Inquisitors can purchase crossbows and lifeblood. Inquisitor favour list slightly tweaked (for example, chain gloves now come in one pair and not two)"
+            },
+            {
+                "rscadd": "Craftable wooden and metal psydon cross"
+            },
+            {
+                "balance": "3 Adepts can now spawn roundstart, there can be a total of 2 adepts of the same advclass."
+            },
+            {
+                "balance": "Slight changes to brutal zealot and inquisitor skills/stats/traits"
+            },
+            {
+                "map": "Major changes to the Old Church."
+            }
+        ],
+        "DrSirKnight": [
+            {
+                "rscadd": "Two new admin only rousmen and a admin only rous abomination"
+            }
+        ]
     }
 }

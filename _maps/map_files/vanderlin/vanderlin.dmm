@@ -12055,6 +12055,14 @@
 /obj/item/reagent_containers/glass/bottle/vial/healthpot,
 /turf/open/floor/cobble,
 /area/rogue/indoors/dungeon)
+"gVa" = (
+/obj/structure/door{
+	name = "vault spare key"
+	},
+/obj/effect/mapping_helpers/access/keyset/manor/vault,
+/obj/effect/mapping_helpers/access/locker,
+/turf/open/floor/tile,
+/area/rogue/indoors/town/vault)
 "gVQ" = (
 /obj/structure/fluff/railing/wood{
 	dir = 1;
@@ -29742,6 +29750,13 @@
 /obj/structure/fluff/railing/border,
 /turf/open/floor/ruinedwood/darker,
 /area/rogue/indoors/soilsons)
+"rWp" = (
+/obj/structure/closet/crate/chest/gold,
+/obj/item/key/vault,
+/obj/effect/mapping_helpers/access/locker,
+/obj/effect/mapping_helpers/access/keyset/manor/vault,
+/turf/open/floor/tile,
+/area/rogue/indoors/town/vault)
 "rWI" = (
 /obj/structure/flora/newtree,
 /turf/open/floor/dirt,
@@ -62523,8 +62538,8 @@ fkZ
 vgJ
 tHe
 tHe
-tHe
-tHe
+mcU
+mcU
 mcU
 mRh
 gye
@@ -62725,9 +62740,9 @@ fkZ
 vgJ
 vgJ
 vgJ
-vgJ
-vgJ
 mcU
+rWp
+gVa
 qny
 rXr
 xaU
@@ -62927,8 +62942,8 @@ fkZ
 vgJ
 vgJ
 vgJ
-vgJ
-vgJ
+mcU
+mcU
 mcU
 pLX
 ozc

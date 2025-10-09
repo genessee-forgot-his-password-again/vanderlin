@@ -7734,6 +7734,9 @@
 /area/rogue/indoors/town/clocktower)
 "hkV" = (
 /obj/structure/closet/crate/chest/neu_fancy,
+/obj/effect/mapping_helpers/access/keyset/manor/vault,
+/obj/effect/mapping_helpers/access/locker,
+/obj/item/key/vault,
 /turf/open/floor/tile/masonic/spiral,
 /area/rogue/indoors/town/vault)
 "hkX" = (
