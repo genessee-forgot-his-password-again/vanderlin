@@ -48,4 +48,4 @@
 	beltl = /obj/item/weapon/hammer/wood
 	beltr = /obj/item/weapon/tongs/stone
 	backl = /obj/item/storage/backpack/satchel
-	backpack_contents = list(/obj/item/recipe_book/blacksmithing = 1, /obj/item/weapon/knife/villager = 1, /obj/item/weapon/chisel/iron = 1)
+	backpack_contents = list(/obj/item/recipe_book/blacksmithing = 1, /obj/item/weapon/knife/villager = 1)
