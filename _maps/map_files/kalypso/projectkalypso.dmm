@@ -18615,6 +18615,10 @@
 	},
 /turf/closed/mineral/coal,
 /area/rogue/under/cave)
+"rtA" = (
+/obj/effect/landmark/latejoin,
+/turf/open/floor/dirt,
+/area/rogue/outdoors)
 "sKx" = (
 /obj/structure/stairs{
 	dir = 1
@@ -111279,7 +111283,7 @@ afM
 alN
 afM
 agh
-agh
+rtA
 agh
 ayQ
 afM
