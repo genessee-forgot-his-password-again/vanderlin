@@ -14,6 +14,7 @@
 	var/lit = FALSE
 	var/infinite = FALSE
 	var/start_lit = FALSE
+	sellprice = 5
 
 /obj/item/candle/lit
 	start_lit = TRUE

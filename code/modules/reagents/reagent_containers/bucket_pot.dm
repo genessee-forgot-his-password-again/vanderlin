@@ -48,6 +48,7 @@
 	dropshrink = 0.8
 	slot_flags = null
 	drop_sound = 'sound/foley/dropsound/wooden_drop.ogg'
+	sellprice = 1
 
 /obj/item/reagent_containers/glass/bucket/wooden/Initialize(mapload, vol)
 	. = ..()
@@ -75,6 +76,7 @@
 	melt_amount = 80
 	var/processing_amount = 0 ///we use this to "reserve" reagents
 	var/static/list/recipe_list = list()
+	sellprice = 15
 
 /obj/item/reagent_containers/glass/bucket/pot/Initialize(mapload, vol)
 	. = ..()
@@ -90,10 +92,12 @@
 /obj/item/reagent_containers/glass/bucket/pot/copper
 	icon_state = "pote_copper"
 	melting_material = /datum/material/copper
+	sellprice = 10
 
 /obj/item/reagent_containers/glass/bucket/pot/stone
 	icon_state = "pote_stone"
 	melting_material = null
+	sellprice = 1
 
 /obj/item/reagent_containers/glass/bucket/pot/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/reagent_containers/glass/bowl))
