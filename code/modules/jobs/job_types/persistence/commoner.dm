@@ -1,13 +1,13 @@
-/datum/job/persistence/settler
+/datum/job/persistence/commoner
 	title = "Commoner"
 	tutorial = "You don't have any particularly notable skills, but you can do most things - albiet worse than your specialized counterparts. Try to make yourself useful."
 	department_flag = PEASANTS
 	job_flags = (JOB_ANNOUNCE_ARRIVAL | JOB_SHOW_IN_CREDITS | JOB_EQUIP_RANK | JOB_NEW_PLAYER_JOINABLE)
 	faction = FACTION_TOWN
-	outfit = /datum/outfit/settler_p
+	outfit = /datum/outfit/commoner_p
 	cmode_music = 'sound/music/cmode/towner/CombatTowner.ogg'
 
-/datum/outfit/settler_p/pre_equip(mob/living/carbon/human/H)
+/datum/outfit/commoner_p/pre_equip(mob/living/carbon/human/H)
 	..()
 	if(prob(50))
 		H.cmode_music = 'sound/music/cmode/towner/CombatTowner2.ogg'

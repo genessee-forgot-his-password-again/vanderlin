@@ -1,4 +1,4 @@
-/datum/job/persistence/blacksmith
+/datum/job/persistence/smithworker
 	title = "Smithworker"
 	tutorial = "You are a blacksmith, somewhat skilled in the creation of arms and armor in a forge. Ensure the town isn't defenseless."
 	department_flag = SERFS

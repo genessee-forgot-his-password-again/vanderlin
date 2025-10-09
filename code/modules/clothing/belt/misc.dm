@@ -5,6 +5,7 @@
 	item_state = "leather"
 	equip_sound = 'sound/blank.ogg'
 	var/empty_when_dropped = TRUE
+	sellprice = 5
 
 /obj/item/storage/belt/leather/dropped(mob/living/carbon/human/user)
 	..()
@@ -122,6 +123,7 @@
 	icon_state = "cloth"
 	salvage_result = /obj/item/natural/cloth
 	component_type = /datum/component/storage/concrete/grid/belt/cloth
+	sellprice = 2
 
 /obj/item/storage/belt/leather/cloth/attack_self(mob/user, params)
 	. = ..()
