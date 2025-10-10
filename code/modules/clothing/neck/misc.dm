@@ -245,6 +245,7 @@
 	body_parts_covered = NECK|HAIR|EARS|HEAD
 	max_integrity = INTEGRITY_STRONGEST
 	prevent_crits = ALL_EXCEPT_BLUNT
+	sellprice = 30
 
 
 /obj/item/clothing/neck/chaincoif/AdjustClothes(mob/user)
@@ -283,6 +284,7 @@
 
 	armor = ARMOR_MAILLE_IRON
 	max_integrity = INTEGRITY_STRONG
+	sellprice = 20
 
 /obj/item/clothing/neck/gorget/copper
 	name = "neck protector"
@@ -293,6 +295,7 @@
 	armor_class = AC_MEDIUM
 	armor = ARMOR_LEATHER_GOOD
 	max_integrity = INTEGRITY_POOR
+	sellprice = 5
 
 
 //..................................................................................................................................
@@ -322,6 +325,7 @@
 	body_parts_covered = NECK|EARS|MOUTH|NOSE
 	max_integrity = INTEGRITY_STRONGEST
 	prevent_crits = ALL_EXCEPT_STAB
+	sellprice = 30
 
 /obj/item/clothing/neck/bevor/Initialize()
 	. = ..()
@@ -336,6 +340,7 @@
 
 	armor = ARMOR_PLATE_BAD
 	max_integrity = INTEGRITY_STRONG
+	sellprice = 20
 
 /obj/item/clothing/neck/gorget
 	name = "gorget"
@@ -358,6 +363,7 @@
 	body_parts_covered = NECK
 	max_integrity = INTEGRITY_STRONG
 	prevent_crits = ALL_EXCEPT_STAB
+	sellprice = 20
 
 /obj/item/clothing/neck/gorget/Initialize()
 	. = ..()
@@ -370,6 +376,7 @@
 	smeltresult = /obj/item/ingot/bronze
 	melting_material = /datum/material/bronze
 	armor = ARMOR_MAILLE_GOOD
+	sellprice = 20
 
 /obj/item/clothing/neck/highcollier
 	name = "high collier"
@@ -392,6 +399,7 @@
 	clothing_flags = CANT_SLEEP_IN
 	max_integrity = INTEGRITY_STRONGEST
 	prevent_crits = ALL_EXCEPT_BLUNT
+	sellprice = 30
 
 /obj/item/clothing/neck/highcollier/AdjustClothes(mob/user)
 	if(loc == user)
@@ -428,12 +436,14 @@
 	smeltresult = /obj/item/ingot/iron
 	melt_amount = 100
 	melting_material = /datum/material/iron
+	sellprice = 20
 
 /obj/item/clothing/neck/highcollier/iron/renegadecollar
 	icon_state = "renegadecollar"
 	name = "black collar"
 	desc = "A tough leather collar concealing iron chain mail, meant to be paired with its jacket. This one also covers not only the neck and mouth, but also the nose and ears."
 	body_parts_covered = NECK|EARS|MOUTH|NOSE
+	sellprice = 25
 
 //........................................................................................
 /*---------------\
