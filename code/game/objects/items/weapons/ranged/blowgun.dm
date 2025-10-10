@@ -15,6 +15,7 @@
 	var/cocked = FALSE
 	cartridge_wording = "dart"
 	fire_sound = 'sound/combat/Ranged/blowgun_shot.ogg'
+	sellprice = 10
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/blowgun/getonmobprop(tag)
 	. = ..()
