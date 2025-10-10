@@ -1462,7 +1462,6 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 		/obj/item/gem/green,
 		/obj/item/gem/diamond,
 		/obj/item/gem/blue,
-		/obj/item/gem/black
 	)
 
 	for(var/i = 1 to socket_count)
