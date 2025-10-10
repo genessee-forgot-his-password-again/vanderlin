@@ -131,8 +131,8 @@
 		icon_state = "[icon_state]l"
 
 /obj/item/reagent_containers/food/snacks/messenger_bird/Destroy()
-    source_spell = null
-    return ..()
+	source_spell = null
+	return ..()
 
 /obj/item/reagent_containers/food/snacks/messenger_bird/attack_hand(mob/user)
 	if(isliving(user))

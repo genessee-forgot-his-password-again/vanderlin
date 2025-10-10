@@ -32,3 +32,8 @@ map whitepalacepass
 	maxplayers 0
 	votable
 endmap
+
+map voyager
+	maxplayers 0
+	votable
+endmap

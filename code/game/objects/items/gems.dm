@@ -142,14 +142,14 @@
 	return new_effect
 
 /obj/item/gem/proc/multiply_effect_data(datum/gem_effect/effect, multiplier)
-    for(var/i = 1 to length(effect.weapon_effect_data))
-        effect.weapon_effect_data[i] = round(effect.weapon_effect_data[i] * multiplier)
+	for(var/i = 1 to length(effect.weapon_effect_data))
+		effect.weapon_effect_data[i] = round(effect.weapon_effect_data[i] * multiplier)
 
-    for(var/i = 1 to length(effect.armor_effect_data))
-        effect.armor_effect_data[i] = round(effect.armor_effect_data[i] * multiplier)
+	for(var/i = 1 to length(effect.armor_effect_data))
+		effect.armor_effect_data[i] = round(effect.armor_effect_data[i] * multiplier)
 
-    for(var/i = 1 to length(effect.shield_effect_data))
-        effect.shield_effect_data[i] = round(effect.shield_effect_data[i] * multiplier)
+	for(var/i = 1 to length(effect.shield_effect_data))
+		effect.shield_effect_data[i] = round(effect.shield_effect_data[i] * multiplier)
 
 /obj/item/gem/proc/get_cut_quality_bonus()
 	switch(quality)

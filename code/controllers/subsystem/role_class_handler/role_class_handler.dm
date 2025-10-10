@@ -137,7 +137,10 @@ SUBSYSTEM_DEF(role_class_handler)
 		// At this point the job is the job of the previous advclass "parent" or null
 		var/datum/job/old = SSjob.GetJob(H.job)
 		if(old)
-			picked_class.title_override = old.title
+			if(H.gender == FEMALE && old.f_title)
+				picked_class.title_override = old.f_title
+			else
+				picked_class.title_override = old.title
 
 	SSjob.EquipRank(H, picked_class, H.client)
 	apply_loadouts(H, H.client)
