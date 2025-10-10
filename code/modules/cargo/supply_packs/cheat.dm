@@ -124,7 +124,37 @@
 /datum/supply_pack/cheat/onyx
 	name = "Onyx"
 	cost = 0
-	contains = /obj/item/gem/black
+	contains = /obj/item/carvedgem/onyxa/cutgem
+
+/datum/supply_pack/cheat/jade
+	name = "Jade"
+	cost = 0
+	contains = /obj/item/carvedgem/jade/cutgem
+
+/datum/supply_pack/cheat/coral
+	name = "Coral"
+	cost = 0
+	contains = /obj/item/carvedgem/coral/cutgem
+
+/datum/supply_pack/cheat/shell
+	name = "Clamshell"
+	cost = 0
+	contains = /obj/item/carvedgem/shell/cutgem
+
+/datum/supply_pack/cheat/turq
+	name = "Turq"
+	cost = 0
+	contains = /obj/item/carvedgem/turq/cutgem
+
+/datum/supply_pack/cheat/amber
+	name = "Amber"
+	cost = 0
+	contains = /obj/item/carvedgem/amber/cutgem
+
+/datum/supply_pack/cheat/opal
+	name = "Opal"
+	cost = 0
+	contains = /obj/item/carvedgem/opal/cutgem
 
 /datum/supply_pack/cheat/manygem
 	name = "Bulk Gemstones"
