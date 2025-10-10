@@ -12,6 +12,7 @@
 	grind_results = list()
 	tastes = list("sweetness" = 1)
 	var/honey_color
+	sellprice = 5
 
 /obj/item/reagent_containers/food/snacks/spiderhoney/Initialize()
 	. = ..()
@@ -28,3 +29,4 @@
 	name = "honey"
 	icon_state = "honeycomb"
 	tastes = list("sweetness" = 1)
+	sellprice = 8
