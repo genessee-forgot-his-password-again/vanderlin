@@ -29,7 +29,7 @@
 		to_chat(owner, span_warning("You need to be holding a container to turn into a cloud!"))
 		return . | SPELL_CANCEL_CAST
 
-	if(held_item?.is_open_container())
+	if(!held_item?.is_open_container())
 		to_chat(owner, span_warning("The cloud can't escape this!"))
 		return . | SPELL_CANCEL_CAST
 

@@ -66,3 +66,4 @@
 	cast_on.ai_controller.set_blackboard_key(BB_PET_TARGETING_DATUM, new /datum/targetting_datum/basic/not_friends())
 	cast_on.befriend(owner)
 	cast_on.pet_passive = TRUE
+	cast_on.tamed(owner)

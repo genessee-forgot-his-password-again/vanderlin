@@ -430,5 +430,81 @@
                 "admin": "New Admin option at Manage Job to disable or enable jobs."
             }
         ]
+    },
+    "2025-10-11": {
+        "wgtjunior743": [
+            {
+                "bugfix": "Dark Elves Zizo Descendant not having cursed elf blood."
+            },
+            {
+                "bugfix": "Forest Guard now knows who is bandit or not from the roundstart."
+            },
+            {
+                "bugfix": "Princess being called prince"
+            },
+            {
+                "bugfix": "Coronate now always gives the proper title."
+            }
+        ],
+        "Bloo4420": [
+            {
+                "rscadd": "Added a new tailor shop sign."
+            },
+            {
+                "map": "Reconfigured the main road of Rosewood to flow better."
+            },
+            {
+                "map": "Many Rosewood shops have been reconfigured to be more accessible from the main road."
+            },
+            {
+                "map": "Fixed placement of Scoms, Meisters, and Hermes on Rosewood."
+            },
+            {
+                "map": "Added Meisters to the generic shops on Rosewood."
+            },
+            {
+                "map": "Changed the Rosewood theatre to be more like an ampitheatre."
+            },
+            {
+                "map": "Increased the size of the Rosewood clinic to be more visible."
+            },
+            {
+                "spellcheck": "Fixed a few hermes directory entries."
+            }
+        ],
+        "snowyseshi": [
+            {
+                "rscadd": "Added new specials and tweak some special trait weight"
+            }
+        ],
+        "Dorodomki": [
+            {
+                "rscadd": "Added more skills to the acolytes of ravox, malum, they get new tabards on them including the xylixian acolyte"
+            }
+        ]
+    },
+    "2025-10-12": {
+        "wgtjunior743": [
+            {
+                "bugfix": "Bandits not appearing on the wanted poster."
+            },
+            {
+                "bugfix": "Lich don't spawns with stats/traits and armor of their previous job anymore"
+            },
+            {
+                "bugfix": "Vampire Lord don't gets the stats or traits from their old job anymore."
+            }
+        ],
+        "Wouju": [
+            {
+                "rscadd": "Added clinic apprentice"
+            },
+            {
+                "map": "modified clinic and apothecary workshop"
+            },
+            {
+                "balance": "Feldsher and Apothecary both have 1 slot, they can have two apprentices each"
+            }
+        ]
     }
 }

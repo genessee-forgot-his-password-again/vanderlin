@@ -40,10 +40,9 @@
 	if(!isliving(cast_on))
 		return FALSE
 	var/mob/living/victim = cast_on
-	if(!victim.mind || victim.stat == DEAD)
+	if(victim.mind || victim.stat == DEAD)
 		return FALSE
 	return (victim.mob_biotypes & MOB_UNDEAD)
-
 
 /datum/action/cooldown/spell/control_undead/cast(mob/living/cast_on)
 	. = ..()
@@ -58,6 +57,3 @@
 		span_greentext("[owner] soothes \the [cast_on] with zizo's blessing."),
 		span_notice("The creacher now obeys me."),
 	)
-
-
-

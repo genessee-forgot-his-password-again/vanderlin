@@ -91,6 +91,7 @@
 	tutorial = "Crusader of the true faith, you came from Grenzelhoft under the command of the Inquisitor. Obey them as they lead you to smite the heathens."
 	allowed_races = RACES_PLAYER_GRENZ
 	is_recognized = TRUE
+	outfit = /datum/outfit/inquisition_crusader
 
 	jobstats = list(
 		STATKEY_END = 2,
@@ -125,6 +126,13 @@
 
 /datum/job/migrant/inquisition_crusader/after_spawn(mob/living/carbon/human/spawned, client/player_client)
 	. = ..()
+	if(spawned.gender == FEMALE)
+		spawned.adjust_skillrank(/datum/skill/combat/crossbows, 2)
+		spawned.adjust_skillrank(/datum/skill/combat/knives, 2)
+	else
+		spawned.adjust_skillrank(/datum/skill/combat/swords, 2)
+		spawned.adjust_skillrank(/datum/skill/combat/shields, 1)
+
 	spawned.set_patron(/datum/patron/psydon)
 
 	var/datum/species/species = spawned.dna?.species
@@ -132,15 +140,6 @@
 		return
 	species.native_language = "Old Psydonic"
 	species.accent_language = species.get_accent(species.native_language)
-
-/datum/job/migrant/inquisition_crusader/adjust_values(mob/living/carbon/human/spawned)
-	. = ..()
-	if(spawned.gender == FEMALE)
-		LAZYADDASSOC(skills, /datum/skill/combat/crossbows, 2)
-		LAZYADDASSOC(skills, /datum/skill/combat/knives, 2)
-	else
-		LAZYADDASSOC(skills, /datum/skill/combat/swords, 2)
-		LAZYADDASSOC(skills, /datum/skill/combat/shields, 1)
 
 /datum/outfit/inquisition_crusader
 	name = "Episcopal Crusader"

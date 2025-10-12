@@ -14,6 +14,7 @@ GLOBAL_LIST_INIT(wisdoms, world.file2list("strings/rt/wisdoms.txt"))
 	obj_flags = CAN_BE_HIT
 	spillable = FALSE
 	reagent_flags = TRANSPARENT
+	fill_icon_under_override = TRUE
 	w_class = WEIGHT_CLASS_NORMAL
 	drinksounds = list('sound/items/drink_bottle (1).ogg','sound/items/drink_bottle (2).ogg')
 	fillsounds = list('sound/items/fillcup.ogg')
