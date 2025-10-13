@@ -6,6 +6,7 @@
 	faction = FACTION_TOWN
 	outfit = /datum/outfit/blacksmith_p
 	cmode_music = 'sound/music/cmode/towner/CombatTowner.ogg'
+	bypass_lastclass = TRUE
 
 /datum/outfit/blacksmith_p/pre_equip(mob/living/carbon/human/H)
 	..()

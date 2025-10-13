@@ -6,6 +6,7 @@
 	faction = FACTION_TOWN
 	outfit = /datum/outfit/physician_p
 	cmode_music = 'sound/music/cmode/nobility/combat_physician.ogg'
+	bypass_lastclass = TRUE
 
 /datum/outfit/physician_p/pre_equip(mob/living/carbon/human/H)
 	..()
