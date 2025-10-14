@@ -1,5 +1,5 @@
-/datum/job/persistence/noble
-	title = "Noble"
+/datum/job/persistence/noble_persistent
+	title = "Noble (Persistent)"
 	tutorial = "You're a noble. Ensure this settlement grows into glory"
 	department_flag = NOBLEMEN
 	job_flags = (JOB_ANNOUNCE_ARRIVAL | JOB_SHOW_IN_CREDITS | JOB_EQUIP_RANK | JOB_NEW_PLAYER_JOINABLE)
