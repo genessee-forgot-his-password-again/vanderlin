@@ -42,6 +42,7 @@
 		H.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
 		H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
 		shirt = /obj/item/clothing/shirt/dress/silkdress/colored/random
+		armor = /obj/item/clothing/armor/gambeson/heavy/dress
 		head = /obj/item/clothing/head/hatfur
 		cloak = /obj/item/clothing/cloak/raincloak/furcloak
 		backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow
@@ -54,6 +55,7 @@
 		H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
 		pants = /obj/item/clothing/pants/tights/colored/black
 		shirt = /obj/item/clothing/shirt/tunic/colored/random
+		armor = /obj/item/clothing/armor/gambeson/arming
 		cloak = /obj/item/clothing/cloak/raincloak/furcloak
 		head = /obj/item/clothing/head/fancyhat
 		backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow
