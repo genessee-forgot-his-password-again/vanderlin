@@ -1,11 +1,11 @@
 /atom/movable/screen/blueprint
 	icon = 'icons/misc/buildmode.dmi'
-	var/datum/blueprint_system/bd
 	// If we don't do this, we get occluded by item action buttons
 	plane = ABOVE_HUD_PLANE
+	var/datum/blueprint_system/bd
 
-/atom/movable/screen/blueprint/New(datum/blueprint_system/blueprint_datum)
-	..()
+/atom/movable/screen/blueprint/Initialize(mapload, datum/hud/hud_owner, datum/blueprint_system/blueprint_datum)
+	. = ..()
 	bd = blueprint_datum
 
 /atom/movable/screen/blueprint/recipe

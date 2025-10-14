@@ -798,6 +798,7 @@ GLOBAL_LIST_INIT(character_flaws, list(
 	//solves edgecases with inbred princes and eoran hand-holders. Yes, you can be an ugly Eoran templar. You are not safe.
 	REMOVE_TRAIT(user, TRAIT_BEAUTIFUL, TRAIT_GENERIC)
 	REMOVE_TRAIT(user, TRAIT_UGLY, TRAIT_GENERIC)
+	REMOVE_TRAIT(user, TRAIT_FISHFACE, TRAIT_GENERIC)
 
 	if(prob(50))
 		ADD_TRAIT(user, TRAIT_BEAUTIFUL, TRAIT_GENERIC)

@@ -20,6 +20,9 @@
 	max_integrity = INTEGRITY_STRONGEST
 	sewrepair = FALSE
 	item_weight = 7 * IRON_MULTIPLIER
+	smeltresult = null
+	melting_material = /datum/material/steel
+	melt_amount = 50
 
 /obj/item/clothing/gloves/chain/iron
 	name = "iron chain gauntlets"
@@ -28,6 +31,9 @@
 	armor = ARMOR_MAILLE_IRON
 	max_integrity = INTEGRITY_STRONG
 	item_weight = 7 * IRON_MULTIPLIER
+	smeltresult = null
+	melting_material = /datum/material/iron
+	melt_amount = 50
 
 /obj/item/clothing/gloves/chain/iron/shadowgauntlets
 	name = "darkplate gauntlets"

@@ -107,7 +107,7 @@
 	if(on)
 		if(length(essence_contents))
 			if(brewing < 20)
-				if(src.reagents.has_reagent(/datum/reagent/water, 30))
+				if(src.reagents.has_reagent(/datum/reagent/water, 50))
 					brewing++
 					update_appearance(UPDATE_OVERLAYS)
 					if(prob(10))

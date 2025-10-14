@@ -20,6 +20,23 @@
 
 	var/atom/movable/screen/strategy_ui/controller_button/exit/exit
 
+/atom/movable/screen/strategy_ui/controller_ui/Initialize(mapload, datum/hud/hud_owner)
+	. = ..()
+	create_and_position_buttons()
+
+/atom/movable/screen/strategy_ui/controller_ui/Destroy(force)
+	QDEL_NULL(actions)
+	QDEL_NULL(stat)
+	QDEL_NULL(units)
+	QDEL_NULL(ability)
+	QDEL_NULL(bottom)
+	QDEL_NULL(move)
+	QDEL_NULL(decor)
+	QDEL_NULL(traps)
+	QDEL_NULL(builds)
+	QDEL_NULL(exit)
+	return ..()
+
 /atom/movable/screen/strategy_ui/controller_ui/vv_edit_var(var_name, var_value)
 	switch (var_name)
 		if ("screen_loc")
@@ -27,10 +44,6 @@
 			return TRUE
 
 	return ..()
-
-/atom/movable/screen/strategy_ui/controller_ui/New()
-	. = ..()
-	create_and_position_buttons()
 
 /atom/movable/screen/strategy_ui/controller_ui/proc/add_ui(client/client)
 	if(!client)
@@ -69,17 +82,17 @@
 	client.screen -= exit
 
 /atom/movable/screen/strategy_ui/controller_ui/proc/create_and_position_buttons()
-	actions = new
-	units = new
-	ability = new
-	stat = new
-	decor = new
-	traps = new
-	builds = new
-	bottom = new
-	destroy = new
-	move = new
-	exit = new
+	actions = new(null, src)
+	units = new(null, src)
+	ability = new(null, src)
+	stat = new(null, src)
+	decor = new(null, src)
+	traps = new(null, src)
+	builds = new(null, src)
+	bottom = new(null, src)
+	destroy = new(null, src)
+	move = new(null, src)
+	exit = new(null, src)
 
 	update_screen_loc()
 	update_all()

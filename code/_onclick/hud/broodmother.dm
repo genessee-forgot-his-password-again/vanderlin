@@ -38,7 +38,7 @@
 	to_chat(broodmother, span_info("Current biomass amount - [broodmother.vars["tier_[tier]_biomass_amount"]]"))
 	to_chat(broodmother, span_info("Amount needed for laying egg - [broodmother.vars["tier_[tier]_biomass_cost"]]"))
 
-/atom/movable/screen/broodmother/bar/New(loc, ...)
+/atom/movable/screen/broodmother/bar/Initialize(mapload, datum/hud/hud_owner)
 	. = ..()
 	add_filter("alpha_mask_filter", 10, alpha_mask_filter(icon = icon('icons/mob/broodmother_hud/4x128.dmi', icon_state = "mask"), y = current_alpha_mask_filter_offset, flags = MASK_INVERSE))
 

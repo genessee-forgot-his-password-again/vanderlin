@@ -47,7 +47,7 @@
 	pants = /obj/item/clothing/pants/tights
 	belt = /obj/item/storage/belt/leather/rope
 	shoes = /obj/item/clothing/shoes/simpleshoes
-	beltl = /obj/item/storage/keyring/priest
+	beltl = /obj/item/key/church
 	neck = /obj/item/clothing/neck/psycross/silver
 	switch(H.patron?.type)
 		if(/datum/patron/divine/astrata)

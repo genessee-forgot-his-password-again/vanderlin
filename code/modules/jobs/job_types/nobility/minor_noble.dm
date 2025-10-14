@@ -17,6 +17,7 @@
 	apprentice_name = "Servant"
 	give_bank_account = 60
 	noble_income = 16
+	cmode_music = 'sound/music/cmode/nobility/combat_noble.ogg'
 
 	spells = list(
 		/datum/action/cooldown/spell/undirected/call_bird = 1,

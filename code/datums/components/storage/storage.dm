@@ -68,8 +68,8 @@
 		return COMPONENT_INCOMPATIBLE
 	if(master)
 		change_master(master)
-	boxes = new(null, src)
-	closer = new(null, src)
+	boxes = new(null, null, src)
+	closer = new(null, null, src)
 	orient2hud()
 
 	RegisterSignal(parent, COMSIG_CONTAINS_STORAGE, PROC_REF(on_check))

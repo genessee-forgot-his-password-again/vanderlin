@@ -23,9 +23,9 @@
 		thealert = alerts[category]
 		if(thealert.override_alerts)
 			return 0
-		if(new_master && new_master != thealert.master)
-			WARNING("[src] threw alert [category] with new_master [new_master] while already having that alert with master [thealert.master]")
-
+		var/obj/old_master = thealert.master_ref?.resolve()
+		if(new_master && new_master != old_master)
+			WARNING("[src] threw alert [category] with new_master [new_master] while already having that alert with master [old_master]")
 			clear_alert(category)
 			return .()
 		else if(thealert.type != type)
@@ -52,7 +52,7 @@
 		new_master.layer = old_layer
 		new_master.plane = old_plane
 		thealert.icon_state = "status" // We'll set the icon to the client's ui pref in reorganize_alerts()
-		thealert.master = new_master
+		thealert.master_ref = WEAKREF(new_master)
 	else
 		thealert.icon_state = "[initial(thealert.icon_state)][severity]"
 		thealert.severity = severity
@@ -465,7 +465,6 @@
 
 /atom/movable/screen/alert/Destroy()
 	severity = 0
-	master = null
 	mob_viewer = null
 	screen_loc = ""
 	return ..()

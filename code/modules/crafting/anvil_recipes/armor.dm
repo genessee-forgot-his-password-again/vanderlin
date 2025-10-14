@@ -411,12 +411,11 @@
 	created_item = /obj/item/clothing/head/helmet/skullcap/grenzelhoft
 
 /datum/anvil_recipe/armor/iron/splint
-	name = "Splint Armor (+Hide)"
+	name = "Two splint Armors (+2 cured leather)"
 	recipe_name = "durable light armor"
-	req_bar = /obj/item/ingot/iron
-	additional_items = list(/obj/item/natural/hide)
+	additional_items = list(/obj/item/natural/hide/cured, /obj/item/natural/hide/cured)
 	created_item = /obj/item/clothing/armor/leather/splint
-	craftdiff = 1
+	createditem_extra = 1
 
 ///////////////////////////////////////////////
 // --------- STEEL -----------

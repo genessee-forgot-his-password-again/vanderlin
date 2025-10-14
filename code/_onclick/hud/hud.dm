@@ -80,8 +80,8 @@ GLOBAL_LIST_INIT(available_ui_styles, sortList(list(
 	var/ui_style
 
 	var/atom/movable/screen/read/reads
-	var/atom/movable/screen/textl
-	var/atom/movable/screen/textr
+	var/atom/movable/screen/readtext/textl
+	var/atom/movable/screen/readtext/textr
 
 	var/atom/movable/screen/vis_holder/vis_holder
 
@@ -95,16 +95,10 @@ GLOBAL_LIST_INIT(available_ui_styles, sortList(list(
 		// will fall back to the default if any of these are null
 		ui_style = ui_style2icon(owner.client && owner.client.prefs && owner.client.prefs.UI_style)
 
-	reads = new /atom/movable/screen/read
-	reads.hud = src
-	static_inventory += reads
-	textr = new /atom/movable/screen/readtext
-	textr.hud = src
-	static_inventory += textr
+	reads = new(null, src)
+	textr = new(null, src)
 	reads.textright = textr
-	textl = new /atom/movable/screen/readtext
-	textl.hud = src
-	static_inventory += textl
+	textl = new(null, src)
 	reads.textleft = textl
 
 	vis_holder = new(null, src)
@@ -139,6 +133,10 @@ GLOBAL_LIST_INIT(available_ui_styles, sortList(list(
 
 	QDEL_NULL(module_store_icon)
 	QDEL_LIST(static_inventory)
+
+	QDEL_NULL(reads)
+	QDEL_NULL(textl)
+	QDEL_NULL(textr)
 
 	QDEL_NULL(toggle_palette)
 	QDEL_NULL(palette_down)
@@ -209,13 +207,13 @@ GLOBAL_LIST_INIT(available_ui_styles, sortList(list(
 	switch(display_hud_version)
 		if(HUD_STYLE_STANDARD)	//Default HUD
 			hud_shown = TRUE	//Governs behavior of other procs
-			if(static_inventory.len)
+			if(length(static_inventory))
 				screenmob.client.screen += static_inventory
-			if(toggleable_inventory.len && screenmob.hud_used && screenmob.hud_used.inventory_shown)
+			if(length(toggleable_inventory) && screenmob.hud_used && screenmob.hud_used.inventory_shown)
 				screenmob.client.screen += toggleable_inventory
-			if(hotkeybuttons.len && !hotkey_ui_hidden)
+			if(length(hotkeybuttons) && !hotkey_ui_hidden)
 				screenmob.client.screen += hotkeybuttons
-			if(infodisplay.len)
+			if(length(infodisplay))
 				screenmob.client.screen += infodisplay
 
 			screenmob.client.screen += toggle_palette
@@ -225,13 +223,13 @@ GLOBAL_LIST_INIT(available_ui_styles, sortList(list(
 
 		if(HUD_STYLE_REDUCED)	//Reduced HUD
 			hud_shown = FALSE	//Governs behavior of other procs
-			if(static_inventory.len)
+			if(length(static_inventory))
 				screenmob.client.screen -= static_inventory
-			if(toggleable_inventory.len)
+			if(length(toggleable_inventory))
 				screenmob.client.screen -= toggleable_inventory
-			if(hotkeybuttons.len)
+			if(length(hotkeybuttons))
 				screenmob.client.screen -= hotkeybuttons
-			if(infodisplay.len)
+			if(length(infodisplay))
 				screenmob.client.screen += infodisplay
 
 			//These ones are a part of 'static_inventory', 'toggleable_inventory' or 'hotkeybuttons' but we want them to stay
@@ -245,13 +243,13 @@ GLOBAL_LIST_INIT(available_ui_styles, sortList(list(
 
 		if(HUD_STYLE_NOHUD)	//No HUD
 			hud_shown = FALSE	//Governs behavior of other procs
-			if(static_inventory.len)
+			if(length(static_inventory))
 				screenmob.client.screen -= static_inventory
-			if(toggleable_inventory.len)
+			if(length(toggleable_inventory))
 				screenmob.client.screen -= toggleable_inventory
-			if(hotkeybuttons.len)
+			if(length(hotkeybuttons))
 				screenmob.client.screen -= hotkeybuttons
-			if(infodisplay.len)
+			if(length(infodisplay))
 				screenmob.client.screen -= infodisplay
 
 	if(vis_holder)
@@ -335,15 +333,14 @@ GLOBAL_LIST_INIT(available_ui_styles, sortList(list(
 	else
 		hand_slots = list()
 	var/atom/movable/screen/inventory/hand/hand_box
-	for(var/i in 1 to mymob.held_items.len)
-		hand_box = new /atom/movable/screen/inventory/hand()
+	for(var/i in 1 to length(mymob.held_items))
+		hand_box = new /atom/movable/screen/inventory/hand(null, src)
 		hand_box.name = mymob.get_held_index_name(i)
 		hand_box.icon = ui_style
 		hand_box.icon_state = "hand_[mymob.held_index_to_dir(i)]"
 		hand_box.screen_loc = ui_hand_position(i)
 		hand_box.held_index = i
 		hand_slots["[i]"] = hand_box
-		hand_box.hud = src
 		static_inventory += hand_box
 		hand_box.update_appearance()
 

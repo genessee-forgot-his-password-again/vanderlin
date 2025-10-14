@@ -5,26 +5,23 @@
 /// ALCHEMICAL POTIONS ///
 //////////////////////////
 
-/obj/item/reagent_containers/glass/bottle/additive
-	list_reagents = list(/datum/reagent/additive = 10)
-
 /obj/item/reagent_containers/glass/bottle/healthpot
-	list_reagents = list(/datum/reagent/medicine/healthpot = 45)
+	list_reagents = list(/datum/reagent/medicine/healthpot = 70)
 
 /obj/item/reagent_containers/glass/bottle/stronghealthpot
-	list_reagents = list(/datum/reagent/medicine/stronghealth = 45)
+	list_reagents = list(/datum/reagent/medicine/stronghealth = 70)
 
 /obj/item/reagent_containers/glass/bottle/manapot
-	list_reagents = list(/datum/reagent/medicine/manapot = 45)
+	list_reagents = list(/datum/reagent/medicine/manapot = 70)
 
 /obj/item/reagent_containers/glass/bottle/strongmanapot
-	list_reagents = list(/datum/reagent/medicine/strongmana = 45)
+	list_reagents = list(/datum/reagent/medicine/strongmana = 70)
 
 /obj/item/reagent_containers/glass/bottle/stampot
-	list_reagents = list(/datum/reagent/medicine/stampot = 45)
+	list_reagents = list(/datum/reagent/medicine/stampot = 70)
 
 /obj/item/reagent_containers/glass/bottle/strongstampot
-	list_reagents = list(/datum/reagent/medicine/strongstam = 45)
+	list_reagents = list(/datum/reagent/medicine/strongstam = 70)
 
 /obj/item/reagent_containers/glass/bottle/poison
 	list_reagents = list(/datum/reagent/berrypoison = 15)
@@ -42,13 +39,13 @@
 	list_reagents = list(/datum/reagent/killersice = 15)
 
 /obj/item/reagent_containers/glass/bottle/water
-	list_reagents = list(/datum/reagent/water = 45)
+	list_reagents = list(/datum/reagent/water = 70)
 
 /obj/item/reagent_containers/glass/bottle/antidote
-	list_reagents = list(/datum/reagent/medicine/antidote = 45)
+	list_reagents = list(/datum/reagent/medicine/antidote = 70)
 
 /obj/item/reagent_containers/glass/bottle/diseasecure
-	list_reagents = list(/datum/reagent/medicine/diseasecure = 45)
+	list_reagents = list(/datum/reagent/medicine/diseasecure = 70)
 
 /obj/item/reagent_containers/glass/bottle/vial/strpot
 	list_reagents = list(/datum/reagent/buff/strength = 30)

@@ -869,7 +869,7 @@
 /datum/repeatable_crafting_recipe/crafting/jade/cutgem
 	name = "cut joapstone gem"
 	output = /obj/item/carvedgem/jade/cutgem
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/jade/fork
 	name = "joapstone fork"
@@ -1033,7 +1033,7 @@
 	attacked_atom = /obj/item/gem/oyster
 	starting_atom = /obj/item/weapon/knife
 	output_amount = 1
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/shell/rawshell
 
@@ -1048,12 +1048,12 @@
 	attacked_atom = /obj/item/carvedgem/shell/openoyster
 	starting_atom = /obj/item/weapon/knife
 	output_amount = 2
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/shell/cutgem
 	name = "polished clam shell"
 	output = /obj/item/carvedgem/shell/cutgem
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/shell/fork
 	name = "shell fork"
@@ -1212,7 +1212,7 @@
 	attacked_atom = /obj/item/carvedgem/rose/rawrose
 	starting_atom = /obj/item/weapon/knife
 	output_amount = 1
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/rose/spoon
 	name = "rosellusk spoon"
@@ -1362,7 +1362,7 @@
 /datum/repeatable_crafting_recipe/crafting/onyxa/cutgem
 	name = "cut onyxa gem"
 	output = /obj/item/carvedgem/onyxa/cutgem
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/onyxa/fork
 	name = "onyxa fork"
@@ -1517,7 +1517,7 @@
 /datum/repeatable_crafting_recipe/crafting/turq/cutgem
 	name = "cut ceruleabaster gem"
 	output = /obj/item/carvedgem/turq/cutgem
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/turq/fork
 	name = "ceruleabaster fork"
@@ -1616,6 +1616,7 @@
 
 /datum/repeatable_crafting_recipe/crafting/turq/urn
 	name = "ceruleabaster urn"
+	output = /obj/item/carvedgem/turq/urn
 	craftdiff = 4
 
 /datum/repeatable_crafting_recipe/crafting/turq/statue
@@ -1629,7 +1630,7 @@
 	craftdiff = 4
 
 /datum/repeatable_crafting_recipe/crafting/turq/mask
-	name = "ceruleabaster urn"
+	name = "ceruleabaster mask"
 	output = /obj/item/clothing/face/turqmask
 	craftdiff = 4
 
@@ -1661,7 +1662,7 @@
 /datum/repeatable_crafting_recipe/crafting/coral/cutgem
 	name = "cut aoetal gem"
 	output = /obj/item/carvedgem/coral/cutgem
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/coral/fork
 	name = "aoetal fork"
@@ -1811,7 +1812,7 @@
 /datum/repeatable_crafting_recipe/crafting/amber/cutgem
 	name = "cut petriamber gem"
 	output = /obj/item/carvedgem/amber/cutgem
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/amber/spoon
 	name = "petriamber spoon"
@@ -1961,7 +1962,7 @@
 /datum/repeatable_crafting_recipe/crafting/opal/cutgem
 	name = "cut opaloise gem"
 	output = /obj/item/carvedgem/opal/cutgem
-	craftdiff = 1
+	craftdiff = 0
 
 /datum/repeatable_crafting_recipe/crafting/opal/spoon
 	name = "opaloise spoon"

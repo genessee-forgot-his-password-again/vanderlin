@@ -118,3 +118,13 @@
 
 /obj/structure/closet/crate/crafted_closet/crafted
 	sellprice = 6
+
+//a chest with a corpse in it
+/obj/structure/closet/crate/chest/neu_iron/corpse/Initialize()
+	var/mob/living/carbon/human/H = new /mob/living/carbon/human/species/rousman(get_turf(src))
+	H.cure_husk()
+	H.update_body()
+	H.update_body_parts()
+	H.death(TRUE) //Kills the new mob
+	H.forceMove(src)
+	. = ..()

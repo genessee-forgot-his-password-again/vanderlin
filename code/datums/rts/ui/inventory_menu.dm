@@ -11,9 +11,14 @@
 	var/current_x = 0
 	var/current_y = 0
 
-/atom/movable/screen/worker_inventory_backdrop/New(loc, ...)
+/atom/movable/screen/worker_inventory_backdrop/New/Initialize(mapload, datum/hud/hud_owner)
 	. = ..()
-	close = new
+	close = new(null, hud_owner)
+
+/atom/movable/screen/worker_inventory_backdrop/Destroy(force)
+	QDEL_NULL(close)
+	linked_worker = null
+	return ..()
 
 /atom/movable/screen/worker_inventory_backdrop/proc/open_ui(mob/camera/strategy_controller/opener, datum/worker_mind/worker)
 	close_uis(opener)

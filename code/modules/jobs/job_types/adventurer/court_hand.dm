@@ -17,6 +17,7 @@
 	job_reopens_slots_on_death = FALSE
 	shows_in_list = FALSE
 	can_have_apprentices = FALSE
+	scales = FALSE
 
 /datum/job/adventurer/courtagent
 

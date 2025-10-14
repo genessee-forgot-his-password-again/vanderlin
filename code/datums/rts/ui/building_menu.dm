@@ -64,9 +64,9 @@
 	for(var/atom/movable/screen/building_button/button in build_buttons)
 		button.update_build_state(processer)
 
-/atom/movable/screen/building_backdrop/New(loc, ...)
+/atom/movable/screen/building_backdrop/Initialize(mapload, datum/hud/hud_owner)
 	. = ..()
-	close = new
+	close = new(null, hud_owner)
 
 /atom/movable/screen/building_backdrop/proc/close_uis(mob/camera/strategy_controller/closer)
 	for(var/atom/movable/screen/building_button/button as anything in build_buttons)

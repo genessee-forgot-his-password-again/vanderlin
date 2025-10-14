@@ -1,17 +1,3 @@
-/atom/movable/screen/buildmode
-	icon = 'icons/misc/buildmode.dmi'
-	var/datum/buildmode/bd
-	// If we don't do this, we get occluded by item action buttons
-	plane = ABOVE_HUD_PLANE
-
-/atom/movable/screen/buildmode/New(bld)
-	bd = bld
-	return ..()
-
-/atom/movable/screen/buildmode/Destroy()
-	bd = null
-	return ..()
-
 /atom/movable/screen/buildmode/mode
 	name = "Toggle Mode"
 	icon_state = "buildmode_basic"
@@ -60,27 +46,14 @@
 /atom/movable/screen/buildmode/modeswitch
 	var/datum/buildmode_mode/modetype
 
-/atom/movable/screen/buildmode/modeswitch/New(bld, mt)
-	modetype = mt
+/atom/movable/screen/buildmode/modeswitch/Initialize(mapload, datum/hud/hud_owner, datum/buildmode/build_datum, mode_type)
+	modetype = mode_type
 	icon_state = "buildmode_[initial(modetype.key)]"
 	name = initial(modetype.key)
-	return ..(bld)
+	return ..()
 
 /atom/movable/screen/buildmode/modeswitch/Click()
 	bd.change_mode(modetype)
-	return 1
-
-// used to switch between dirs
-/atom/movable/screen/buildmode/dirswitch
-	icon_state = "build"
-
-/atom/movable/screen/buildmode/dirswitch/New(bld, dir)
-	src.dir = dir
-	name = dir2text(dir)
-	return ..(bld)
-
-/atom/movable/screen/buildmode/dirswitch/Click()
-	bd.change_dir(dir)
 	return 1
 
 /atom/movable/screen/buildmode/quit

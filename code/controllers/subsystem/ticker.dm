@@ -192,6 +192,7 @@ SUBSYSTEM_DEF(ticker)
 				if(player.ready == PLAYER_READY_TO_PLAY)
 					++totalPlayersReady
 
+			readying_update_scale_job()
 			if(start_immediately)
 				timeLeft = 0
 
@@ -241,6 +242,48 @@ SUBSYSTEM_DEF(ticker)
 				Master.SetRunLevel(RUNLEVEL_POSTGAME)
 			if(SSgamemode.roundvoteend)
 				return
+
+/datum/controller/subsystem/ticker/proc/readying_update_scale_job()
+
+	//Get ALL town jobs
+	var/list/town_jobs = list()
+	for(var/datum/job/J as anything in SSjob.joinable_occupations)
+		if (J.faction == FACTION_TOWN)
+			town_jobs += J.title
+
+	//Now find players who readied with HIGH preference on those town jobs
+	var/list/town_ready = list()
+
+	for(var/mob/dead/new_player/player in GLOB.player_list)
+		if(!player || !player.client)
+			continue
+
+		if(player.ready != PLAYER_READY_TO_PLAY)
+			continue
+
+		//Loop through each job the player has set to HIGH
+		for(var/job_name in player.client.prefs.job_preferences)
+			if(player.client.prefs.job_preferences[job_name] != JP_HIGH)
+				continue
+
+			//Only count if it is a town job
+			if(!(job_name in town_jobs))
+				continue
+
+			//Check job availability rules
+			if(player.client.prefs.lastclass == job_name)
+				if (player.IsJobUnavailable(job_name) != JOB_AVAILABLE)
+					continue
+
+			//Add to the list
+			town_ready += job_name
+
+	var/ready_town_count = length(town_ready)
+
+	for(var/datum/job/job_to_set in SSjob.joinable_occupations)
+		if(job_to_set.enabled && job_to_set.scales)
+			job_to_set.set_spawn_and_total_positions(ready_town_count)
+
 
 /datum/controller/subsystem/ticker/proc/checkreqroles()
 	var/list/readied_jobs = list()

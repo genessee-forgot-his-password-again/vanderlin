@@ -40,6 +40,9 @@
 	sewrepair = FALSE
 	anvilrepair = /datum/skill/craft/armorsmithing
 	clothing_flags = CANT_SLEEP_IN
+	smeltresult = null
+	melting_material = /datum/material/iron
+	melt_amount = 50
 
 /obj/item/clothing/face/jademask
 	name = "joapstone mask "
@@ -235,6 +238,9 @@
 	armor = list("blunt" = 100, "slash" = 100, "stab" = 100,  "piercing" = 80, "fire" = 0, "acid" = 0)
 	desc = "A knightly steel mask that both conceals and protects the face. Usually paired with a bascinet."
 	max_integrity = 300
+	smeltresult = /obj/item/ingot/steel
+	melting_material = /datum/material/steel
+	melt_amount = 100
 
 /obj/item/clothing/face/facemask/silver
 	name = "silver mask"
@@ -244,6 +250,9 @@
 	armor = list("blunt" = 100, "slash" = 100, "stab" = 100,  "piercing" = 85, "fire" = 0, "acid" = 0)
 	desc = "A custom made silver penance mask, created especially for the Adepts of the Inquisitorial Lodge."
 	max_integrity = 300
+	smeltresult = /obj/item/ingot/silver
+	melting_material = /datum/material/silver
+	melt_amount = 100
 
 /obj/item/clothing/face/facemask/silver/Initialize(mapload)
 	. = ..()
@@ -253,6 +262,8 @@
 	name = "anthraxi war mask"
 	desc = "A metal mask resembling a spider's face. Such a visage haunts many an older dark elf's nitemares - while the younger generation simply scoffs at such relics."
 	icon_state = "shadowfacemask"
+	smeltresult = null// the mask is made out of silk and cloth, turns out it was giving "free" iron
+	melting_material = null
 
 /obj/item/clothing/face/shepherd
 	name = "halfmask"

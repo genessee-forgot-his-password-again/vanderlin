@@ -810,13 +810,19 @@
 	return TRUE
 
 /atom/movable/screen/close
+	name = "close"
+	plane = ABOVE_HUD_PLANE
 	icon = 'icons/hud/storage.dmi'
 	icon_state = "close"
 	var/locked = TRUE
 
+/atom/movable/screen/close/Initialize(mapload, datum/hud/hud_owner, obj/item/new_master)
+	. = ..()
+	master_ref = WEAKREF(new_master)
+
 /atom/movable/screen/close/Click(location, control, params)
 	. = ..()
-	var/datum/component/storage/storage_master = master
+	var/datum/component/storage/storage_master = master_ref?.resolve()
 	var/list/modifiers = params2list(params)
 	if(LAZYACCESS(modifiers, SHIFT_CLICKED))
 		if(!istype(storage_master))
@@ -839,7 +845,7 @@
 
 /atom/movable/screen/close/MouseDrop(atom/over, src_location, over_location, src_control, over_control, params)
 	. = ..()
-	var/datum/component/storage/storage_master = master
+	var/datum/component/storage/storage_master = master_ref?.resolve()
 	if(!istype(storage_master))
 		return
 	if(locked)
@@ -885,13 +891,14 @@
 	alpha = 180
 	var/atom/movable/screen/storage_hover/hovering
 
-/atom/movable/screen/storage/Initialize(mapload, new_master)
+/atom/movable/screen/storage/Initialize(mapload, datum/hud/hud_owner, obj/item/new_master)
 	. = ..()
-	hovering = new()
+	master_ref = WEAKREF(new_master)
+	hovering = new(null, hud)
 
 /atom/movable/screen/storage/Destroy()
-	. = ..()
-	qdel(hovering)
+	QDEL_NULL(hovering)
+	return ..()
 
 /atom/movable/screen/storage/MouseEntered(location, control, params)
 	. = ..()
@@ -910,7 +917,7 @@
 	if(!usr.client)
 		return
 	usr.client.screen -= hovering
-	var/datum/component/storage/storage_master = master
+	var/datum/component/storage/storage_master = master_ref?.resolve()
 	if(!istype(storage_master) || !(usr in storage_master.is_using) || !isliving(usr) || usr.incapacitated(IGNORE_GRAB))
 		return
 	var/obj/item/held_item = usr.get_active_held_item()
@@ -952,7 +959,7 @@
 	if(!usr.client)
 		return
 	usr.client.screen -= hovering
-	var/datum/component/storage/storage_master = master
+	var/datum/component/storage/storage_master = master_ref?.resolve()
 	if(!istype(storage_master) || !(usr in storage_master.is_using) || !isliving(usr) || usr.incapacitated(IGNORE_GRAB))
 		return
 	var/obj/item/held_item = usr.get_active_held_item()

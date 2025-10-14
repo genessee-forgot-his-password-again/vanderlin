@@ -18,6 +18,26 @@
 	var/mob/living/worker_mob
 	var/datum/worker_mind/worker_mind
 
+/atom/movable/screen/controller_ui/controller_ui/Initialize(mapload, datum/hud/hud_owner, mob/living/worker, datum/worker_mind/creation_source)
+	. = ..()
+	worker_mob = worker
+	worker_mind = creation_source
+
+	create_and_position_buttons()
+
+/atom/movable/screen/controller_ui/controller_ui/Destroy(force)
+	QDEL_NULL(character)
+	QDEL_NULL(name_box)
+	QDEL_NULL(task)
+	QDEL_NULL(stat)
+	QDEL_NULL(button_one)
+	QDEL_NULL(button_two)
+	QDEL_NULL(mob_exit)
+	QDEL_NULL(patrol_button)
+	worker_mind = null
+	worker_mob = null
+	return ..()
+
 /atom/movable/screen/controller_ui/controller_ui/vv_edit_var(var_name, var_value)
 	switch (var_name)
 		if ("screen_loc")
@@ -25,14 +45,6 @@
 			return TRUE
 
 	return ..()
-
-
-/atom/movable/screen/controller_ui/controller_ui/New(mob/living/worker, datum/worker_mind/creation_source)
-	. = ..()
-	worker_mob = worker
-	worker_mind = creation_source
-
-	create_and_position_buttons()
 
 /atom/movable/screen/controller_ui/controller_ui/proc/add_ui(client/client)
 	if(!client)

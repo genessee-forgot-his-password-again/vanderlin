@@ -67,8 +67,8 @@
 			if(L) //living mob
 				var/drawn_amount = reagents.maximum_volume - reagents.total_volume
 				if(target != user)
-					target.visible_message(span_danger("[user] is trying to draw blood from [target]!"), \
-									span_userdanger("[user] is trying to draws blood from me!"))
+					target.visible_message(span_danger("[user] tries to draw blood from [target]!"), \
+									span_userdanger("[user] is trying to draw blood from me!"))
 					busy = TRUE
 					if(!do_after(user, 4 SECONDS, target, extra_checks=CALLBACK(L, TYPE_PROC_REF(/mob/living, can_inject), user, TRUE)))
 						busy = FALSE

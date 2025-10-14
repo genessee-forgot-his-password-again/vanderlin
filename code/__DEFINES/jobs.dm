@@ -28,6 +28,8 @@
 #define FACTION_NONE		"None"
 #define FACTION_NEUTRAL		"Neutral"
 #define FACTION_TOWN		"Town"
+#define FACTION_FOREIGNERS  "Foreigners"
+#define FACTION_MIGRANTS  	"Migrants"
 #define FACTION_UNDEAD		"Undead"
 #define FACTION_PLANTS		"Plants"
 #define FACTION_VINES		"Vines" //Seemingly unused
@@ -73,6 +75,7 @@
 
 #define JDO_APOTHECARY 6
 #define JDO_FELDSHER 6.1
+#define JDO_CLINICAPPRENTICE 6.2
 
 #define JDO_CAPTAIN 7
 #define JDO_VET 7.1

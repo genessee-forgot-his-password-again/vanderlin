@@ -41,8 +41,8 @@
 		"Your ancestors' misdeeds continue to haunt you."
 	)
 
-/atom/movable/screen/alert/status_effect/family_curse/mmisfortune/New()
-	..()
+/atom/movable/screen/alert/status_effect/family_curse/mmisfortune/Initialize(mapload, datum/hud/hud_owner)
+	. = ..()
 	if(desc == initial(desc))
 		desc = "[initial(desc)] [pick(misfortune_tips)]"
 

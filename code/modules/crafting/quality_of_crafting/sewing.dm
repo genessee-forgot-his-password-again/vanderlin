@@ -565,7 +565,7 @@
 	craftdiff = 4
 
 /datum/repeatable_crafting_recipe/sewing/normal_robes
-	name = "robes"
+	name = "cloth robes"
 	output = /obj/item/clothing/shirt/robe
 	requirements = list(/obj/item/natural/cloth = 1,
 				/obj/item/natural/fibers = 1)
@@ -593,7 +593,7 @@
 	craftdiff = 3
 
 /datum/repeatable_crafting_recipe/sewing/robe
-	name = "robes"
+	name = "plain robes"
 	output = /obj/item/clothing/shirt/robe/colored/plain
 	requirements = list(/obj/item/natural/cloth = 3,
 				/obj/item/natural/fibers = 1)

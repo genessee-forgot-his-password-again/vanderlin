@@ -28,6 +28,8 @@
 	shirt = /obj/item/clothing/shirt/undershirt/colored/uncolored
 	belt = /obj/item/storage/belt/leather/rope
 	beltl = /obj/item/storage/belt/pouch/coins/poor
+	backl = /obj/item/storage/backpack/satchel
+	backpack_contents = list(/obj/item/recipe_book/cooking = 1)
 	neck = /obj/item/key/manor
 	if(H.gender == MALE)
 		armor = /obj/item/clothing/armor/leather/vest/colored/black
@@ -46,7 +48,7 @@
 	H.adjust_skillrank(/datum/skill/misc/music, pick(0,1,1), TRUE)
 	H.change_stat(STATKEY_SPD, 1)
 	H.change_stat(STATKEY_END, 1)
-	backpack_contents = list(/obj/item/recipe_book/cooking = 1)
+
 
 /datum/job/tapster
 	title = "Tapster"
@@ -76,6 +78,8 @@
 	shirt = /obj/item/clothing/shirt/undershirt/colored/uncolored
 	belt = /obj/item/storage/belt/leather/rope
 	beltl = /obj/item/storage/belt/pouch/coins/poor
+	backl = /obj/item/storage/backpack/satchel
+	backpack_contents = list(/obj/item/recipe_book/cooking = 1)
 	neck = /obj/item/key/tavern
 	if(H.gender == MALE)
 		armor = /obj/item/clothing/armor/leather/vest/colored/black
@@ -125,6 +129,8 @@
 	belt = /obj/item/storage/belt/leather/rope
 	beltl = /obj/item/storage/belt/pouch/coins/poor
 	neck = /obj/item/key/matron
+	backl = /obj/item/storage/backpack/satchel
+	backpack_contents = list(/obj/item/recipe_book/cooking = 1)
 	if(H.gender == MALE)
 		armor = /obj/item/clothing/armor/leather/vest/colored/black
 	else
@@ -170,6 +176,8 @@
 	belt = /obj/item/storage/belt/leather/rope
 	beltl = /obj/item/storage/belt/pouch/coins/poor
 	beltr = /obj/item/storage/keyring/gaffer_assistant
+	backl = /obj/item/storage/backpack/satchel
+	backpack_contents = list(/obj/item/recipe_book/cooking = 1)
 	if(H.gender == MALE)
 		armor = /obj/item/clothing/armor/leather/vest/colored/black
 	else

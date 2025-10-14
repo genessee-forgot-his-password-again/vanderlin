@@ -506,5 +506,101 @@
                 "balance": "Feldsher and Apothecary both have 1 slot, they can have two apprentices each"
             }
         ]
+    },
+    "2025-10-13": {
+        "wgtjunior743": [
+            {
+                "bugfix": "Wanted posters for real."
+            },
+            {
+                "bugfix": "You can ride moles by taming them with tame beast just like taming normally."
+            },
+            {
+                "bugfix": "Court Mage got natural mana regen roundstart."
+            },
+            {
+                "rscadd": "An option to choose between toss blade and leather belt for the Faceless class."
+            }
+        ]
+    },
+    "2025-10-14": {
+        "wgtjunior743": [
+            {
+                "bugfix": "Court Agent now appear as adventurer at the ready menu."
+            },
+            {
+                "rscadd": "A scaling system for adventurer roles based on the town roles pop"
+            },
+            {
+                "rscadd": "Satchel to Servant, Tapster, Orphanage Assistant and Ring Servant"
+            },
+            {
+                "rscadd": "Cook Recipe book to Servant, Tapster, Orphanage Assistant and Ring Servant."
+            },
+            {
+                "bugfix": "Actor list now works as intended"
+            }
+        ],
+        "AnDigitalGondola": [
+            {
+                "bugfix": "Changed the names of two instances of \\\"robes\\\" to be unique in the sewing menu."
+            }
+        ],
+        "7erracotta": [
+            {
+                "rscadd": "Added different lore for the lakkarian cleric"
+            },
+            {
+                "qol": "gave ex-pegasus knight riding skill and made one gem carving recipe require no skill"
+            },
+            {
+                "bugfix": "fixed a broken recipe\\n:cl:\\n<!-- Both :cl:'s are required for the changelog to work! You can put your name to the right of the first :cl: if you want to overwrite your GitHub username as author ingame. -->\\n<!-- You can use multiple of the same prefix (they're only used for the icon ingame) and delete the unneeded ones. Despite some of the tags, changelogs should generally represent how a player might be affected by the changes rather than a summary of the PR's contents. -->\\n## Pre-Merge Checklist\\n<!-- Don't bother filling these in while creating your Pull Request, just click the checkboxes after the Pull Request is opened and you are redirected to the page. -->\\n- [x] You tested this on a local server.\\n- [x] This code did not runtime during testing.\\n- [x] You documented all of your changes.\\n<!-- Neither the compiler nor workflow checks are perfect at detecting runtimes and errors. It is important to test your code/feature/fix locally. -->"
+            }
+        ],
+        "SarmentiCampbell": [
+            {
+                "balance": "changed the churchling's keyring to a key."
+            }
+        ],
+        "userfacethis": [
+            {
+                "sound": "added combat_noble.ogg to minor nobles for cmode music\\n:cl:\\n<!-- Both :cl:'s are required for the changelog to work! You can put your name to the right of the first :cl: if you want to overwrite your GitHub username as author ingame. -->\\n<!-- You can use multiple of the same prefix (they're only used for the icon ingame) and delete the unneeded ones. Despite some of the tags, changelogs should generally represent how a player might be affected by the changes rather than a summary of the PR's contents. -->\\n## Pre-Merge Checklist\\n<!-- Don't bother filling these in while creating your Pull Request, just click the checkboxes after the Pull Request is opened and you are redirected to the page. -->\\n- [ ] You tested this on a local server.\\n- [ ] This code did not runtime during testing.\\n- [X] You documented all of your changes.\\n<!-- Neither the compiler nor workflow checks are perfect at detecting runtimes and errors. It is important to test your code/feature/fix locally. -->"
+            }
+        ],
+        "Bloo4420": [
+            {
+                "bugfix": "Bog and field mapgens"
+            },
+            {
+                "bugfix": "Malum's Anvil mapgen"
+            }
+        ],
+        "Dorodomki": [
+            {
+                "bugfix": "fixed a few things in the smithy recipes"
+            }
+        ],
+        "PibeCantina": [
+            {
+                "rscadd": "Allows apothecary, feldsher and weaponsmith to bypass last class lock"
+            }
+        ],
+        "Wouju": [
+            {
+                "rscadd": "Added a new poison that's craftable only via alchemy"
+            },
+            {
+                "rscadd": "Added a new alchemy essence, death essence"
+            },
+            {
+                "balance": "tweaked cost of alchemy potions and essence combinations"
+            },
+            {
+                "balance": "stat buffs from potions last 10 minutes, weak ones last 5 minutes"
+            },
+            {
+                "balance": "certain reagents had their smells and tastes changed"
+            }
+        ]
     }
 }

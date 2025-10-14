@@ -1,6 +1,6 @@
 /datum/job/advclass/combat/lakkariancleric // terra was here! <3
 	title = "Lakkarian Cleric"
-	tutorial = "A follower of the Order of the Southern Sun. Acolytes who underwent years of martial training, they seek to root out the corruption caused by the Four in Faience and spread the word of the Sun Queen."
+	tutorial = "A cleric belonging to the Order of the Southern Sun. After years of martial training and rigorous theological study, your abbess has deemed you worthy of a grand task. You will root out the corruption spread by The Four across Faience, and deliver the gospel of the glorious Sun Queen."
 	allowed_races = RACES_PLAYER_ELF
 	outfit = /datum/outfit/adventurer/lakkariancleric
 	category_tags = list(CTAG_ADVENTURER)

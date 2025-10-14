@@ -117,6 +117,7 @@
 
 /datum/special_trait/beautiful/on_apply(mob/living/carbon/human/character, silent)
 	REMOVE_TRAIT(character, TRAIT_UGLY, TRAIT_GENERIC)
+	REMOVE_TRAIT(character, TRAIT_FISHFACE, TRAIT_GENERIC)
 	ADD_TRAIT(character, TRAIT_BEAUTIFUL, "[type]")
 
 //positive

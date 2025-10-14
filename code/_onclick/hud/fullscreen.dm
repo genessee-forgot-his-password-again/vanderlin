@@ -129,7 +129,7 @@
 	plane = FULLSCREEN_PLANE
 	alpha = 0
 
-/atom/movable/screen/fullscreen/love/New(client/C)
+/atom/movable/screen/fullscreen/love/Initialize(mapload, datum/hud/hud_owner)
 	. = ..()
 	animate(src, alpha = 255, time = 30)
 

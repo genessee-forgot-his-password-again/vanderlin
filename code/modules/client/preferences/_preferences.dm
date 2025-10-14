@@ -642,7 +642,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 
 				<div class="tutorialhover">[used_name]</font>
 				<span class="tutorial">[job.tutorial]<br>
-				Slots: [job.spawn_positions]</span>
+				Slots: [job.get_total_positions()]</span>
 				</div>
 
 			"}

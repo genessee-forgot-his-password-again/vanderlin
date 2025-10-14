@@ -109,7 +109,7 @@
 		client.verbs |= /client/proc/commendsomeone
 
 /client/proc/show_game_over()
-	var/atom/movable/screen/splash/credits/S = new(src, FALSE)
+	var/atom/movable/screen/splash/credits/S = new(null, null, src, FALSE, FALSE)
 	S.Fade(FALSE,FALSE)
 	RollCredits()
 

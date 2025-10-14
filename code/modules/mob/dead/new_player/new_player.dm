@@ -463,6 +463,10 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 			for(var/job in available_jobs)
 				var/datum/job/job_datum = SSjob.name_occupations[job]
 				if(job_datum)
+					if(job_datum.scales && job_datum.enabled)
+						var/new_slots = job_datum.get_total_positions()
+						if(new_slots > job_datum.spawn_positions)
+							job_datum.set_spawn_and_total_positions(get_total_town_members())
 					var/command_bold = ""
 					if(job in GLOB.noble_positions)
 						command_bold = " command"
@@ -525,7 +529,7 @@ GLOBAL_LIST_INIT(roleplay_readme, world.file2list("strings/rt/Lore_Primer.txt"))
 	if(joined_area)
 		joined_area.on_joining_game(new_character)
 	if(new_character.client)
-		var/atom/movable/screen/splash/Spl = new(new_character.client, TRUE)
+		var/atom/movable/screen/splash/Spl = new(null, null, new_character.client, TRUE, FALSE)
 		Spl.Fade(TRUE)
 	new_character = null
 	qdel(src)

@@ -7,8 +7,8 @@
 	var/title_override = null
 	/// The title of this job given to female mobs. Fluff, not as important as [var/title].
 	var/f_title = null
-	/// For the outlaw icon generation.
-	var/parent_job_title
+	/// Used if the job gets switched later to something else.
+	var/datum/job/parent_job
 	/// When joining the round, this text will be shown to the player.
 	var/tutorial = null
 
@@ -28,6 +28,12 @@
 
 	/// How many players currently have this job
 	var/current_positions = 0
+
+	///How many slots were open in this round. Used to prevent slots locking with decreasing amount of alive players
+	var/total_positions_so_far = 0
+
+	///If the roles will scale depending on the amount of players, example : adventurer, only for jobs that are not in the FACTION_TOWN
+	var/scales = FALSE
 
 	/// Whether this job clears a slot when you get a rename prompt.
 	var/antag_job = FALSE
@@ -294,7 +300,13 @@
 		DIRECT_OUTPUT(spawned, load_resource(cmode_music, -1)) //preload their combat mode music
 		spawned.cmode_music = cmode_music
 
-	if(!(type in actors_list_blacklist)) //don't show these.
+	var/type_check
+	if(parent_job)
+		type_check = parent_job.type
+		used_title = parent_job.get_informed_title(spawned)
+	else
+		type_check = type
+	if(!(type_check in actors_list_blacklist)) //don't show these.
 		GLOB.actors_list[spawned.mobid] = "[spawned.real_name] as [used_title]<BR>"
 
 	if(forced_flaw)
@@ -486,3 +498,9 @@
 		return f_title
 
 	return title
+
+/datum/job/proc/set_spawn_and_total_positions(count)
+	return spawn_positions
+
+/datum/job/proc/get_total_positions(latejoin)
+	return latejoin ? total_positions : spawn_positions

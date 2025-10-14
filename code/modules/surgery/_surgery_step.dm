@@ -297,9 +297,9 @@
 		play_failure_sound(user, target, target_zone, tool)
 		if(user.client?.prefs.showrolls)
 			if(try_to_fail)
-				to_chat(user, "<span class='warning'>Intentional surgery fail... [success_prob]%</span>")
+				to_chat(user, span_warning("Intentional surgery fail, the chance to succeed was [success_prob]%"))
 			else
-				to_chat(user, "<span class='warning'>Surgery fail... [success_prob]%</span>")
+				to_chat(user, span_warning("Surgery fail, the chance to succeed was [success_prob]%"))
 		if(repeating && can_do_step(user, target, target_zone, tool, intent, try_to_fail))
 			initiate(user, target, target_zone, tool, intent, try_to_fail)
 		return FALSE

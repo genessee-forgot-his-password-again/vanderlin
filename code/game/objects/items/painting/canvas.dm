@@ -162,7 +162,7 @@
 	var/current_overlays = 0
 
 
-/atom/movable/screen/canvas/Initialize(mapload, ...)
+/atom/movable/screen/canvas/Initialize(mapload, datum/hud/hud_owner)
 	. = ..()
 	draw = icon(icon, icon_state)
 	base = icon(icon, icon_state)

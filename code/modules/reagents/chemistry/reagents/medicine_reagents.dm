@@ -1,6 +1,8 @@
 /datum/reagent/medicine
 	name = "Medicine"
 	taste_description = "bitterness"
+	random_reagent_color = TRUE
+	overdose_threshold = 0
 
 /datum/reagent/medicine/on_mob_life(mob/living/carbon/M)
 	current_cycle++
@@ -11,6 +13,7 @@
 	description = "If a patient is in critical condition, rapidly heals all damage types as well as regulating oxygen in the body. Excellent for stabilizing wounded patients, and said to neutralize blood-activated internal explosives found amongst clandestine black op agents."
 	reagent_state = LIQUID
 	color = "#1D3535" //slightly more blue, like epinephrine
+	random_reagent_color = FALSE
 	metabolization_rate = 0.25 * REAGENTS_METABOLISM
 	overdose_threshold = 35
 
