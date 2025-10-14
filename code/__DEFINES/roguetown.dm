@@ -154,6 +154,7 @@ GLOBAL_LIST_EMPTY(job_respawn_delays)
 #define CTAG_SERVANT		"CAT_SERVANT" 		// Servant class - 4 type of servant to fill in someplace.
 #define CTAG_GATEMASTER		"CAT_GATEMASTER"
 #define CTAG_WRETCH			"CAT_WRETCH"
+#define CTAG_NOBLE			"CAT_NOBLE"  //For Persistence Nobles
 
 // Character category and its buys
 #define TRIUMPH_CAT_CHARACTER "CHARACTER"
