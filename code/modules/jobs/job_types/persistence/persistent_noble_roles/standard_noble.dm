@@ -27,9 +27,9 @@
 	H.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
 	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
 	H.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
 	H.adjust_skillrank(/datum/skill/misc/music, rand(1,2), TRUE)
 	H.change_stat(STATKEY_STR, 1)
 	H.change_stat(STATKEY_INT, 1)
@@ -39,20 +39,20 @@
 	ring = /obj/item/clothing/ring/silver
 	if(H.gender == FEMALE)
 		H.change_stat(STATKEY_SPD, 1)
-		H.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
 		shirt = /obj/item/clothing/shirt/dress/silkdress/colored/random
 		armor = /obj/item/clothing/armor/gambeson/heavy/dress
 		head = /obj/item/clothing/head/hatfur
 		cloak = /obj/item/clothing/cloak/raincloak/furcloak
 		backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow
-		beltr = /obj/item/weapon/knife/dagger/steel/special
+		beltr = /obj/item/weapon/sword/rapier/dec
 		beltl = /obj/item/ammo_holder/quiver/arrows
 		backpack_contents = list(/obj/item/reagent_containers/glass/bottle/wine = 1, /obj/item/reagent_containers/glass/cup/silver = 1)
 	if(H.gender == MALE)
 		H.change_stat(STATKEY_CON, 1)
-		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
 		pants = /obj/item/clothing/pants/tights/colored/black
 		shirt = /obj/item/clothing/shirt/tunic/colored/random
 		armor = /obj/item/clothing/armor/gambeson/arming
