@@ -45,6 +45,10 @@
 	background_track_dusk = 'sound/music/area/septimus.ogg'
 	background_track_night = 'sound/music/area/sleeping.ogg'
 
+/area/rogue/indoors/genzone
+	name = "Sanctum Sanctorum"
+	icon_state = "shelter"
+
 /area/rogue/outdoors/mountains
 	name = "mountains"
 	icon_state = "mountains"
@@ -1018,3 +1022,39 @@
 /area/rogue/delver
 	delver_restrictions = TRUE
 	converted_type = /area/rogue/delver
+
+/area/rogue/ship/topdeck
+	name = "upperdeck"
+	icon_state = "roofs"
+	droning_index = DRONING_BOAT
+	background_track = 'sound/music/area/topdeckdrone.ogg'
+	background_track_dusk = null
+	background_track_night = null
+	first_time_text = "The Voyager"
+	outdoors = TRUE
+
+/area/rogue/ship/middeck
+	name = "middeck"
+	icon_state = "indoors"
+	droning_index = DRONING_BOAT
+	background_track = 'sound/music/area/middeckdrone.ogg'
+	background_track_dusk = null
+	background_track_night = null
+	first_time_text = "Waist Deck"
+
+/area/rogue/ship/nobledeck
+	name = "nobledeck"
+	icon_state = "manor"
+	droning_index = DRONING_BOAT
+	background_track = 'sound/music/area/nobledeckdrone.ogg'
+	background_track_dusk = null
+	background_track_night = null
+
+/area/rogue/ship/shipbrig
+	name = "shipbrig"
+	icon_state = "cell"
+	droning_index = DRONING_BOAT
+	background_track = 'sound/music/area/shipbrig.ogg'
+	background_track_dusk = null
+	background_track_night = null
+	first_time_text = "The Brig"

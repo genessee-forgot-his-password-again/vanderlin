@@ -5,6 +5,7 @@
 	item_state = "leather"
 	equip_sound = 'sound/blank.ogg'
 	var/empty_when_dropped = TRUE
+	sellprice = 5
 
 /obj/item/storage/belt/leather/dropped(mob/living/carbon/human/user)
 	..()
@@ -105,6 +106,7 @@
 	icon_state = "rope"
 	item_state = "rope"
 	color = "#b9a286"
+	sellprice = 2
 	salvage_result = /obj/item/rope
 	component_type = /datum/component/storage/concrete/grid/belt/cloth
 
@@ -121,6 +123,7 @@
 	icon_state = "cloth"
 	salvage_result = /obj/item/natural/cloth
 	component_type = /datum/component/storage/concrete/grid/belt/cloth
+	sellprice = 2
 
 /obj/item/storage/belt/leather/cloth/attack_self(mob/user, params)
 	. = ..()
@@ -141,6 +144,7 @@
 	icon = 'icons/roguetown/clothing/storage.dmi'
 	mob_overlay_icon = null
 	icon_state = "pouch"
+	sellprice = 3
 	slot_flags = ITEM_SLOT_HIP|ITEM_SLOT_NECK
 	w_class = WEIGHT_CLASS_NORMAL
 	attack_verb = list("whips", "lashes")
@@ -457,6 +461,13 @@
 	. = ..()
 	for(var/i in 1 to max_storage)
 		var/obj/item/weapon/knife/throwingknife/psydon/A = new(loc)
+		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, A, null, TRUE, TRUE))
+			qdel(A)
+
+/obj/item/storage/belt/leather/knifebelt/black/rous/Initialize()
+	. = ..()
+	for(var/i in 1 to max_storage)
+		var/obj/item/weapon/knife/throwingknife/rous/A = new(loc)
 		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, A, null, TRUE, TRUE))
 			qdel(A)
 

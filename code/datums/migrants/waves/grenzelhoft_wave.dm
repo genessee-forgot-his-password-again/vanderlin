@@ -32,6 +32,10 @@
 		/datum/skill/labor/mathematics = 3,
 	)
 
+	spells = list(
+		/datum/action/cooldown/spell/undirected/call_bird/grenzel
+	)
+
 	traits = list(TRAIT_HEAVYARMOR, TRAIT_MEDIUMARMOR, TRAIT_NOBLE)
 	languages = list(/datum/language/oldpsydonic)
 	cmode_music = 'sound/music/cmode/combat_grenzelhoft.ogg'
@@ -98,6 +102,10 @@
 		/datum/skill/combat/unarmed = 2,
 		/datum/skill/combat/swords = 3,
 		/datum/skill/combat/knives = 2,
+	)
+
+	spells = list(
+		/datum/action/cooldown/spell/undirected/call_bird/grenzel
 	)
 
 	traits = list(TRAIT_MEDIUMARMOR, TRAIT_NOBLE)
@@ -234,17 +242,15 @@
 
 /datum/job/migrant/grenzelhoft_man_at_arms/after_spawn(mob/living/carbon/human/spawned, client/player_client)
 	. = ..()
+	spawned.adjust_skillrank(/datum/skill/combat/whipsflails, pick(1, 1, 2))
+	spawned.adjust_skillrank(/datum/skill/combat/axesmaces, pick(2, 3))
+	spawned.adjust_skillrank(/datum/skill/combat/shields, pick(0, 0, 1))
+
 	if(!spawned.dna?.species)
 		return
 	var/datum/species/species = spawned.dna.species
 	species.native_language = "Old Psydonic"
 	species.accent_language = species.get_accent(species.native_language)
-
-/datum/job/migrant/grenzelhoft_man_at_arms/adjust_values(mob/living/carbon/human/spawned)
-	. = ..()
-	LAZYADDASSOC(skills, /datum/skill/combat/whipsflails, pick(1, 1, 2))
-	LAZYADDASSOC(skills, /datum/skill/combat/axesmaces, pick(2, 3))
-	LAZYADDASSOC(skills, /datum/skill/combat/shields, pick(0, 0, 1))
 
 /datum/outfit/grenzelhoft_man_at_arms
 	name = "Grenzelhoft Man-at-Arms"

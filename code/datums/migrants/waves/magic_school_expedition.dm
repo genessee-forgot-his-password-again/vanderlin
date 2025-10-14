@@ -38,12 +38,9 @@
 
 /datum/job/migrant/magic_teacher/after_spawn(mob/living/carbon/human/spawned, client/player_client)
 	. = ..()
+	if(prob(5))
+		spawned.cmode_music = 'sound/music/cmode/antag/combat_evilwizard.ogg'
 	spawned.mana_pool?.set_intrinsic_recharge(MANA_ALL_LEYLINES)
-
-/datum/job/migrant/magic_teacher/adjust_values(mob/living/carbon/human/spawned)
-	. = ..()
-	if(prob(5)) //extremely rare
-		cmode_music = 'sound/music/cmode/antag/combat_evilwizard.ogg'
 
 /datum/outfit/magic_teacher
 	name = "Magic School Teacher"
@@ -98,11 +95,11 @@
 	. = ..()
 	spawned.mana_pool?.set_intrinsic_recharge(MANA_ALL_LEYLINES)
 
-/datum/job/migrant/magic_student/adjust_values(mob/living/carbon/human/spawned)
+/datum/job/migrant/magic_student/after_spawn(mob/living/carbon/human/spawned, client/player_client)
 	. = ..()
-	skills += list(/datum/skill/magic/arcane = pick(2,2,2,3))
-	if(prob(5)) //extremely rare
-		cmode_music = 'sound/music/cmode/antag/combat_evilwizard.ogg'
+	spawned.adjust_skillrank(/datum/skill/magic/arcane, pick(2,2,2,3))
+	if(prob(5))
+		spawned.cmode_music = 'sound/music/cmode/antag/combat_evilwizard.ogg'
 
 /datum/outfit/magic_student
 	name = "Magic School Student"

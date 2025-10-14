@@ -76,6 +76,7 @@
 /area/rogue/under/tomb/wilds/bog)
 "mh" = (
 /obj/structure/bed/shit,
+/mob/living/carbon/human/species/zizombie/npc/peasant,
 /turf/open/floor/blocks/paving/vert,
 /area/rogue/under/tomb/indoors)
 "nj" = (
@@ -110,8 +111,8 @@
 /turf/open/floor/blocks/paving/vert,
 /area/rogue/under/tomb/indoors)
 "sS" = (
-/mob/living/simple_animal/hostile/retaliate/minotaur/axe,
-/turf/open/floor/tile/checkeralt,
+/mob/living/carbon/human/species/zizombie/npc/GRENZEL,
+/turf/open/floor/carpet,
 /area/rogue/under/tomb/indoors/royal)
 "th" = (
 /obj/machinery/light/fueled/torchholder/c,
@@ -547,8 +548,8 @@ pk
 gk
 pk
 gk
+pk
 sS
-gk
 pk
 gk
 pk
@@ -578,8 +579,8 @@ gk
 pk
 gk
 pk
-gk
 sS
+pk
 gk
 pk
 gk

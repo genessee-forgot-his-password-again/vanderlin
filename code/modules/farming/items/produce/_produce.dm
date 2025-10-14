@@ -3,7 +3,7 @@
 	dried_type = null
 	resistance_flags = FLAMMABLE
 	w_class = WEIGHT_CLASS_SMALL
-	sellprice = 0
+	sellprice = 1
 	force = 0
 	throwforce = 0
 	faretype = FARE_POOR
@@ -11,6 +11,7 @@
 	var/seed
 	var/bitesize_mod = 0
 	var/datum/plant_genetics/source_genetics
+	sellprice = 1
 
 /obj/item/reagent_containers/food/snacks/produce/fruit
 	name = "fruit"
@@ -114,7 +115,7 @@
 	list_reagents = list(/datum/reagent/consumable/nutriment = 1)
 	worn_y_dimension = 64
 	rotprocess = SHELFLIFE_DECENT
-	sellprice = 0 // spoil too quickly to export
+	sellprice = 1 // spoil too quickly to export
 	var/equippedloc = null
 	var/list/bitten_names = list()
 
@@ -160,7 +161,7 @@
 	list_reagents = list(/datum/reagent/consumable/nutriment = 0.5)
 	dropshrink = 0.75
 	rotprocess = SHELFLIFE_SHORT
-	sellprice = 0 // spoil too quickly to export
+	sellprice = 1 // spoil too quickly to export
 
 
 /obj/item/reagent_containers/food/snacks/produce/fruit/raspberry
@@ -174,7 +175,7 @@
 	list_reagents = list(/datum/reagent/consumable/nutriment = 0.5)
 	dropshrink = 0.75
 	rotprocess = SHELFLIFE_SHORT
-	sellprice = 0 // spoil too quickly to export
+	sellprice = 1 // spoil too quickly to export
 
 
 /obj/item/reagent_containers/food/snacks/produce/fruit/blackberry
@@ -188,7 +189,7 @@
 	list_reagents = list(/datum/reagent/consumable/nutriment = 0.5)
 	dropshrink = 0.75
 	rotprocess = SHELFLIFE_SHORT
-	sellprice = 0 // spoil too quickly to export
+	sellprice = 1 // spoil too quickly to export
 
 /obj/item/reagent_containers/food/snacks/produce/fruit/jacksberry
 	name = "jacksberries"
@@ -202,7 +203,7 @@
 	dropshrink = 0.75
 	var/color_index = "good"
 	rotprocess = SHELFLIFE_SHORT
-	sellprice = 0 // spoil too quickly to export
+	sellprice = 1 // spoil too quickly to export
 	var/poisonous = FALSE
 
 /obj/item/reagent_containers/food/snacks/produce/fruit/jacksberry/Initialize()
@@ -276,7 +277,7 @@
 	tastes = list("sweet" = 1,"bitterness" = 1)
 	eat_effect = /datum/status_effect/debuff/badmeal
 	rotprocess = SHELFLIFE_LONG
-	sellprice = 0 // only dried has value
+	sellprice = 1 // only dried has value
 
 /obj/item/reagent_containers/food/snacks/produce/swampweed_dried
 	seed = null
@@ -306,7 +307,6 @@
 	grind_results = list(/datum/reagent/drug/nicotine = 5)
 	eat_effect = /datum/status_effect/debuff/badmeal
 	rotprocess = SHELFLIFE_LONG
-	sellprice = 0 // only dried has value
 
 /obj/item/reagent_containers/food/snacks/produce/dry_westleach
 	seed = null
@@ -319,7 +319,7 @@
 	list_reagents = list(/datum/reagent/drug/nicotine = 5, /datum/reagent/consumable/nutriment = 1)
 	grind_results = list(/datum/reagent/drug/nicotine = 10)
 	rotprocess = null
-	sellprice = 1
+	sellprice = 3
 
 
 /*	..................   Cabbage   ................... */
@@ -489,6 +489,7 @@
 	icon_state = "salt"
 	tastes = list("sweet" = 1)
 	list_reagents = list(/datum/reagent/consumable/sugar = 15)
+	sellprice = 2
 
 /*	..................   Fyritius Flower   ................... */ // some sort of funni fire flowers. Dunno just moving them here for consistency.
 /obj/item/reagent_containers/food/snacks/produce/fyritius
@@ -521,6 +522,7 @@
 	slot_flags = ITEM_SLOT_HEAD|ITEM_SLOT_MASK
 	body_parts_covered = NONE
 	alternate_worn_layer  = 8.9
+	sellprice = 2
 /*
 /obj/item/reagent_containers/food/snacks/produce/garlic
 	name = "garlic"

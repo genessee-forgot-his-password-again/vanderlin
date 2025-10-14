@@ -129,8 +129,6 @@
 				if(!GLOB.thaumic_research.has_research(prereq))
 					can_unlock = FALSE
 					break
-			if(can_unlock && !GLOB.thaumic_research.has_research(node_type))
-				message_admins("test")
 		qdel(temp_node)
 
 	visible_message(span_notice("The engine hums and grumbles with alchemic energy as it's fueled!"))

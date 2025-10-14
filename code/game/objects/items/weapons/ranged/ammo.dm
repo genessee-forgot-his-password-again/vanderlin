@@ -30,6 +30,7 @@
 	force = DAMAGE_KNIFE-2
 	embedding = list("embedded_pain_multiplier" = 3, "embedded_fall_chance" = 0)
 	firing_effect_type = null
+	sellprice = 2
 
 /obj/item/ammo_casing/caseless/bolt/Initialize(mapload, ...)
 	. = ..()
@@ -101,6 +102,7 @@
 	desc = "A bolt smeared with a flammable tincture."
 	icon_state = "bolt_pyroclastic"
 	projectile_type = /obj/projectile/bullet/reusable/bolt/pyro
+	sellprice = 10
 
 /obj/item/ammo_casing/caseless/bolt/pyro/Initialize(mapload, ...)
 	. = ..()
@@ -212,6 +214,7 @@
 	damage = BOLT_DAMAGE-9
 	armor_penetration = BOLT_PENETRATION-15
 	embedchance = 0
+	sellprice = 5
 
 /obj/projectile/bullet/reusable/bolt/water/Initialize(mapload, ...)
 	. = ..()
@@ -242,6 +245,7 @@
 	max_integrity = 20
 	embedding = list("embedded_pain_multiplier" = 3, "embedded_fall_chance" = 0)
 	firing_effect_type = null
+	sellprice = 2
 
 /obj/item/ammo_casing/caseless/arrow/Initialize(mapload, ...)
 	. = ..()
@@ -294,6 +298,7 @@
 	icon_state = "stonearrow"
 	projectile_type = /obj/projectile/bullet/reusable/arrow/stone //weaker projectile
 	max_integrity = 5
+	sellprice = 1
 
 /obj/projectile/bullet/reusable/arrow/stone
 	ammo_type = /obj/item/ammo_casing/caseless/arrow/stone
@@ -328,6 +333,7 @@
 	icon_state = "arrow_pyroclastic"
 	max_integrity = 10
 	force = DAMAGE_KNIFE-2
+	sellprice = 10
 
 /obj/item/ammo_casing/caseless/arrow/pyro/Initialize(mapload, ...)
 	. = ..()
@@ -424,6 +430,7 @@
 	projectile_type = /obj/projectile/bullet/reusable/arrow/water
 	max_integrity = 10
 	force = DAMAGE_KNIFE-2
+	sellprice = 5
 
 /obj/item/ammo_casing/caseless/arrow/water/Initialize(mapload, ...)
 	. = ..()

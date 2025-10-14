@@ -25,6 +25,9 @@ GLOBAL_LIST_INIT(garrison_positions, list(
 	/datum/job/forestwarden::title,
 	/datum/job/forestguard::title,
 	/datum/job/persistence/caravanguard::title,
+	// requires level 1 barracks to unlock
+//	/datum/job/persistence/caravanguard/watchman::title,
+// 	/datum/job/persistence/caravanguard/watchboss::title,
 	))
 GLOBAL_PROTECT(garrison_positions)
 
@@ -54,6 +57,10 @@ GLOBAL_LIST_INIT(serf_positions, list(
 	/datum/job/butler::title,
 	/datum/job/persistence/carpenter::title,
 	/datum/job/persistence/stonemason::title,
+	// requires smithy to unlock
+	/datum/job/persistence/smithworker::title,
+	// requires clinic to unlock
+	/datum/job/persistence/physician::title,
 	))
 GLOBAL_PROTECT(serf_positions)
 
@@ -72,6 +79,7 @@ GLOBAL_LIST_INIT(peasant_positions, list(
 	/datum/job/persistence/woodsman::title,
 	/datum/job/persistence/miner::title,
 	/datum/job/persistence/farmer::title,
+	/datum/job/persistence/commoner::title,
 ))
 GLOBAL_PROTECT(peasant_positions)
 

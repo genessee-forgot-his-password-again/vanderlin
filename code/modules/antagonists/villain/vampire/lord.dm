@@ -11,10 +11,12 @@
 	var/ascended = FALSE
 
 /datum/antagonist/vampire/lord/on_gain()
-	var/mob/living/carbon/vampire = owner.current
+	var/mob/living/carbon/human/vampire = owner?.current
 	remove_job()
-	owner.current?.roll_mob_stats()
-	owner.current?.purge_combat_knowledge()
+	vampire.delete_equipment()
+	vampire.reset_and_reroll_stats()
+	vampire.purge_combat_knowledge()
+	vampire.remove_all_traits()
 	. = ..()
 	addtimer(CALLBACK(owner.current, TYPE_PROC_REF(/mob/living/carbon/human, choose_name_popup), "[name]"), 5 SECONDS)
 	vampire.grant_undead_eyes()

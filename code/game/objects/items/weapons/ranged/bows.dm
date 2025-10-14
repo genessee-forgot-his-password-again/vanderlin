@@ -23,6 +23,7 @@
 	cartridge_wording = "arrow"
 	load_sound = 'sound/foley/nockarrow.ogg'
 	metalizer_result = /obj/item/restraints/legcuffs/beartrap/armed
+	sellprice = 60
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/bow/getonmobprop(tag)
 	if(tag)
@@ -211,6 +212,7 @@
 	slot_flags = ITEM_SLOT_BACK
 	force = 12
 	damfactor = 1.2
+	sellprice = 80
 
 /datum/intent/shoot/bow/long/prewarning()
 	var/mob/master_mob = get_master_mob()
@@ -252,6 +254,7 @@
 	spread = 1
 	force = 9
 	damfactor = 0.9
+	sellprice = 70
 
 /datum/intent/shoot/bow/short
 	chargetime = 0.75

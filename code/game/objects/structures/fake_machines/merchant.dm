@@ -278,4 +278,9 @@
 	popup.set_content(contents)
 	popup.open()
 
+/obj/structure/fake_machine/merchantvend/cheat
+	name = "CONJURER'S GOLDFACE"
+	desc = "Greed is good."
+	unlocked_cats = list("Royal Bank","Royal Apothecary","Royal Chef")
+
 #undef UPGRADE_NOTAX

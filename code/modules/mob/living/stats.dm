@@ -411,6 +411,35 @@
 	UPDATE_SPEED()
 	UPDATE_FORTUNE()
 
+/mob/living/proc/reset_and_reroll_stats()
+	//Reset base stats to defaults
+	base_strength = 10
+	base_perception = 10
+	base_endurance = 10
+	base_constitution = 10
+	base_intelligence = 10
+	base_speed = 10
+	base_fortune = 10
+
+	//Clear all cached modifiers
+	modified_strength = 0
+	modified_perception = 0
+	modified_endurance = 0
+	modified_constitution = 0
+	modified_intelligence = 0
+	modified_speed = 0
+	modified_fortune = 0
+	stat_modifiers = list()
+
+	//Reset stat roll var so roll_mob_stats() will work
+	has_rolled_for_stats = FALSE
+
+	//Reroll mob stats
+	roll_mob_stats()
+
+	//recalc all modifiers to ensure final stats are up to date
+	recalculate_stats()
+
 #undef UPDATE_STRENGTH
 #undef UPDATE_PERCEPTION
 #undef UPDATE_ENDURANCE

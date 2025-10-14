@@ -1629,6 +1629,10 @@
 /obj/structure/hotspring/border/three,
 /turf/open/floor/grass/yel,
 /area/rogue/outdoors)
+"hA" = (
+/obj/machinery/light/fueled/wallfire/candle/l,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "hC" = (
 /obj/effect/decal/cobbleedge{
 	dir = 6
@@ -1860,6 +1864,11 @@
 /obj/item/neuFarm/seed/westleach,
 /turf/open/floor/dirt,
 /area/rogue/outdoors/woods_safe)
+"iT" = (
+/obj/structure/bed/wool/double,
+/obj/item/bedsheet/double_pelt,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "iX" = (
 /obj/structure/table/wood{
 	icon_state = "largetable"
@@ -1932,6 +1941,10 @@
 /obj/structure/fluff/wallclock,
 /turf/open/floor/ruinedwood/chevron,
 /area/rogue/indoors)
+"jx" = (
+/obj/machinery/light/fueled/wallfire/candle,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "jA" = (
 /obj/structure/bed/inn/double,
 /turf/open/floor/carpet/purple,
@@ -2607,6 +2620,10 @@
 /obj/item/reagent_containers/glass/bottle/healthpot,
 /turf/open/floor/blocks/paving,
 /area/rogue/indoors/vampire_manor)
+"oa" = (
+/obj/structure/fake_machine/atm,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "ob" = (
 /turf/closed/wall/mineral/decostone,
 /area/rogue/indoors)
@@ -2820,6 +2837,10 @@
 /obj/structure/flora/grass,
 /turf/open/floor/dirt,
 /area/rogue/outdoors/bog/inhumen_camp)
+"pL" = (
+/obj/structure/table/wood/nice/decorated_alt,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "pP" = (
 /obj/structure/closet/crate/crafted_closet/inn/chest,
 /obj/item/clothing/shirt/rags,
@@ -3068,7 +3089,7 @@
 /obj/item/clothing/neck/psycross/silver/eora,
 /obj/item/clothing/neck/psycross/g,
 /obj/item/clothing/neck/psycross/silver/necra,
-/obj/item/clothing/neck/psycross/noc,
+/obj/item/clothing/neck/psycross/silver/noc,
 /obj/item/clothing/neck/psycross/silver/ravox,
 /turf/open/floor/wood,
 /area/rogue/indoors)
@@ -3520,6 +3541,10 @@
 /obj/structure/mannequin/male,
 /turf/open/floor/wood,
 /area/rogue/indoors)
+"tV" = (
+/obj/structure/fake_machine/merchantvend/cheat,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "tW" = (
 /obj/structure/fluff/millstone{
 	pixel_x = -5;
@@ -3932,6 +3957,9 @@
 /obj/effect/landmark/start/new_player,
 /turf/open/floor/blocks,
 /area/start)
+"wE" = (
+/turf/closed/wall/mineral/craftstone,
+/area/rogue/indoors/genzone)
 "wH" = (
 /obj/machinery/light/fueled/torchholder/c,
 /obj/structure/chair/bench/coucha/redleft,
@@ -4095,6 +4123,11 @@
 	},
 /turf/open/floor/church,
 /area/rogue/indoors/lich)
+"xZ" = (
+/obj/structure/closet/crate/crafted_closet/inn,
+/obj/item/weapon/knife/dagger/steel,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "ya" = (
 /obj/structure/table/wood/large/corner_new{
 	dir = 5
@@ -4694,6 +4727,9 @@
 	},
 /turf/open/floor/dirt/road,
 /area/rogue/outdoors/bog/inhumen_camp)
+"Cc" = (
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "Cd" = (
 /obj/effect/decal/cleanable/dirt/cobweb,
 /obj/effect/decal/cleanable/dirt/dust,
@@ -4978,6 +5014,10 @@
 	},
 /turf/open/floor/naturalstone,
 /area/rogue/indoors/lich)
+"En" = (
+/obj/structure/door/green,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "Eo" = (
 /turf/open/floor/twig,
 /area/rogue/outdoors/bog/inhumen_camp)
@@ -5329,6 +5369,10 @@
 /obj/structure/fluff/statue/pillar,
 /turf/open/floor/dirt,
 /area/rogue/outdoors/bog/inhumen_camp)
+"Hd" = (
+/obj/structure/rack/shelf/biggest,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "Hf" = (
 /obj/machinery/light/fueled/wallfire/candle/skull/r,
 /obj/structure/fluff/clock/zizoclock,
@@ -5817,6 +5861,10 @@
 /obj/item/reagent_containers/glass/bucket/pot,
 /turf/open/floor/tile/checker_green,
 /area/rogue/indoors)
+"JW" = (
+/obj/structure/fake_machine/merchantvend,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "JX" = (
 /obj/machinery/light/fueled/wallfire/candle{
 	pixel_y = -32
@@ -6198,6 +6246,12 @@
 /obj/item/rope,
 /turf/open/floor/church,
 /area/rogue/indoors/lich)
+"MO" = (
+/obj/structure/closet/crate/chest/old_crate,
+/obj/item/coin/gold/pile,
+/obj/item/coin/gold/pile,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "MP" = (
 /obj/effect/decal/cleanable/dirt/dust,
 /obj/machinery/light/fueled/wallfire/candle/r,
@@ -6343,6 +6397,9 @@
 /obj/machinery/light/fueled/wallfire/candle/l,
 /turf/open/floor/ruinedwood/darker,
 /area/rogue/indoors/bandit_lair)
+"NJ" = (
+/turf/closed/mineral/bedrock,
+/area/rogue/indoors/genzone)
 "NL" = (
 /obj/structure/closet/dirthole/closed,
 /obj/structure/flora/grass,
@@ -6369,6 +6426,12 @@
 /obj/structure/fluff/railing/tall/palisade,
 /turf/open/floor/dirt,
 /area/rogue/outdoors/woods_safe)
+"NV" = (
+/obj/structure/bars/bent,
+/obj/structure/table/wood,
+/obj/item/key/merchant,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "NX" = (
 /obj/machinery/light/fueled/wallfire/candle/skull/l,
 /turf/open/floor/carpet/lord/left,
@@ -6490,6 +6553,10 @@
 	},
 /turf/open/floor/cobble,
 /area/rogue/indoors)
+"OY" = (
+/obj/machinery/light/fueled/wallfire/candle/r,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "OZ" = (
 /obj/structure/flora/grass,
 /obj/effect/falling_sakura,
@@ -7400,6 +7467,11 @@
 	},
 /turf/open/floor/carpet/red,
 /area/rogue/indoors/lich)
+"UH" = (
+/obj/structure/bars/bent,
+/obj/structure/table/wood,
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "UI" = (
 /obj/structure/fluff/statue/knight/interior/r,
 /turf/open/floor/herringbone,
@@ -7784,6 +7856,12 @@
 /obj/item/ore/iron,
 /turf/open/floor/dirt/road,
 /area/rogue/indoors/bandit_lair)
+"Xn" = (
+/obj/structure/chair/wood/alt/chair_noble/purple{
+	dir = 4
+	},
+/turf/open/floor/ruinedwood/turned,
+/area/rogue/indoors/genzone)
 "Xp" = (
 /obj/structure/table/wood{
 	dir = 5;
@@ -22326,6 +22404,17 @@ hZ
 hZ
 hZ
 JN
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
 ag
 ag
 ag
@@ -22333,17 +22422,6 @@ ag
 ag
 ag
 ag
-ag
-ag
-ag
-ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -22456,6 +22534,17 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+wE
+wE
+wE
+wE
+wE
+wE
+wE
+wE
+NJ
 ag
 ag
 ag
@@ -22463,17 +22552,6 @@ ag
 ag
 ag
 ag
-ag
-ag
-ag
-ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -22586,6 +22664,17 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+Cc
+hA
+Cc
+En
+Cc
+hA
+Cc
+wE
+NJ
 ag
 ag
 ag
@@ -22593,17 +22682,6 @@ ag
 ag
 ag
 ag
-ag
-ag
-ag
-ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -22716,6 +22794,17 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+Cc
+Cc
+Cc
+wE
+xZ
+Cc
+Xn
+wE
+NJ
 ag
 ag
 ag
@@ -22723,17 +22812,6 @@ ag
 ag
 ag
 ag
-ag
-ag
-ag
-ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -22846,6 +22924,17 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+jx
+Cc
+Cc
+wE
+iT
+OY
+pL
+wE
+NJ
 ag
 ag
 ag
@@ -22853,17 +22942,6 @@ ag
 ag
 ag
 ag
-ag
-ag
-ag
-ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -22976,6 +23054,17 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+Cc
+Cc
+Cc
+wE
+wE
+wE
+wE
+wE
+NJ
 ag
 ag
 ag
@@ -22983,17 +23072,6 @@ ag
 ag
 ag
 ag
-ag
-ag
-ag
-ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -23106,6 +23184,17 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+Cc
+Cc
+Cc
+En
+Cc
+hA
+tV
+wE
+NJ
 ag
 ag
 ag
@@ -23113,17 +23202,6 @@ ag
 ag
 ag
 ag
-ag
-ag
-ag
-ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -23236,6 +23314,17 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+Cc
+Cc
+Cc
+wE
+oa
+Cc
+JW
+wE
+NJ
 ag
 ag
 ag
@@ -23243,17 +23332,6 @@ ag
 ag
 ag
 ag
-ag
-ag
-ag
-ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -23366,24 +23444,24 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+Cc
+Cc
+Cc
+NV
+Cc
+Cc
+Cc
+wE
+NJ
 ag
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
 ag
 ag
 ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -23496,24 +23574,24 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+jx
+Cc
+Cc
+UH
+Cc
+Cc
+MO
+wE
+NJ
 ag
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
 ag
 ag
 ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -23626,24 +23704,24 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+Hd
+Cc
+Cc
+UH
+Cc
+Cc
+Hd
+wE
+NJ
 ag
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
 ag
 ag
 ag
-ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -23756,11 +23834,18 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+Hd
+OY
+Cc
+wE
+Cc
+OY
+Hd
+wE
+NJ
 ag
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
@@ -23768,14 +23853,7 @@ ag
 ag
 ag
 ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
+ag
 rQ
 rQ
 HZ
@@ -23886,26 +23964,26 @@ hZ
 hZ
 hZ
 JN
+NJ
+wE
+wE
+wE
+wE
+wE
+wE
+wE
+wE
+wE
+NJ
 ag
-rQ
-rQ
-rQ
-rQ
 ag
 ag
 ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
+ag
+ag
+ag
+ag
+ag
 rQ
 rQ
 HZ
@@ -24016,6 +24094,17 @@ JN
 JN
 JN
 JN
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
+NJ
 ag
 ag
 ag
@@ -24024,18 +24113,7 @@ ag
 ag
 ag
 ag
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
-rQ
+ag
 rQ
 rQ
 rQ

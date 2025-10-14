@@ -14,6 +14,7 @@
 	w_class = WEIGHT_CLASS_TINY
 	spitoutmouth = FALSE
 	bundletype = /obj/item/natural/bundle/fibers
+	sellprice = 1
 
 /obj/item/natural/silk
 	name = "silk"
@@ -31,6 +32,7 @@
 	w_class = WEIGHT_CLASS_TINY
 	spitoutmouth = FALSE
 	bundletype = /obj/item/natural/bundle/silk
+	sellprice = 5
 
 #ifdef TESTSERVER
 
@@ -66,6 +68,7 @@
 	w_class = WEIGHT_CLASS_TINY
 	spitoutmouth = FALSE
 	bundletype = /obj/item/natural/bundle/cloth
+	sellprice = 3
 
 	var/datum/component/cleaner/cleaner_component = null
 	var/clean_speed = 0.4 SECONDS

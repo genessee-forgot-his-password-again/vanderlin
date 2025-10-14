@@ -8,6 +8,7 @@
 	allowed_ages = ALL_AGES_LIST
 	outfit = /datum/outfit/woodsman_p
 	cmode_music = 'sound/music/cmode/towner/CombatTowner.ogg'
+	bypass_lastclass = TRUE
 
 /datum/outfit/woodsman_p/pre_equip(mob/living/carbon/human/H)
 	..()

@@ -7,6 +7,8 @@
 	var/title_override = null
 	/// The title of this job given to female mobs. Fluff, not as important as [var/title].
 	var/f_title = null
+	/// For the outlaw icon generation.
+	var/parent_job_title
 	/// When joining the round, this text will be shown to the player.
 	var/tutorial = null
 
@@ -85,15 +87,13 @@
 	/// Default patron in case the patron is not allowed
 	var/datum/patron/default_patron
 
-	/// Stats given to the job in the form of list(STA_X = value)
-	var/list/jobstats
-	/// Female stats only used if a value is given
-	var/list/jobstats_f
-
 	/// Voicepack to grant to males
 	var/datum/voicepack/voicepack_m
 	/// Voicepack to grant to females
 	var/datum/voicepack/voicepack_f
+
+	/// Stats given to the job in the form of list(STA_X = value)
+	var/list/jobstats
 
 	/// Skill levels granted at roundstart.
 	/// Possibly modified by species.
@@ -230,8 +230,6 @@
 	if(!ishuman(spawned))
 		return
 
-	adjust_values(spawned)
-
 	if(magic_user)
 		spawned.mana_pool.set_intrinsic_recharge(MANA_ALL_LEYLINES)
 
@@ -259,9 +257,8 @@
 	spawned.adjust_spell_points(spell_points)
 	spawned.generate_random_attunements(rand(attunements_min, attunements_max))
 
-	var/list/used_stats = ((spawned.gender == FEMALE) && jobstats_f) ? jobstats_f : jobstats
 	spawned.remove_stat_modifier("job_stats") // Reset so no inf stat
-	spawned.adjust_stat_modifier_list("job_stats", used_stats)
+	spawned.adjust_stat_modifier_list("job_stats", jobstats)
 
 	for(var/datum/skill/skill as anything in skills)
 		var/amount_or_list = skills[skill]
@@ -326,11 +323,6 @@
 
 	if(length(advclass_cat_rolls))
 		spawned.hugboxify_for_class_selection()
-
-/// Called by [after_spawn] and run before anything else.
-/// Change your stat values and such here, not in outfits.
-/datum/job/proc/adjust_values(mob/living/carbon/human/spawned)
-	return
 
 /datum/job/proc/adjust_patron(mob/living/carbon/human/spawned)
 	if(!length(allowed_patrons))

@@ -51,6 +51,7 @@
 
 			for(var/datum/round_event_control/listed as anything in SSgamemode.control)
 				listed.occurrences = 0
+				listed.last_round_occurrences = 0
 
 			for(var/client/C in GLOB.clients)
 				if(!C?.mob)

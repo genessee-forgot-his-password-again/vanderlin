@@ -28,6 +28,86 @@
 	. = ..()
 	enchant(/datum/enchantment/silver)
 
+/obj/item/clothing/neck/jadeamulet
+	name = "joapstone amulet"
+	icon_state = "amulet_jade"
+	slot_flags = ITEM_SLOT_NECK
+	equip_sound = 'sound/foley/equip/cloak_equip.ogg'
+	pickup_sound = 'sound/foley/equip/cloak_take_off.ogg'
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	sellprice = 60
+
+/obj/item/clothing/neck/turqamulet
+	name = "ceruleabaster amulet"
+	icon_state = "amulet_turq"
+	slot_flags = ITEM_SLOT_NECK
+	equip_sound = 'sound/foley/equip/cloak_equip.ogg'
+	pickup_sound = 'sound/foley/equip/cloak_take_off.ogg'
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	sellprice = 85
+
+/obj/item/clothing/neck/onyxaamulet
+	name = "onyxa amulet"
+	icon_state = "amulet_onyxa"
+	slot_flags = ITEM_SLOT_NECK
+	equip_sound = 'sound/foley/equip/cloak_equip.ogg'
+	pickup_sound = 'sound/foley/equip/cloak_take_off.ogg'
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	sellprice = 40
+
+/obj/item/clothing/neck/coralamulet
+	name = "aoetal amulet"
+	icon_state = "amulet_coral"
+	slot_flags = ITEM_SLOT_NECK
+	equip_sound = 'sound/foley/equip/cloak_equip.ogg'
+	pickup_sound = 'sound/foley/equip/cloak_take_off.ogg'
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	sellprice = 70
+
+/obj/item/clothing/neck/amberamulet
+	name = "petriamber amulet"
+	icon_state = "amulet_amber"
+	slot_flags = ITEM_SLOT_NECK
+	equip_sound = 'sound/foley/equip/cloak_equip.ogg'
+	pickup_sound = 'sound/foley/equip/cloak_take_off.ogg'
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	sellprice = 60
+
+/obj/item/clothing/neck/opalamulet
+	name = "opaloise amulet"
+	icon_state = "amulet_opal"
+	slot_flags = ITEM_SLOT_NECK
+	equip_sound = 'sound/foley/equip/cloak_equip.ogg'
+	pickup_sound = 'sound/foley/equip/cloak_take_off.ogg'
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	sellprice = 90
+
+/obj/item/clothing/neck/roseamulet
+	name = "rosellusk amulet"
+	icon_state = "amulet_rose"
+	slot_flags = ITEM_SLOT_NECK
+	equip_sound = 'sound/foley/equip/cloak_equip.ogg'
+	pickup_sound = 'sound/foley/equip/cloak_take_off.ogg'
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	sellprice = 25
+
+/obj/item/clothing/neck/shellamulet
+	name = "shell amulet"
+	icon_state = "amulet_shell"
+	slot_flags = ITEM_SLOT_NECK
+	equip_sound = 'sound/foley/equip/cloak_equip.ogg'
+	pickup_sound = 'sound/foley/equip/cloak_take_off.ogg'
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	sellprice = 25
+
 /obj/item/clothing/neck/coif
 	name = "leather coif"
 	desc = "A simple coif made of boiled leather, not that good as armor itself but mostly useful as padding for proper helmets."
@@ -165,6 +245,7 @@
 	body_parts_covered = NECK|HAIR|EARS|HEAD
 	max_integrity = INTEGRITY_STRONGEST
 	prevent_crits = ALL_EXCEPT_BLUNT
+	sellprice = 30
 
 
 /obj/item/clothing/neck/chaincoif/AdjustClothes(mob/user)
@@ -203,6 +284,7 @@
 
 	armor = ARMOR_MAILLE_IRON
 	max_integrity = INTEGRITY_STRONG
+	sellprice = 20
 
 /obj/item/clothing/neck/gorget/copper
 	name = "neck protector"
@@ -213,6 +295,7 @@
 	armor_class = AC_MEDIUM
 	armor = ARMOR_LEATHER_GOOD
 	max_integrity = INTEGRITY_POOR
+	sellprice = 5
 
 
 //..................................................................................................................................
@@ -242,6 +325,7 @@
 	body_parts_covered = NECK|EARS|MOUTH|NOSE
 	max_integrity = INTEGRITY_STRONGEST
 	prevent_crits = ALL_EXCEPT_STAB
+	sellprice = 30
 
 /obj/item/clothing/neck/bevor/Initialize()
 	. = ..()
@@ -256,6 +340,7 @@
 
 	armor = ARMOR_PLATE_BAD
 	max_integrity = INTEGRITY_STRONG
+	sellprice = 20
 
 /obj/item/clothing/neck/gorget
 	name = "gorget"
@@ -278,6 +363,7 @@
 	body_parts_covered = NECK
 	max_integrity = INTEGRITY_STRONG
 	prevent_crits = ALL_EXCEPT_STAB
+	sellprice = 20
 
 /obj/item/clothing/neck/gorget/Initialize()
 	. = ..()
@@ -290,6 +376,7 @@
 	smeltresult = /obj/item/ingot/bronze
 	melting_material = /datum/material/bronze
 	armor = ARMOR_MAILLE_GOOD
+	sellprice = 20
 
 /obj/item/clothing/neck/highcollier
 	name = "high collier"
@@ -312,6 +399,7 @@
 	clothing_flags = CANT_SLEEP_IN
 	max_integrity = INTEGRITY_STRONGEST
 	prevent_crits = ALL_EXCEPT_BLUNT
+	sellprice = 30
 
 /obj/item/clothing/neck/highcollier/AdjustClothes(mob/user)
 	if(loc == user)
@@ -348,12 +436,14 @@
 	smeltresult = /obj/item/ingot/iron
 	melt_amount = 100
 	melting_material = /datum/material/iron
+	sellprice = 20
 
 /obj/item/clothing/neck/highcollier/iron/renegadecollar
 	icon_state = "renegadecollar"
 	name = "black collar"
 	desc = "A tough leather collar concealing iron chain mail, meant to be paired with its jacket. This one also covers not only the neck and mouth, but also the nose and ears."
 	body_parts_covered = NECK|EARS|MOUTH|NOSE
+	sellprice = 25
 
 //........................................................................................
 /*---------------\

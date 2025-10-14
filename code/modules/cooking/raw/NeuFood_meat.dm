@@ -23,12 +23,13 @@
 	foodtype = RAW | MEAT
 	drop_sound = 'sound/foley/dropsound/gen_drop.ogg'
 	become_rot_type = /obj/item/reagent_containers/food/snacks/rotten/meat
+	sellprice = 6
 
 /*	.............   Raw meat   ................ */
 /obj/item/reagent_containers/food/snacks/meat/steak
 	ingredient_size = 2
 	name = "raw meat"
-	slices_num = 2
+	slices_num = 3
 	slice_path = /obj/item/reagent_containers/food/snacks/meat/mince/beef
 	slice_bclass = BCLASS_CHOP
 
@@ -40,15 +41,17 @@
 /obj/item/reagent_containers/food/snacks/meat/fatty
 	name = "raw pigflesh"
 	icon_state = "pigflesh"
-	slices_num = 2
+	slices_num = 3
 	slice_path = /obj/item/reagent_containers/food/snacks/meat/mince/beef
 	chopping_sound = TRUE
+	sellprice = 6
 
 /obj/item/reagent_containers/food/snacks/meat/strange // Low-nutrient, kind of gross. Survival food.
 	name = "strange meat"
 	icon_state = "strange_meat"
 	slice_path = null
 	slices_num = 0
+	sellprice = 2
 
 /obj/item/reagent_containers/food/snacks/meat/poultry
 	name = "plucked bird"
@@ -58,6 +61,7 @@
 	slice_sound = TRUE
 	ingredient_size = 4
 	become_rot_type = /obj/item/reagent_containers/food/snacks/rotten/poultry
+	sellprice = 4
 
 /obj/item/reagent_containers/food/snacks/meat/poultry/cutlet
 	name = "bird meat"
@@ -67,6 +71,7 @@
 	slice_bclass = BCLASS_CHOP
 	slice_path = /obj/item/reagent_containers/food/snacks/meat/mince/poultry
 	become_rot_type = /obj/item/reagent_containers/food/snacks/rotten/chickenleg
+	sellprice = 4
 
 /*	........   Fish sounds   ................ */
 /obj/item/reagent_containers/food/snacks/fish
@@ -76,6 +81,7 @@
 	var/rare = FALSE
 	/// Number representing how rare the fish is, 0 is the lowest common fish
 	var/rarity_rank = 0
+	sellprice = 4
 
 /*	........   Cooked food template   ................ */ // No choppping double cooking etc prefixed
 /obj/item/reagent_containers/food/snacks/cooked
@@ -102,6 +108,7 @@
 	filling_color = "#8a0000"
 	rotprocess = SHELFLIFE_TINY
 	become_rot_type = /obj/item/reagent_containers/food/snacks/rotten/mince
+	sellprice = 2
 
 /obj/item/reagent_containers/food/snacks/meat/mince/throw_impact(atom/hit_atom, datum/thrownthing/thrownthing)
 	new /obj/effect/decal/cleanable/food/mess(get_turf(src))
@@ -160,6 +167,7 @@
 	eat_effect = null
 	rotprocess = SHELFLIFE_TINY
 	faretype = FARE_POOR
+	sellprice = 9
 
 /obj/item/reagent_containers/food/snacks/meat/mince/beef/mett/slice
 	name = "grenzel mett"
@@ -168,6 +176,7 @@
 	slices_num = FALSE
 	slice_path = FALSE
 	list_reagents = list(/datum/reagent/consumable/nutriment = SNACK_POOR)
+	sellprice = 3
 
 /*	..................   Sausage & Wiener   ................... */
 /obj/item/reagent_containers/food/snacks/meat/sausage
@@ -175,11 +184,13 @@
 	icon_state = "raw_wiener"
 	ingredient_size = 1
 	become_rot_type = /obj/item/reagent_containers/food/snacks/rotten/sausage
+	sellprice = 6
 
 /obj/item/reagent_containers/food/snacks/meat/wiener
 	name = "raw wiener"
 	icon_state = "raw_wiener"
 	ingredient_size = 1
 	become_rot_type = /obj/item/reagent_containers/food/snacks/rotten/sausage
+	sellprice = 6
 
 

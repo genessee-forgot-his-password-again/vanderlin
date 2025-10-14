@@ -13,6 +13,11 @@
 	cost = 6
 	contains = /obj/item/reagent_containers/food/snacks/hardtack
 
+/datum/supply_pack/food/bread
+	name = "Loaf of Bread"
+	cost = 10
+	contains = /obj/item/reagent_containers/food/snacks/bread
+
 /datum/supply_pack/food/cheese
 	name = "Cheese Wheel"
 	cost = 25

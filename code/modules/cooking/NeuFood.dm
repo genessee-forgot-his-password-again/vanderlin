@@ -118,36 +118,42 @@
 	desc = "Traditional utensil for shoveling soup into your mouth, or to churn butter with."
 	icon_state = "spoon"
 	smeltresult = /obj/item/fertilizer/ash
+	sellprice = 1
 
 /obj/item/kitchen/spoon/iron
 	name = "iron spoon"
 	icon_state = "spoon_iron"
 	melting_material = /datum/material/iron
 	melt_amount = 20
+	sellprice = 5
 
 /obj/item/kitchen/spoon/pewter
 	name = "pewter spoon"
 	icon_state = "spoon_iron"
 	melting_material = /datum/material/tin
 	melt_amount = 20
+	sellprice = 3
 
 /obj/item/kitchen/fork
 	name = "wooden fork"
 	desc = "Traditional utensil for stabbing your food in order to shove it into your mouth."
 	icon_state = "fork"
 	smeltresult = /obj/item/fertilizer/ash
+	sellprice = 1
 
 /obj/item/kitchen/fork/iron
 	name = "iron fork"
 	icon_state = "fork_iron"
 	melting_material = /datum/material/iron
 	melt_amount = 20
+	sellprice = 5
 
 /obj/item/kitchen/fork/pewter
 	name = "pewter fork"
 	icon_state = "fork_iron"
 	melting_material = /datum/material/tin
 	melt_amount = 20
+	sellprice = 3
 
 /obj/item/reagent_containers/glass/bowl
 	name = "bowl"
@@ -178,6 +184,7 @@
 	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
 	melting_material = /datum/material/iron
 	melt_amount = 20
+	sellprice = 5
 
 /obj/item/reagent_containers/glass/bowl/pewter
 	icon_state = "bowl_iron"
@@ -185,12 +192,80 @@
 	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
 	melting_material = /datum/material/tin
 	melt_amount = 20
+	sellprice = 3
+
+/obj/item/reagent_containers/glass/bowl/jade
+	name = "joapstone bowl"
+	desc = "A bowl carved out of joapstone."
+	icon_state = "bowl_jade"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 55
+
+/obj/item/reagent_containers/glass/bowl/onyxa
+	name = "onyxa bowl"
+	desc = "A bowl carved out of onyxa."
+	icon_state = "bowl_onyxa"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 35
+
+/obj/item/reagent_containers/glass/bowl/rose
+	name = "rosellusk bowl"
+	desc = "A bowl carved out of rosellusk."
+	icon_state = "bowl_rose"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 20
+
+/obj/item/reagent_containers/glass/bowl/amber
+	name = "petriamber bowl"
+	desc = "A bowl carved out of petriamber."
+	icon_state = "bowl_amber"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 55
+
+/obj/item/reagent_containers/glass/bowl/turq
+	name = "ceruleabaster bowl"
+	desc = "A bowl carved out of ceruleabaster."
+	icon_state = "bowl_turq"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 80
+
+/obj/item/reagent_containers/glass/bowl/shell
+	name = "shell bowl"
+	desc = "A bowl carved out of shell."
+	icon_state = "bowl_shell"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 15
+
+
+/obj/item/reagent_containers/glass/bowl/coral
+	name = "aoetal bowl"
+	desc = "A bowl carved out of aoetal."
+	icon_state = "bowl_coral"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 65
+
+/obj/item/reagent_containers/glass/bowl/opal
+	name = "opaloise bowl"
+	desc = "A bowl carved out of opaloise."
+	icon_state = "bowl_opal"
+	fill_icon_state = "bowl"
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	sellprice = 85
+
 
 /obj/item/reagent_containers/glass/bowl/clay
 	desc = "Made from fired clay."
 	icon_state = "bowl_clay"
 	fill_icon_state = "bowl"
 	drop_sound = 'sound/foley/dropsound/brick_drop.ogg'
+	sellprice = 2
 
 /obj/item/reagent_containers/glass/bowl/clay/set_material_information()
 	. = ..()
