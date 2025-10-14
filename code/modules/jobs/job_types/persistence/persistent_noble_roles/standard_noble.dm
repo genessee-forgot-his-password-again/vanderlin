@@ -4,15 +4,17 @@
 	looking to enjoy the hospitality of the ruler. You have many mammons to your name, but with wealth comes \
 	danger, so keep your wits and tread lightly..."
 	allowed_races = RACES_PLAYER_FOREIGNNOBLE
-	outfit = /datum/outfit/adventurer/noble
+	outfit = /datum/outfit/persistence/noble
 	category_tags = list(CTAG_NOBLE)
 	total_positions = 2
 	apprentice_name = "Servant"
 	cmode_music = 'sound/music/cmode/nobility/combat_noble.ogg'
 	is_recognized = TRUE
+	spells = list(
+		/datum/action/cooldown/spell/undirected/call_bird = 1,
+	)
 
-
-/datum/outfit/adventurer/noble/pre_equip(mob/living/carbon/human/H)
+/datum/outfit/persistence/noble/pre_equip(mob/living/carbon/human/H)
 	..()
 	var/prev_real_name = H.real_name
 	var/prev_name = H.name
@@ -37,8 +39,8 @@
 	ring = /obj/item/clothing/ring/silver
 	if(H.gender == FEMALE)
 		H.change_stat(STATKEY_SPD, 1)
-		H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
 		shirt = /obj/item/clothing/shirt/dress/silkdress/colored/random
 		head = /obj/item/clothing/head/hatfur
 		cloak = /obj/item/clothing/cloak/raincloak/furcloak
@@ -48,8 +50,8 @@
 		backpack_contents = list(/obj/item/reagent_containers/glass/bottle/wine = 1, /obj/item/reagent_containers/glass/cup/silver = 1)
 	if(H.gender == MALE)
 		H.change_stat(STATKEY_CON, 1)
-		H.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
 		pants = /obj/item/clothing/pants/tights/colored/black
 		shirt = /obj/item/clothing/shirt/tunic/colored/random
 		cloak = /obj/item/clothing/cloak/raincloak/furcloak
@@ -58,3 +60,5 @@
 		beltr = /obj/item/weapon/sword/rapier/dec
 		beltl = /obj/item/ammo_holder/quiver/arrows
 		backpack_contents = list(/obj/item/reagent_containers/glass/bottle/wine = 1, /obj/item/reagent_containers/glass/cup/silver = 1)
+
+	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC )

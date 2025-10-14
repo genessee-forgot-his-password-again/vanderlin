@@ -2,15 +2,19 @@
 	title = "Zaladin Emir"
 	tutorial = "An Emir hailing from Deshret, here on business for the Mercator's Guild."
 	allowed_races = RACES_PLAYER_ZALADIN
-	outfit = /datum/outfit/adventurer/zalad
+	outfit = /datum/outfit/persistence/zalad
 	category_tags = list(CTAG_NOBLE)
-	total_positions = 1
+	total_positions = 10
 	min_pq = 0
 
 	cmode_music = 'sound/music/cmode/adventurer/CombatOutlander.ogg'
 	is_recognized = TRUE
+	spells = list(
+		/datum/action/cooldown/spell/undirected/call_bird/zalad = 1,
+	)
 
-/datum/outfit/adventurer/zalad/pre_equip(mob/living/carbon/human/H)
+
+/datum/outfit/persistence/zalad/pre_equip(mob/living/carbon/human/H)
 	..()
 	shoes = /obj/item/clothing/shoes/shalal
 	gloves = /obj/item/clothing/gloves/leather
@@ -63,3 +67,6 @@
 			if(H.dna.species.native_language == "Imperial")
 				H.dna.species.native_language = "Zalad"
 				H.dna.species.accent_language = H.dna.species.get_accent(H.dna.species.native_language)
+
+	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC )
+
