@@ -324,7 +324,7 @@
 	name = "scorched tree"
 	desc = "A tree trunk scorched to ruin."
 	icon = 'icons/roguetown/misc/tree.dmi'
-	icon_state = "burnt"
+	icon_state = "treeburnt"
 	num_random_icons = 0
 	burnt = TRUE
 	underlay_base = null
