@@ -627,9 +627,8 @@
 	body_parts_covered = NONE
 	alternate_worn_layer  = 8.9
 	sellprice = 2
-/*
 
-/* .......... Mushrooms ........ */
+// shroomz
 /obj/item/reagent_containers/food/snacks/produce/mushroom/capillus
 	name = "capillus mort"
 	desc = "Also called Corpse Caps or Necra’s Nightcaps, this toxic fungus was first discovered by Necran gravetenders, growing amongst tombs. It has long since been harvested and dried to make use of its fibrous gills in the weaving of winding sheets."
