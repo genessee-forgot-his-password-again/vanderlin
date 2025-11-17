@@ -31,7 +31,7 @@
 	var/mob/living/carbon/follower = user
 	var/datum/patron/patron = follower.patron
 
-	var/in_literal_hell = ( istype(get_area(user), /area/rogue/underworld) )
+	var/in_literal_hell = ( istype(get_area(user), /area/underworld) )
 	if(!in_literal_hell && !patron?.can_pray(follower))
 		return
 
@@ -723,6 +723,7 @@
 /datum/emote/living/laugh/run_emote(mob/user, params, type_override, intentional, targetted)
 	. = ..()
 	if(. && user.mind)
+		record_featured_stat(FEATURED_STATS_JOKESTERS, user)
 		record_round_statistic(STATS_LAUGHS_MADE)
 
 /mob/living/carbon/human/verb/emote_laugh()

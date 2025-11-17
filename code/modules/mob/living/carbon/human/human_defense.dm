@@ -57,18 +57,27 @@
 						if(val > protection)
 							protection = val
 							used = C
+
+	var/obj/item/clothing/cloak/boiler/steam_boiler = get_item_by_slot(ITEM_SLOT_BACK_R) || get_item_by_slot(ITEM_SLOT_BACK_L)
+	if(!istype(steam_boiler))
+		steam_boiler = null
+
+	var/boiler_damage = damage / 5
+
 	if(used)
-		if(!blade_dulling)
-			blade_dulling = BCLASS_BLUNT
 		if(used.blocksound)
 			playsound(loc, get_armor_sound(used.blocksound, blade_dulling), 100)
 		used.take_damage(damage, damage_flag = d_type, sound_effect = FALSE, armor_penetration = 100)
+
+	if(steam_boiler && def_zone == BODY_ZONE_CHEST)
+		steam_boiler.take_damage(boiler_damage, damage_flag = d_type, sound_effect = FALSE, armor_penetration = 100)
+
 	if(physiology)
 		protection += physiology.armor.getRating(d_type)
 	return protection
 
 /// Return the armor that blocks the crit
-/mob/living/carbon/human/proc/checkcritarmor(def_zone, d_type)
+/mob/living/carbon/human/proc/check_crit_armor(def_zone, d_type)
 	if(!d_type)
 		return FALSE
 	var/obj/item/clothing/best_armor
@@ -206,7 +215,7 @@
 		blocked = TRUE
 	else if(I)
 		if(((throwingdatum ? throwingdatum.speed : I.throw_speed) >= EMBED_THROWSPEED_THRESHOLD) || I.embedding.embedded_ignore_throwspeed_threshold)
-			if(can_embed(I) && prob(I.embedding.embed_chance) && !HAS_TRAIT(src, TRAIT_PIERCEIMMUNE))
+			if(I.can_embed() && prob(I.embedding.embed_chance) && !HAS_TRAIT(src, TRAIT_PIERCEIMMUNE))
 				//throw_alert("embeddedobject", /atom/movable/screen/alert/embeddedobject)
 				var/obj/item/bodypart/L = pick(bodyparts)
 				L.add_embedded_object(I, silent = FALSE, crit_message = TRUE)

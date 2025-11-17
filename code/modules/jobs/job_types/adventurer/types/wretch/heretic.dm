@@ -3,8 +3,8 @@
 	tutorial = "You are either a heretic or a fanatic, spurned by the church, cast out from society - frowned upon by the tens for your type of faith."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_PLAYER_ALL
+	allowed_patrons = ALL_ICONOCLAST_PATRONS
 	outfit = /datum/outfit/wretch/heretic
-	category_tags = list(CTAG_WRETCH)
 	total_positions = 2
 
 /datum/outfit/wretch/heretic/pre_equip(mob/living/carbon/human/H)
@@ -90,7 +90,7 @@
 			wrists = /obj/item/clothing/neck/psycross/silver/ravox
 			head = /obj/item/clothing/head/helmet/heavy/necked/ravox
 			cloak = /obj/item/clothing/cloak/stabard/templar/ravox
-			H.cmode_music = 'sound/music/cmode/adventurer/CombatOutlander2.ogg'
+			H.cmode_music = 'sound/music/cmode/church/CombatRavox.ogg'
 			H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
 		if(/datum/patron/divine/malum)
 			wrists = /obj/item/clothing/neck/psycross/silver/malum
@@ -99,6 +99,8 @@
 			H.cmode_music = 'sound/music/cmode/adventurer/CombatOutlander2.ogg'
 			H.adjust_skillrank(/datum/skill/combat/axesmaces, 4, TRUE)
 		if(/datum/patron/divine/abyssor)
+			head = /obj/item/clothing/head/helmet/heavy/necked/abyssor
+			armor = /obj/item/clothing/armor/brigandine/abyssor
 			wrists = /obj/item/clothing/neck/psycross/silver/abyssor
 			cloak = /obj/item/clothing/cloak/stabard/templar/abyssor
 			H.cmode_music = 'sound/music/cmode/adventurer/CombatMonk.ogg'
@@ -108,6 +110,7 @@
 			wrists = /obj/item/clothing/neck/psycross/silver/xylix
 			head = /obj/item/clothing/head/helmet/heavy/necked/xylix
 			cloak = /obj/item/clothing/cloak/stabard/templar/xylix
+			H.cmode_music = 'sound/music/cmode/church/CombatXylix.ogg'
 			H.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
 		if(/datum/patron/inhumen/graggar) //They get cooler outfits cause of non-unique weapon
 			head = /obj/item/clothing/head/helmet/graggar
@@ -146,7 +149,7 @@
 			H.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
 			H.cmode_music = 'sound/music/cmode/antag/CombatBandit1.ogg'
 		if(/datum/patron/inhumen/baotha) //give them custom armor i beg
-			head = /obj/item/clothing/head/helmet/heavy/decorated/golden
+			head = /obj/item/clothing/head/helmet/heavy/baotha
 			mask = /obj/item/clothing/face/spectacles/sglasses
 			armor = /obj/item/clothing/armor/plate
 			gloves = /obj/item/clothing/gloves/plate
@@ -157,14 +160,21 @@
 			H.adjust_skillrank(/datum/skill/craft/alchemy, 2, TRUE)
 			ADD_TRAIT(H, TRAIT_DUALWIELDER, TRAIT_GENERIC)
 		if(/datum/patron/psydon, /datum/patron/psydon/progressive)
-			head = /obj/item/clothing/head/helmet/heavy/bucket/gold
 			wrists = /obj/item/clothing/neck/psycross/g
+			armor = /obj/item/clothing/armor/cuirass/fluted
+			cloak = /obj/item/clothing/cloak/psydontabard
+			gloves = /obj/item/clothing/gloves/chain/psydon
+			shoes = /obj/item/clothing/shoes/psydonboots
+			head = /obj/item/clothing/head/helmet/heavy/psydonhelm
 			H.cmode_music = 'sound/music/cmode/church/CombatInquisitor.ogg'
 			H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
 			H.grant_language(/datum/language/oldpsydonic)
 			to_chat(H, "<span class='info'>I can speak Old Psydonic with ,m before my speech.</span>")
-		else //Why are you going faithless
-			wrists = /obj/item/clothing/neck/psycross/silver
+		else //Just in case.
+			head = /obj/item/clothing/head/helmet/heavy/bucket
+			wrists = /obj/item/clothing/neck/psycross/silver/undivided
+			cloak = /obj/item/clothing/cloak/templar/undivided
+			H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
 			H.cmode_music = 'sound/music/cmode/church/CombatInquisitor.ogg'
 	if(!H.has_language(/datum/language/celestial) && (H.patron?.type in ALL_TEMPLE_PATRONS))
 		H.grant_language(/datum/language/celestial)
@@ -231,9 +241,11 @@
 			var/obj/item/weapon/knife/dagger/steel/dirk/baotha/L = new(get_turf(src))
 			H.equip_to_appropriate_slot(L)
 		if(/datum/patron/psydon, /datum/patron/psydon/progressive)
-			var/obj/item/weapon/sword/long/greatsword/psydon/P = new(get_turf(src))
+			var/obj/item/weapon/sword/long/psydon/P = new(get_turf(src))
 			H.equip_to_appropriate_slot(P)
+			var/obj/item/weapon/scabbard/sword/L = new(get_turf(src))
+			H.equip_to_appropriate_slot(L)
 		else
-			var/obj/item/weapon/sword/long/greatsword/psydon/P = new(get_turf(src))
+			var/obj/item/weapon/sword/long/decorated/P = new(get_turf(src))
 			H.equip_to_appropriate_slot(P)
 	wretch_select_bounty(H)

@@ -83,6 +83,7 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 	var/gas_transfer_coefficient = 1 // for leaking gas from turf to mask and vice-versa (for masks right now, but at some point, i'd like to include space helmets)
 	var/permeability_coefficient = 1 // for chemicals/diseases
 	var/siemens_coefficient = 1 // for electrical admittance/conductance (electrocution checks and shit)
+	var/surgery_cover = TRUE // binary, whether this item is considered covering its bodyparts in respect to surgery. Tattoos, etc. are false.
 	// How much clothing is slowing you down. Negative values speeds you up
 	var/slowdown = 0
 	// Value of armour effectiveness to remove. Since armor values can go over 100, this is no longer a percentage.
@@ -166,6 +167,7 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 	var/list/alt_intents //these replace main intents
 	var/gripsprite = FALSE //use alternate grip sprite for inhand
 	var/gripspriteonmob = FALSE //use alternate sprite for onmob
+	var/wieldsound = FALSE
 
 	/// Item will be scaled by this factor when on the ground.
 	var/dropshrink = 0
@@ -283,6 +285,9 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 	/// This thing can be used to unlock locks
 	var/can_unlock = TRUE
 
+	///do we block the offhand while wielding
+	var/wield_block = TRUE
+
 /obj/item/proc/set_quality(quality)
 	recipe_quality = clamp(quality, 0, 4)
 	update_appearance(UPDATE_OVERLAYS)
@@ -308,14 +313,6 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 	if(recipe_quality <= length(quality_icons) && quality_icons[recipe_quality])
 		. += mutable_appearance('icons/effects/crop_quality.dmi', quality_icons[recipe_quality])
 
-/obj/item/dropped(mob/user, silent)
-	. = ..()
-	update_appearance(UPDATE_OVERLAYS)
-
-/obj/item/equipped(mob/user, slot, initial)
-	. = ..()
-	update_appearance(UPDATE_OVERLAYS)
-
 /**
  * Handles adding components to the item. Added in Initialize()
  *
@@ -324,7 +321,7 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 /obj/item/proc/apply_components()
 	if(force_wielded || gripped_intents)
 		var/wielded_force = force_wielded ? force_wielded : force
-		AddComponent(/datum/component/two_handed, force_unwielded = force, force_wielded = wielded_force, wield_callback = CALLBACK(src, PROC_REF(on_wield)), unwield_callback = CALLBACK(src, PROC_REF(on_unwield)))
+		AddComponent(/datum/component/two_handed, force_unwielded = force, force_wielded = wielded_force, wield_callback = CALLBACK(src, PROC_REF(on_wield)), unwield_callback = CALLBACK(src, PROC_REF(on_unwield)), wield_blocking = wield_block)
 
 /obj/item/proc/get_detail_tag() //this is for extra layers on clothes
 	return detail_tag
@@ -650,6 +647,9 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 
 /obj/item/proc/attempt_pickup(mob/user)
 	. = TRUE
+	if(HAS_TRAIT(src, TRAIT_NEEDS_QUENCH))
+		to_chat(user, "<span class='warning'>[src] is too hot to touch.</span>")
+		return
 
 	if(resistance_flags & ON_FIRE)
 		var/mob/living/carbon/C = user
@@ -683,14 +683,6 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 
 	if(!(interaction_flags_item & INTERACT_ITEM_ATTACK_HAND_PICKUP))		//See if we're supposed to auto pickup.
 		return
-
-	//Heavy gravity makes picking up things very slow.
-	var/grav = user.has_gravity()
-	if(grav > STANDARD_GRAVITY)
-		var/grav_power = min(3,grav - STANDARD_GRAVITY)
-		to_chat(user,"<span class='notice'>I start picking up [src]...</span>")
-		if(!do_after(user, (3 SECONDS * grav_power), src))
-			return
 
 	if(SEND_SIGNAL(loc, COMSIG_STORAGE_BLOCK_USER_TAKE, src, user, TRUE))
 		return
@@ -809,8 +801,10 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 	toggle_altgrip(user, FALSE)
 	user.update_equipment_speed_mods()
 	if(isliving(user))
-		user:encumbrance_to_speed()
+		var/mob/living/living_user = user
+		living_user.encumbrance_to_speed()
 	update_transform()
+	update_appearance(UPDATE_OVERLAYS)
 
 // called just as an item is picked up (loc is not yet changed)
 /obj/item/proc/pickup(mob/user)
@@ -855,6 +849,7 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 					playsound(src, pickup_sound, PICKUP_SOUND_VOLUME, ignore_walls = FALSE)
 	user.update_equipment_speed_mods()
 	update_transform()
+	update_appearance(UPDATE_OVERLAYS)
 
 /// Gives one of our item actions to a mob, when equipped to a certain slot
 /obj/item/proc/give_item_action(datum/action/action, mob/to_who, slot)
@@ -1327,7 +1322,8 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 
 /obj/item/proc/on_wield(obj/item/source, mob/living/carbon/user)
 	wdefense += 1
-	playsound(loc, pick('sound/combat/weaponr1.ogg','sound/combat/weaponr2.ogg'), 50, TRUE)
+	if(!wieldsound)
+		playsound(loc, pick('sound/combat/weaponr1.ogg','sound/combat/weaponr2.ogg'), 50, TRUE)
 	user.update_a_intents()
 
 /obj/item/proc/on_unwield(obj/item/source, mob/living/carbon/user)
@@ -1474,6 +1470,13 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 		mod?.socket_gem(new_gem, null) // null user for automatic generation
 
 	return new_item
+
+/obj/item/proc/can_embed()
+	if(HAS_TRAIT(src, TRAIT_NODROP) || HAS_TRAIT(src, TRAIT_NOEMBED))
+		return FALSE
+	if(!embedding?.embed_chance)
+		return FALSE
+	return TRUE
 
 /obj/item/examine(mob/user)
 	. = ..()

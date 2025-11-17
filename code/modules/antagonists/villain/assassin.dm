@@ -1,7 +1,7 @@
 // Assassin, cultist of graggar. Normally found as a drifter.
 /datum/antagonist/assassin
 	name = "Assassin"
-	roundend_category = "assassins"
+	roundend_category = "Assassins"
 	antagpanel_category = "Assassin"
 	antag_hud_type = ANTAG_HUD_ASSASSIN
 	antag_hud_name = "assassin"
@@ -24,7 +24,7 @@
 	)
 
 /datum/antagonist/assassin/on_gain()
-	owner.current.cmode_music = list('sound/music/cmode/antag/CombatAssassin.ogg')
+	owner.current.cmode_music = 'sound/music/cmode/antag/CombatAssassin.ogg'
 	if(owner.current.job != "Drifter") // This code only runs if the assassin is assigned midround and is not a drifter.
 		owner.current.set_patron(/datum/patron/inhumen/graggar, TRUE)
 		var/old_knife_skill = owner.current.get_skill_level(/datum/skill/combat/knives)
@@ -40,7 +40,7 @@
 
 /mob/living/carbon/human/proc/who_targets() // Verb for the assassin to remember their targets.
 	set name = "Remember Targets"
-	set category = "Graggar"
+	set category = "Assassin"
 	if(!mind)
 		return
 	mind.recall_targets(src)

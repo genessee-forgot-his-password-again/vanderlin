@@ -83,6 +83,11 @@
 	var/rarity_rank = 0
 	sellprice = 4
 
+/obj/item/reagent_containers/food/snacks/fish/dead
+	abstract_type = /obj/item/reagent_containers/food/snacks/fish/dead
+	status = FISH_DEAD
+	fish_id = "dead"
+
 /*	........   Cooked food template   ................ */ // No choppping double cooking etc prefixed
 /obj/item/reagent_containers/food/snacks/cooked
 	name = "cooked meat"

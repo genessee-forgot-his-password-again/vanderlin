@@ -225,31 +225,39 @@
 		var/mob/living/living = M
 		body += "<li>Strength: [living.STASTR] "
 		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];add_stat=[REF(M)];stat=[STATKEY_STR]'>+</a> "
-		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_STR]'>-</a></li>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_STR]'>-</a>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];bulk_change=[REF(M)];stat=[STATKEY_STR]'> Bulk Change</a></li>"
 
 		body += "<li>Perception: [living.STAPER] "
 		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];add_stat=[REF(M)];stat=[STATKEY_PER]'>+</a> "
-		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_PER]'>-</a></li>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_PER]'>-</a>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];bulk_change=[REF(M)];stat=[STATKEY_PER]'> Bulk Change</a></li>"
 
 		body += "<li>Endurance: [living.STAEND] "
 		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];add_stat=[REF(M)];stat=[STATKEY_END]'>+</a> "
-		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_END]'>-</a></li>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_END]'>-</a>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];bulk_change=[REF(M)];stat=[STATKEY_END]'> Bulk Change</a></li>"
 
 		body += "<li>Constitution: [living.STACON] "
 		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];add_stat=[REF(M)];stat=[STATKEY_CON]'>+</a> "
-		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_CON]'>-</a></li>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_CON]'>-</a>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];bulk_change=[REF(M)];stat=[STATKEY_CON]'> Bulk Change</a></li>"
 
 		body += "<li>Intelligence: [living.STAINT] "
 		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];add_stat=[REF(M)];stat=[STATKEY_INT]'>+</a> "
-		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_INT]'>-</a></li>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_INT]'>-</a>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];bulk_change=[REF(M)];stat=[STATKEY_INT]'> Bulk Change</a></li>"
 
 		body += "<li>Speed: [living.STASPD] "
 		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];add_stat=[REF(M)];stat=[STATKEY_SPD]'>+</a> "
-		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_SPD]'>-</a></li>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_SPD]'>-</a>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];bulk_change=[REF(M)];stat=[STATKEY_SPD]'> Bulk Change</a></li>"
 
 		body += "<li>Luck: [living.STALUC] "
 		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];add_stat=[REF(M)];stat=[STATKEY_LCK]'>+</a> "
-		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_LCK]'>-</a></li>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];lower_stat=[REF(M)];stat=[STATKEY_LCK]'>-</a>"
+		body += "<a class='skill-btn' href='?_src_=holder;[HrefToken()];bulk_change=[REF(M)];stat=[STATKEY_LCK]'> Bulk Change</a></li>"
+
 	body += "</ul></div>"
 
 
@@ -398,7 +406,7 @@
 	var/raisin = stripped_input("State a short reason for this change", "Game Master", "", null)
 	if(!amt2change && !raisin)
 		return
-	M.adjust_triumphs(amt2change, FALSE)
+	M.adjust_triumphs(amt2change, FALSE, override_bonus = TRUE)
 	to_chat(M.client, "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message linkify\">Your Triumphs has been adjusted by [amt2change] by [admin] for reason: [raisin]</span></span>")
 
 /datum/admins/proc/adjustpq(mob/living/M in GLOB.mob_list)
@@ -684,6 +692,47 @@
 			SEND_SOUND(world, sound('sound/blank.ogg'))
 			log_admin("[key_name(usr)] set the pre-game delay to [DisplayTimeText(newtime)].")
 		SSblackbox.record_feedback("tally", "admin_verb", 1, "Delay Game Start") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/accelerate_or_delay_round_end()
+	set category = "Server"
+	set desc="Delay / Accelerate the round ending or vote time"
+	set name="Delay / Accelerate the round ending or vote time"
+
+
+	if(SSticker.current_state != GAME_STATE_PLAYING)
+		return alert("This is only available while the game is in progress.")
+	var/list/choices = list("Time before the round end vote.", "Time until the game ends.")
+	var/choice = browser_input_list(src, "Choose what you want to adjust.", "Delay Tools", choices)
+	var/number
+	switch(choice)
+		if("Time before the round end vote.")
+			number = input(usr, "By how many minutes do you want to delay or accelerate it? (positive numbers delay, negative numbers accelerate)", "Time before the first round end vote.") as num
+			if(number)
+				if(number > 0)
+					to_chat(world, "<b>The round end vote will now occur in [(GLOB.round_timer + (number * 1 MINUTES))/600] minutes instead of [GLOB.round_timer/600] minutes.</b>")
+					log_admin("[key_name(usr)] delayed the round end vote by [number] minutes.")
+					message_admins("[key_name(usr)] delayed the round end vote by [number] minutes.")
+				else
+					to_chat(world, "<b>The round end vote will now occur in [(GLOB.round_timer - (-number * 1 MINUTES))/600] minutes instead of [GLOB.round_timer/600] minutes.</b>")
+					log_admin("[key_name(usr)] accelerated the round end vote by [-number] minutes.")
+					message_admins("[key_name(usr)] accelerated the round end vote by [-number] minutes.")
+				number *= 1 MINUTES
+				GLOB.round_timer += number
+				SSblackbox.record_feedback("tally", "admin_verb", 1, "Time before the round end vote triggered.")
+		if("Time until the game ends.")
+			number = input(usr, "By how many minutes do you want to delay or accelerate it? (positive numbers delay, negative numbers accelerate)", "Time until the round ends.") as num
+			if(number)
+				if(number > 0)
+					to_chat(world, "<b>The round ending will now occur after an additional [number] minutes.</b>")
+					log_admin("[key_name(usr)] delayed the round ending by [number] minutes.")
+					message_admins("[key_name(usr)] delayed the round ending by [number] minutes.")
+				else
+					to_chat(world, "<b>The round ending has been accelerated by [-number] minutes.</b>")
+					log_admin("[key_name(usr)] accelerated the round ending by [-number] minutes.")
+					message_admins("[key_name(usr)] accelerated the round ending by [-number] minutes.")
+				number *= 1 MINUTES
+				SSgamemode.round_ends_at += number
+				SSblackbox.record_feedback("tally", "admin_verb", 1, "Time until round ends triggered.")
 
 /datum/admins/proc/unprison(mob/M in GLOB.mob_list)
 	set category = "Admin"
@@ -1087,7 +1136,7 @@
 	var/reason = input(user, "Choose a reason", "Triumph Giver") as text|null
 
 	for(var/client/client as anything in GLOB.clients)
-		client.mob.adjust_triumphs(amount, reason = reason)
+		client.mob.adjust_triumphs(amount, reason = reason, override_bonus = TRUE)
 
 /datum/admins/proc/change_skill_exp_modifier()
 	set name = "Change Skill Experience Gain"

@@ -62,7 +62,9 @@
 /obj/projectile/bullet/reusable/bolt/on_hit(atom/target, blocked = FALSE)
 	if(can_inject && iscarbon(target))
 		var/mob/living/carbon/M = target
-		if(blocked != 100) // not completely blocked
+		var/armor = M.run_armor_check(def_zone, flag, "", "",armor_penetration, damage)
+		var/armor_real_check = max(0, armor - damage)
+		if(armor_real_check == 0)
 			if(M.can_inject(null, FALSE, def_zone, piercing)) // Pass the hit zone to see if it can inject by whether it hit the head or the body.
 				..()
 				reagents.reaction(M, INJECT)
@@ -227,6 +229,38 @@
 	chem_splash(target_loc, 3, list(reagents))
 	return ..()
 
+
+/obj/item/ammo_casing/caseless/bolt/holy
+	name = "sunderbolt"
+	desc = "A silver-tipped bolt, containing a small vial of holy water. Though it inflicts lesser wounds on living flesh, it exceeds when employed against the unholy; a snap and a crack, followed by a fiery surprise. </br>'One baptism for the remission of sins.'"
+	projectile_type = /obj/projectile/bullet/reusable/bolt/holy
+	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/thrust)
+	caliber = "regbolt"
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "bolt_holywater"
+	dropshrink = 0.6
+	max_integrity = 10
+	force = 10
+/obj/item/ammo_casing/caseless/bolt/holy/Initialize()
+	. = ..()
+	reagents.add_reagent(/datum/reagent/water/blessed, 5)
+
+/obj/projectile/bullet/reusable/bolt/holy
+	name = "sunderbolt"
+	damage = 35 //Halved damage, but same penetration.
+	damage_type = BRUTE
+	armor_penetration = 50
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "bolthwater_proj"
+	ammo_type = /obj/item/ammo_casing/caseless/bolt/holy
+	range = 15
+	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	embedchance = 100
+	woundclass = BCLASS_PIERCE
+	flag = "piercing"
+	speed = 0.5
+
+
 /*-------\
 | Arrows |
 \-------*/
@@ -276,7 +310,9 @@
 /obj/projectile/bullet/reusable/arrow/on_hit(atom/target, blocked = FALSE)
 	if(can_inject && iscarbon(target))
 		var/mob/living/carbon/M = target
-		if(blocked != 100) // not completely blocked
+		var/armor = M.run_armor_check(def_zone, flag, "", "",armor_penetration, damage)
+		var/armor_real_check = max(0, armor - damage)
+		if(armor_real_check == 0)
 			if(M.can_inject(null, FALSE, def_zone, piercing)) // Pass the hit zone to see if it can inject by whether it hit the head or the body.
 				..()
 				reagents.reaction(M, INJECT)
@@ -482,6 +518,8 @@
 	armor_penetration = BULLET_PENETRATION
 	speed = 0.3
 	accuracy = 50 //Lower accuracy than an arrow.
+	reduce_crit_chance = 5 //Reduces crit chance
+	dismemberment = 0 //Can't dismember
 
 /obj/projectile/bullet/fragment
 	name = "smaller lead ball"
@@ -615,7 +653,9 @@
 /obj/projectile/bullet/reusable/dart/on_hit(atom/target, blocked = FALSE)
 	if(iscarbon(target))
 		var/mob/living/carbon/M = target
-		if(blocked != 100) // not completely blocked
+		var/armor = M.run_armor_check(def_zone, flag, "", "",armor_penetration, damage)
+		var/armor_real_check = max(0, armor - damage)
+		if(armor_real_check == 0)
 			if(M.can_inject(null, FALSE, def_zone, piercing)) // Pass the hit zone to see if it can inject by whether it hit the head or the body.
 				..()
 				reagents.reaction(M, INJECT)

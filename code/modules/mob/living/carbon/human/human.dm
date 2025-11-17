@@ -462,7 +462,7 @@
 					hud_used.energy.icon_state = "stam10"
 
 	if(hud_used.zone_select && !stamina_only)
-		hud_used.zone_select.update_appearance()
+		hud_used.zone_select.update_appearance(UPDATE_OVERLAYS)
 
 /mob/living/carbon/human/fully_heal(admin_revive = FALSE)
 	dna?.species.spec_fully_heal(src)
@@ -507,6 +507,7 @@
 	VV_DROPDOWN_OPTION(VV_HK_COPY_OUTFIT, "Copy Outfit")
 	VV_DROPDOWN_OPTION(VV_HK_SET_SPECIES, "Set Species")
 	VV_DROPDOWN_OPTION(VV_HK_CORONATE, "Coronate")
+	VV_DROPDOWN_OPTION(VV_HK_CHANGE_TITLE, "Change Title")
 
 /mob/living/carbon/human/vv_do_topic(list/href_list)
 	. = ..()
@@ -559,7 +560,17 @@
 		GLOB.badomens -= OMEN_NOLORD
 		priority_announce("The Ten have named [coronated.real_name] the inheritor of [SSmapping.config.map_name]!", \
 		title = "Long Live [lord_job.get_informed_title(coronated)] [coronated.real_name]!", sound = 'sound/misc/bell.ogg')
-
+	if(href_list[VV_HK_CHANGE_TITLE])
+		if(!mind?.assigned_role)
+			return
+		var/datum/job/human_job = mind.assigned_role
+		var/new_title = browser_input_text(usr, "What new title would you like to assign?", "Title Change")
+		if(!new_title)
+			return
+		admin_title = new_title
+		if(is_lord_job(human_job))
+			var/datum/job/lord_job = SSjob.GetJobType(/datum/job/lord)
+			lord_job?.get_informed_title(src, TRUE, new_title)
 
 /mob/living/carbon/human/MouseDrop_T(mob/living/target, mob/living/user)
 	if(pulling == target && stat == CONSCIOUS)
@@ -841,7 +852,10 @@
 				GLOB.weatherproof_z_levels |= "[turf.z]"
 		if("[turf.z]" in GLOB.weatherproof_z_levels)
 			faction |= FACTION_MATTHIOS
-			SSmobs.matthios_mobs |= src
+			SSmatthios_mobs.register_mob(src)
+		if(SSterrain_generation.get_island_at_location(turf))
+			faction |= "islander"
+			SSisland_mobs.register_mob(src, SSterrain_generation.get_island_at_location(turf))
 
 /**
  * Called when this human should be washed

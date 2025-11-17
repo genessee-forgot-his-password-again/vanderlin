@@ -279,3 +279,5 @@
 
 	/// A ref of the area we're taking our ambient loop from.
 	var/area/ambience_tracked_area
+	/// new title given by an admin.
+	var/admin_title = null

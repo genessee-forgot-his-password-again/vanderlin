@@ -5,7 +5,6 @@
 	outfit = /datum/outfit/adventurer/zalad
 	category_tags = list(CTAG_PILGRIM)
 	total_positions = 1
-	roll_chance = 30
 	min_pq = 0
 
 	cmode_music = 'sound/music/cmode/adventurer/CombatOutlander.ogg'

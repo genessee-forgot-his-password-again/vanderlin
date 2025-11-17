@@ -24,7 +24,7 @@
 		return
 	set_new_hud(hud_owner)
 
-/atom/movable/screen/Destroy()
+/atom/movable/screen/Destroy(force)
 	master_ref = null
 	hud = null
 	return ..()
@@ -654,7 +654,7 @@
 	addtimer(CALLBACK(src, PROC_REF(check_mob)), 3 SECONDS)
 
 /atom/movable/screen/advsetup/Destroy()
-	hud.static_inventory -= src
+	hud?.static_inventory -= src
 	return ..()
 
 /atom/movable/screen/advsetup/proc/check_mob()
@@ -1647,7 +1647,6 @@
 	. = ..()
 	if(client)
 		holder = client
-	. = ..()
 	holder.screen += src
 
 /atom/movable/screen/rintent_selection/Destroy()
@@ -1676,7 +1675,7 @@
 		if(type in possible_rmb_intents)
 			rmb_intent = new type()
 			if(hud_used?.rmb_intent)
-				hud_used.rmb_intent.update_appearance()
+				hud_used.rmb_intent.update_appearance(UPDATE_OVERLAYS)
 				hud_used.rmb_intent.collapse_intents()
 	if(num)
 		if(possible_rmb_intents.len < num)
@@ -1685,7 +1684,7 @@
 		if(A)
 			rmb_intent = new A()
 			if(hud_used?.rmb_intent)
-				hud_used.rmb_intent.update_appearance()
+				hud_used.rmb_intent.update_appearance(UPDATE_OVERLAYS)
 				hud_used.rmb_intent.collapse_intents()
 
 /// Cycles through right-mouse-button intents. Loops.
@@ -1705,7 +1704,7 @@
 	rmb_intent = new A()
 
 	if(hud_used?.rmb_intent)
-		hud_used.rmb_intent.update_appearance()
+		hud_used.rmb_intent.update_appearance(UPDATE_OVERLAYS)
 		hud_used.rmb_intent.collapse_intents()
 
 /atom/movable/screen/time

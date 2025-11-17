@@ -1,6 +1,7 @@
 /datum/action/cooldown/spell/transfrom_tree
 	name = "Transform Tree"
 	button_icon_state = "entangle"
+	sound = null
 	has_visual_effects = FALSE
 	self_cast_possible = FALSE
 	charge_required = FALSE

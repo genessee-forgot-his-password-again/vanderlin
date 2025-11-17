@@ -77,3 +77,4 @@
 	wrists = /obj/item/storage/keyring/clinic
 	beltl = /obj/item/storage/fancy/ifak
 	beltr = /obj/item/storage/belt/pouch
+	ring = /obj/item/clothing/ring/feldsher_ring

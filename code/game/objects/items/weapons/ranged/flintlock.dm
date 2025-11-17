@@ -1,7 +1,7 @@
 /obj/item/gun/ballistic/revolver/grenadelauncher/pistol
 	name = "puffer"
 	desc = "The current zenith of Dwarven and Humen cooperation on the Eastern continent. It uses alchemical blastpowder to propel metal balls for devastating effect."
-	icon = 'icons/roguetown/weapons/32.dmi'
+	icon = 'icons/roguetown/weapons/32/guns.dmi'
 	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
 	icon_state = "puffer_uncocked_ramrod"
@@ -18,7 +18,7 @@
 	cartridge_wording = "ball"
 	var/rammed = FALSE
 	load_sound = 'sound/foley/nockarrow.ogg'
-	fire_sound = 'sound/combat/Ranged/muskshoot.ogg'
+	fire_sound = null // handled in shoot_live_shot()
 	equip_sound = 'sound/foley/gun_equip.ogg'
 	pickup_sound = 'sound/foley/gun_equip.ogg'
 	drop_sound = 'sound/foley/gun_drop.ogg'
@@ -45,6 +45,14 @@
 	..()
 	user.playsound_local(get_turf(user), 'sound/foley/tinnitus.ogg', 60, FALSE) // muh realism or something
 	new /obj/effect/particle_effect/smoke(get_turf(user))
+
+	for(var/mob/M in GLOB.player_list)
+		if(!is_in_zweb(M.z, src.z))
+			continue
+		var/turf/M_turf = get_turf(M)
+		var/shot_sound = sound('sound/combat/Ranged/muskshoot.ogg')
+		if(M_turf)
+			M.playsound_local(M_turf, null, 100, 1, get_rand_frequency(), S = shot_sound)
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/pistol/shoot_with_empty_chamber(mob/living/user)
 	if(!cocked || !wound)
@@ -134,8 +142,7 @@
 		if(user.STAPER > 8)
 			BB.accuracy += (user.STAPER - 8) * 4 //each point of perception above 8 increases standard accuracy by 4.
 			BB.bonus_accuracy += (user.STAPER - 8) //Also, increases bonus accuracy by 1, which cannot fall off due to distance.
-		if(user.STAPER > 10)
-			BB.damage = BB.damage * (user.STAPER / 10)
+		BB.damage = BB.damage *1.625 // 80 * 1.5 = 130 of damage.
 		BB.bonus_accuracy += (user.get_skill_level(/datum/skill/combat/firearms) * 3) //+3 accuracy per level in firearms
 	playsound(src.loc, 'sound/combat/Ranged/muskclick.ogg', 100, FALSE)
 	cocked = FALSE

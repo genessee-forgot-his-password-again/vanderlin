@@ -5,7 +5,7 @@
 	opacity = 1
 	density = TRUE
 	blocks_air = TRUE
-	baseturfs = list(/turf/open/floor/naturalstone, /turf/open/transparent/openspace)
+	baseturfs = /turf/open/floor/naturalstone
 	smoothing_groups = SMOOTH_GROUP_CLOSED
 	pass_flags_self = PASSCLOSEDTURF
 
@@ -15,6 +15,9 @@
 	var/climbdiff = 0
 
 	var/obj/effect/skill_tracker/thieves_cant/thieves_marking
+
+/turf/closed/basic
+	baseturfs = /turf/closed/basic
 
 /turf/closed/basic/New()//Do not convert to Initialize
 	SHOULD_CALL_PARENT(FALSE)

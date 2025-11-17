@@ -2,11 +2,10 @@
 	title = "Assassin"
 	tutorial = "From a young age you have been drawn to blood, to hurting others. Eventually you found others like you, and a god who would bless your actions. Your cursed dagger has never led you astray, and with every stab you feel a little less empty."
 	allowed_sexes = list(MALE, FEMALE)
-
+	bypass_class_cat_limits = TRUE
 	outfit = /datum/outfit/adventurer/assassin
 	category_tags = list(CTAG_PILGRIM)
 	total_positions = 2
-	roll_chance = 100
 	inherit_parent_title = TRUE //this prevents advjob from being set back to "Assassin" in equipme
 	min_pq = 6
 
@@ -161,7 +160,7 @@
 				H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE) //Female nobles get the male noble's bow, but are less trained than an Assassin disguising as a Hunter. Balance.
 				H.adjust_skillrank(/datum/skill/combat/crossbows, -1, TRUE)
 				shirt = /obj/item/clothing/shirt/dress/silkdress/colored/random
-				head = /obj/item/clothing/head/hatfur
+				head = /obj/item/clothing/head/fancyhat
 				cloak = /obj/item/clothing/cloak/raincloak/furcloak
 				backr = /obj/item/gun/ballistic/revolver/grenadelauncher/bow
 				beltr = /obj/item/weapon/knife/dagger/steel/special

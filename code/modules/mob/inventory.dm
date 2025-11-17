@@ -171,8 +171,8 @@
 	I.pixel_x = I.base_pixel_x
 	I.pixel_y = I.base_pixel_y
 	if(hud_used)
-		hud_used.throw_icon?.update_appearance()
-		hud_used.give_intent?.update_appearance()
+		hud_used.throw_icon?.update_appearance(UPDATE_ICON_STATE)
+		hud_used.give_intent?.update_appearance(UPDATE_ICON_STATE)
 	if((istype(I, /obj/item/weapon) || istype(I, /obj/item/gun) || I.force >= 15) && !forced && client)
 		// is this the right hand?
 		var/right_hand = FALSE
@@ -272,6 +272,7 @@
 		I.pixel_x = I.base_pixel_x + rand(-6,6)
 		I.pixel_y = I.base_pixel_x + rand(-6,6)
 		I.afterdrop()
+		SEND_SIGNAL(I, COMSIG_ATOM_TEMPORARY_ANIMATION_START, 3)
 
 //for when the item will be immediately placed in a loc other than the ground
 /mob/proc/transferItemToLoc(obj/item/I, newloc = null, force = FALSE, silent = TRUE)
@@ -319,8 +320,8 @@
 				I.forceMove(newloc)
 		I.dropped(src, silent)
 	if(hud_used)
-		hud_used.throw_icon?.update_appearance()
-		hud_used.give_intent?.update_appearance()
+		hud_used.throw_icon?.update_appearance(UPDATE_ICON_STATE)
+		hud_used.give_intent?.update_appearance(UPDATE_ICON_STATE)
 	update_a_intents()
 	SEND_SIGNAL(I, COMSIG_ITEM_POST_UNEQUIP, force, newloc, no_move, invdrop, silent)
 	SEND_SIGNAL(src, COMSIG_MOB_UNEQUIPPED_ITEM, I, force, newloc, no_move, invdrop, silent)

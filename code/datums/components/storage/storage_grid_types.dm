@@ -221,7 +221,9 @@
 
 /datum/component/storage/concrete/grid/crucible/can_be_inserted(obj/item/storing, stop_messages, mob/user, worn_check, params, storage_click)
 	if(!storing.melting_material)
-		return FALSE
+		var/obj/item/ingot/ingot = storing.smeltresult
+		if(!ispath(ingot, /obj/item/ingot))
+			return FALSE
 	. = ..()
 
 /datum/component/storage/concrete/grid/anvil_bin
@@ -282,7 +284,7 @@
 		/obj/item/reagent_containers/food/snacks/fish,
 		/obj/item/natural/worms,
 		/obj/item/natural/bundle/worms,
-		/obj/item/fishing/bait,
+		/obj/item/fishing/lure,
 		/obj/item/grown/log/tree/stick,
 		/obj/item/natural/bundle/stick,
 		/obj/item/weapon/knife,//wouldn't it be cool to smuggle a knife somewhere via a bucket?

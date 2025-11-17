@@ -158,9 +158,9 @@
 /obj/item/dendor_blessing/growing/give_blessing(mob/living/carbon/human/user)
 	playsound(get_turf(user), 'sound/vo/smokedrag.ogg', 100, TRUE)
 	playsound(get_turf(user), 'sound/misc/wind.ogg', 100, TRUE, -1)
-	to_chat(user, span_good("Plants grow rampant with your every step... things that constrain no longer impede you."))
+	to_chat(user, span_good("Plants grow rampant as the brush twists to ease your every step..."))
 	user.emote("smile")
-	ADD_TRAIT(user, TRAIT_WEBWALK, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_BRUSHWALK, TRAIT_GENERIC)
 	user.add_spell(/datum/action/cooldown/spell/undirected/touch/entangler, source = user.cleric)
 	user.apply_status_effect(/datum/status_effect/buff/calm)
 
@@ -247,6 +247,7 @@
 	user.emote("rage", forced = TRUE)
 	ADD_TRAIT(user, TRAIT_STRONGBITE, TRAIT_GENERIC)
 	ADD_TRAIT(user, TRAIT_BESTIALSENSE, TRAIT_GENERIC)
+	ADD_TRAIT(user, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 	user.update_sight()
 	user.remove_spell(/datum/action/cooldown/spell/undirected/bless_crops)
 	user.add_spell(/datum/action/cooldown/spell/undirected/conjure_item/briar_claw)
@@ -289,6 +290,7 @@
 	playsound(get_turf(user), pick('sound/vo/mobs/troll/idle1.ogg','sound/vo/mobs/troll/idle2.ogg'), 50, TRUE)
 	to_chat(user, span_good("The rumblings of a troll echo through the trees, your offering was acknowledged by the ancient dwellers of the forest."))
 	user.emote("rage", forced = TRUE)
+	ADD_TRAIT(user, TRAIT_CRITICAL_RESISTANCE, TRAIT_GENERIC)
 	user.physiology.pain_mod *= 0.6
 	user.remove_spell(/datum/action/cooldown/spell/healing)
 	user.add_spell(/datum/action/cooldown/spell/undirected/shapeshift/troll_form)

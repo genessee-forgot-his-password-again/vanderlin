@@ -110,11 +110,12 @@
 
 /datum/patron/inhumen/graggar_zizo/can_pray(mob/living/follower)
 	var/datum/antagonist/maniac/dreamer = follower.mind.has_antag_datum(/datum/antagonist/maniac)
-	if(!dreamer)
-		// if a non-maniac somehow gets this patron,
-		// something interesting should happen if they try to pray
-		return FALSE
-	return TRUE
+	if(dreamer)
+		return TRUE
+	// if a non-maniac somehow gets this patron,
+	// something interesting should happen if they try to pray.
+	INVOKE_ASYNC(follower, GLOBAL_PROC_REF(cant_wake_up), follower)  //Something interesting happened.
+	return FALSE
 
 /datum/patron/inhumen/graggar_zizo/hear_prayer(mob/living/follower, message)
 	var/datum/antagonist/maniac/dreamer = follower.mind.has_antag_datum(/datum/antagonist/maniac)
@@ -123,6 +124,4 @@
 	if(text2num(message) == dreamer.sum_keys)
 		INVOKE_ASYNC(dreamer, TYPE_PROC_REF(/datum/antagonist/maniac, wake_up))
 		return TRUE
-	// something interesting should happen...
-
 	. = ..()

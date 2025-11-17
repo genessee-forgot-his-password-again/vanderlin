@@ -502,13 +502,6 @@ will handle it, but:
 	if(centered)
 		. += world.icon_size
 
-/proc/can_embed(obj/item/weapon)
-	if(HAS_TRAIT(weapon, TRAIT_NODROP) || HAS_TRAIT(weapon, TRAIT_NOEMBED))
-		return FALSE
-	if(!weapon.embedding?.embed_chance)
-		return FALSE
-	return TRUE
-
 /*
 Checks if that loc and dir has an item on the wall
 */
@@ -800,9 +793,6 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 	for(type in view(range, GLOB.dview_mob))
 
 #define FOR_DVIEW_END GLOB.dview_mob.loc = null
-
-
-#define UNTIL(X) while(!(X)) stoplag()
 
 /proc/get_mob_or_brainmob(occupant)
 	var/mob/living/mob_occupant

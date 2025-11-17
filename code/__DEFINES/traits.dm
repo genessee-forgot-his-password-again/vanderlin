@@ -113,7 +113,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_EMOTEMUTE			"emotemute"
 #define TRAIT_DEAF				"deaf"
 #define TRAIT_NEARSIGHT			"nearsighted"
-#define TRAIT_FAT				"fat"
 #define TRAIT_HUSK				"husk"
 #define TRAIT_CHUNKYFINGERS		"chunkyfingers" //means that you can't use weapons with normal trigger guards.
 #define TRAIT_DUMB				"dumb"
@@ -200,10 +199,12 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_NOAMBUSH "no_ambush" //! mob cannot be ambushed for any reason
 #define TRAIT_CLAN_LEADER "clan_leader"
 #define TRAIT_BLUEPRINT_VISION "blueprint_vision"
+#define TRAIT_WEREWOLF_RAGE "ww_rage"
 /// Receives echolocation images.
 #define TRAIT_ECHOLOCATION_RECEIVER "echolocation_receiver"
 /// Echolocation has a higher range.
 #define TRAIT_ECHOLOCATION_EXTRA_RANGE "echolocation_extra_range"
+#define TRAIT_BLOCKED_DIAGONAL "blocked_diagonals"
 
 /// Can swim ignoring water flow and slowdown
 #define TRAIT_GOOD_SWIM "Good Swim"
@@ -220,6 +221,10 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_NODROP            "nodrop"
 #define TRAIT_NOEMBED			"noembed"
 #define TRAIT_NO_TELEPORT		"no-teleport" //you just can't
+#define TRAIT_HAS_CONFESSED "has_confessed"
+#define TRAIT_CONFESSED_FOR	"confessed_for"
+#define TRAIT_RECENTLY_TORTURED "recently_tortured"
+#define TRAIT_RECENTLY_STAGGERED "recently_staggered"
 
 /// this object has been frozen
 #define TRAIT_FROZEN "frozen"
@@ -280,9 +285,16 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 /// trait associated to a stat value or range of
 #define STAT_TRAIT "stat"
 
+#define TRAIT_NOTIGHTGRABMESSAGE "notightgrabmessage" // Hides grab tightening messages.
+#define TRAIT_NOSSDINDICATOR "nossdindicator" // Hides the SSD indicator. Used with scrying.
+#define TRAIT_NOSTRUGGLE "nostruggle" // Instant grabs on someone else.
+#define TRAIT_GARROTED "garroted" // Garrote-wired. Used for a snowflaked grab with item relevant tracking.
+#define TRAIT_BAGGED "bagged" // Black-bagged. More snowflaking.
+
 // unique trait sources, still defines
 #define TRAIT_BESTIALSENSE "bestial-sense"
 #define TRAIT_DARKVISION "darkvision"
+#define TRAIT_NOCSHADES "Nocshaded"
 #define CLONING_POD_TRAIT "cloning-pod"
 #define STATUE_MUTE "statue"
 #define CHANGELING_DRAIN "drain"
@@ -324,8 +336,14 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_LONGSTRIDER "longstrider"
 #define TRAIT_GUIDANCE "guidance"
 #define DEVOTION_TRAIT "devotion_trait"
+#define RAGE_TRAIT "rage_trait"
+#define TRAIT_PSYDONIAN_GRIT "Psydonian Grit" // Pain Tolerance. Through faith, ENDURE.
+#define TRAIT_PSYDONITE "Psydonite's Devotion" // Anti-Miracles on a selective basis, anastasis / cure rot still apply. Slow passive wound healing while you have blood.
+#define TRAIT_BLACKBAGGER "Apprehension Techniques" // Capable of using Garrotes and Blackbags. Apprehension techniques.
+#define TRAIT_LYCANRESILENCE "Werewolf Resilence"
 
 #define TRAIT_WEBWALK 					"Webwalker"
+#define TRAIT_BRUSHWALK					"Brushwalker"
 #define TRAIT_DEADNOSE 					"Dead Nose"
 #define TRAIT_STINKY					"Natural Stench"
 #define TRAIT_ZJUMP 					"High Jumping"
@@ -344,6 +362,7 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_MEDIUMARMOR				"Mail Training"
 #define TRAIT_HEAVYARMOR				"Plate Training"
 #define TRAIT_DODGEEXPERT              "Fast Reflexes"
+#define TRAIT_UNDODGING					"Unyielding"
 #define TRAIT_DECEIVING_MEEKNESS 		"Deceiving Meekness"
 #define TRAIT_VILLAIN					"Villain"
 #define TRAIT_CRITICAL_RESISTANCE		"Critical Resistance"
@@ -392,6 +411,9 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_KEENEARS					"Keen Ears"
 #define TRAIT_POISON_RESILIENCE			"Poison Resilience"
 #define TRAIT_SEED_FINDER				"Seed Finder"
+#define TRAIT_COIN_ILLITERATE "Barterer"
+#define TRAIT_LUCKY_COOK "Lucky Cook"
+
 /// applied to orphans
 #define TRAIT_ORPHAN 					"Orphan"
 #define TRAIT_RECRUITED					"Recruit" //Trait used to give foreigners their new title
@@ -409,12 +431,16 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_TUTELAGE					"Tutelage" //Slightly more sleep xp to you and xp to apprentices
 #define TRAIT_APRICITY					"Apricity" //Decreased stamina regen time during "day"
 #define TRAIT_BLACKLEG					"Blackleg" //Rig coin, dice, cards in your favor
+#define TRAIT_INQUISITION 				"Member of the Oratorium Throni Vacui"
+#define TRAIT_PURITAN					"Puritan"
+#define TRAIT_SILVER_BLESSED 			"Silver Blessed"
 
 // Inhumen patron trait bonuses:
 #define TRAIT_ORGAN_EATER				"Blessing of Graggar"//Can eat organs (duh.) and raw meat
 #define TRAIT_CRACKHEAD					"Blessing of Baotha" //No overdose on drugs.
 #define TRAIT_CABAL                     "Of the Cabal" //Zizo cultists recognize each other too
 #define TRAIT_MATTHIOS_EYES				"Eyes of Matthios" //Examine to see the most expensive item someone has
+#define INSPIRING_MUSICIAN 				"Inspiring Musician" // unlocks bardic inspiration stuff
 
 #define TRAIT_BASHDOORS "bashdoors"
 #define TRAIT_NOMOOD "no_mood"
@@ -440,6 +466,7 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_BEAUTIFUL "Beautiful"
 #define TRAIT_UGLY "Ugly"
 #define TRAIT_FISHFACE "Fishface"
+#define TRAIT_FAT "Obese"
 #define TRAIT_SCHIZO_FLAW "Schizophrenic"
 #define TRAIT_VIOLATOR					"Violator of the Coven"
 #define TRAIT_TORPOR					"Endless Slumber"
@@ -454,6 +481,7 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_OLDPARTY "Old Party"
 #define TRAIT_EARGRAB "Ear Grab"
 #define TRAIT_FACELESS "Faceless One"
+#define TRAIT_ROYALSERVANT "Household Insight" // Let's you see the royals liked/hated food/drink
 
 // PATRON CURSE TRAITS
 #define TRAIT_CURSE "Curse" //source
@@ -565,6 +593,7 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define ECHOLOCATION_TRAIT "echolocation"
 /// trait that makes you bounce when speaking
 #define TRAIT_SHAKY_SPEECH "Shaky Speech"
+#define TRAIT_NEEDS_QUENCH "Needs Quenching"
 
 /// Dendor Path Traits
 #define TRAIT_DENDOR_GROWING "trait_dendor_growing"

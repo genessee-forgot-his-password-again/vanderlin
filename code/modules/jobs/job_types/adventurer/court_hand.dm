@@ -19,8 +19,6 @@
 	can_have_apprentices = FALSE
 	scales = FALSE
 
-/datum/job/adventurer/courtagent
-
 //Hooking in here does not mess with their equipment procs
 /datum/job/adventurer/courtagent/after_spawn(mob/living/spawned, client/player_client)
 	if(ishuman(spawned))
